@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------
+   Brand tokens — Al-Waliy Maklon
+   Bahasa visual: dokumen resmi (sertifikat, CoA, batch)
+--------------------------------------------------- */
+@theme {
+  --font-display: "Space Grotesk", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+  --font-body: "Inter", sans-serif;
+
+  --color-forest: #123625;
+  --color-paper: #F1EEE3;
+  --color-ink: #1A1F1B;
+  --color-stamp: #AE3B2B;
+  --color-hairline: #CFC7AF;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3 {
+    font-family: var(--font-display);
+  }
+
+  code, .mono {
+    font-family: var(--font-mono);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
