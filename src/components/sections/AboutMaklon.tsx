@@ -1,58 +1,58 @@
-import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Check } from "lucide-react";
+import { useEffect, useRef } from 'react'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { Check } from 'lucide-react'
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger)
 
 const BRAND_OWNS = [
-  "Konsep, nama, dan identitas brand",
-  "Target pasar dan strategi marketing",
-  "Kanal penjualan dan distribusi",
-  "Harga jual dan positioning produk",
-];
+  'Konsep, nama, dan identitas brand',
+  'Target pasar dan strategi marketing',
+  'Kanal penjualan dan distribusi',
+  'Harga jual dan positioning produk',
+]
 
 const AL_WALIY_OWNS = [
-  "Riset dan pengembangan formula",
-  "Produksi sesuai standar GMP",
-  "Pengurusan halal, BPOM, dan CoA",
-  "Quality control tiap batch produksi",
-];
+  'Riset dan pengembangan formula',
+  'Produksi sesuai standar GMP',
+  'Pengurusan halal, BPOM, dan CoA',
+  'Quality control tiap batch produksi',
+]
 
-export function ApaItuMaklon() {
-  const rootRef = useRef<HTMLElement>(null);
+export function AboutMaklon() {
+  const rootRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from('[data-aim="heading"]', {
+      gsap.from('[data-about="heading"]', {
         opacity: 0,
         y: 20,
         duration: 0.6,
-        ease: "power3.out",
-        scrollTrigger: { trigger: rootRef.current, start: "top 75%" },
-      });
+        ease: 'power3.out',
+        scrollTrigger: { trigger: rootRef.current, start: 'top 75%' },
+      })
 
-      gsap.from('[data-aim="column"]', {
+      gsap.from('[data-about="column"]', {
         opacity: 0,
         y: 24,
         duration: 0.6,
         stagger: 0.15,
-        ease: "power3.out",
-        scrollTrigger: { trigger: '[data-aim="columns"]', start: "top 80%" },
-      });
-    }, rootRef);
+        ease: 'power3.out',
+        scrollTrigger: { trigger: '[data-about="columns"]', start: 'top 80%' },
+      })
+    }, rootRef)
 
-    return () => ctx.revert();
-  }, []);
+    return () => ctx.revert()
+  }, [])
 
   return (
     <section
       ref={rootRef}
-      id="apa-itu-maklon"
+      id="about"
       className="border-b border-hairline py-20 md:py-28"
     >
       <div className="mx-auto max-w-6xl px-6">
-        <div data-aim="heading" className="max-w-2xl">
+        <div data-about="heading" className="max-w-2xl">
           <p className="font-mono text-xs uppercase tracking-[0.2em] text-stamp">
             Apa itu Maklon?
           </p>
@@ -60,18 +60,18 @@ export function ApaItuMaklon() {
             Satu kesepakatan kerja, dua peran yang jelas.
           </h2>
           <p className="mt-5 font-body text-base leading-relaxed text-ink/70 md:text-lg">
-            Maklon adalah kerja sama produksi: Anda membawa ide dan brand, kami
-            yang mewujudkannya jadi produk jadi berkualitas — lengkap dengan
-            izin edarnya. Gak perlu bangun pabrik sendiri atau mengurus
-            sertifikasi dari nol.
+            Maklon adalah kerja sama produksi: Anda membawa ide dan brand,
+            kami yang mewujudkannya jadi produk jadi berkualitas — lengkap
+            dengan izin edarnya. Gak perlu bangun pabrik sendiri atau
+            mengurus sertifikasi dari nol.
           </p>
         </div>
 
         <div
-          data-aim="columns"
+          data-about="columns"
           className="mt-14 grid gap-px overflow-hidden rounded-sm border border-hairline bg-hairline md:grid-cols-2"
         >
-          <div data-aim="column" className="bg-paper p-8 md:p-10">
+          <div data-about="column" className="bg-paper p-8 md:p-10">
             <span className="font-mono text-[11px] uppercase tracking-widest text-ink/50">
               Pihak Pertama — Anda
             </span>
@@ -90,7 +90,7 @@ export function ApaItuMaklon() {
             </ul>
           </div>
 
-          <div data-aim="column" className="bg-forest p-8 text-paper md:p-10">
+          <div data-about="column" className="bg-forest p-8 text-paper md:p-10">
             <span className="font-mono text-[11px] uppercase tracking-widest text-paper/60">
               Pihak Kedua — Al-Waliy
             </span>
@@ -111,5 +111,5 @@ export function ApaItuMaklon() {
         </div>
       </div>
     </section>
-  );
+  )
 }

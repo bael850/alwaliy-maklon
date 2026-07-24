@@ -1,17 +1,17 @@
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { useState } from 'react'
+import { Menu, X } from 'lucide-react'
 
 const NAV_LINKS = [
-  { href: "#apa-itu-maklon", label: "Tentang Maklon" },
-  { href: "#kenapa-al-waliy", label: "Kenapa Kami" },
-  { href: "#jenis-produk", label: "Jenis Produk" },
-  { href: "#alur-kerja", label: "Alur Kerja" },
-  { href: "#sertifikasi", label: "Sertifikasi" },
-  { href: "#faq", label: "FAQ" },
-];
+  { href: '#about', label: 'Tentang Maklon' },
+  { href: '#why-us', label: 'Kenapa Kami' },
+  { href: '#products', label: 'Jenis Produk' },
+  { href: '#process', label: 'Alur Kerja' },
+  { href: '#certifications', label: 'Sertifikasi' },
+  { href: '#faq', label: 'FAQ' },
+]
 
 export function Navbar() {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-hairline/60 bg-paper/90 backdrop-blur-sm">
@@ -48,7 +48,7 @@ export function Navbar() {
           type="button"
           className="text-ink md:hidden"
           onClick={() => setOpen((v) => !v)}
-          aria-label={open ? "Tutup menu" : "Buka menu"}
+          aria-label={open ? 'Tutup menu' : 'Buka menu'}
           aria-expanded={open}
         >
           {open ? <X size={24} /> : <Menu size={24} />}
@@ -77,5 +77,5 @@ export function Navbar() {
         </nav>
       )}
     </header>
-  );
+  )
 }

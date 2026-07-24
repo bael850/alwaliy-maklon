@@ -1,7 +1,7 @@
 export function Cta() {
   return (
     <section id="cta" className="w-full">
-      {/* TODO: Fase 2 — bangun konten Cta */}
+      {/* TODO: Phase 2 — build Cta content */}
     </section>
   )
 }

@@ -1,50 +1,44 @@
-import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
-import { ArrowRight, FileCheck } from "lucide-react";
+import { useEffect, useRef } from 'react'
+import { gsap } from 'gsap'
+import { ArrowRight, FileCheck } from 'lucide-react'
 
 export function Hero() {
-  const rootRef = useRef<HTMLElement>(null);
+  const rootRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
 
       tl.from('[data-hero="eyebrow"]', { opacity: 0, y: 12, duration: 0.5 })
         .from(
           '[data-hero="headline-line"]',
           { opacity: 0, y: 24, duration: 0.7, stagger: 0.08 },
-          "-=0.25",
+          '-=0.25'
         )
         .from(
           '[data-hero="subhead"]',
           { opacity: 0, y: 16, duration: 0.6 },
-          "-=0.35",
+          '-=0.35'
         )
         .from(
           '[data-hero="cta"]',
           { opacity: 0, y: 12, duration: 0.5, stagger: 0.08 },
-          "-=0.3",
+          '-=0.3'
         )
         .from(
           '[data-hero="doc-card"]',
           { opacity: 0, x: 32, rotate: 3, duration: 0.8 },
-          "-=0.6",
+          '-=0.6'
         )
         .from(
           '[data-hero="stamp"]',
-          {
-            opacity: 0,
-            scale: 1.6,
-            rotate: -24,
-            duration: 0.4,
-            ease: "back.out(3)",
-          },
-          "-=0.15",
-        );
-    }, rootRef);
+          { opacity: 0, scale: 1.6, rotate: -24, duration: 0.4, ease: 'back.out(3)' },
+          '-=0.15'
+        )
+    }, rootRef)
 
-    return () => ctx.revert();
-  }, []);
+    return () => ctx.revert()
+  }, [])
 
   return (
     <section
@@ -94,7 +88,7 @@ export function Hero() {
             </a>
             <a
               data-hero="cta"
-              href="#alur-kerja"
+              href="#process"
               className="inline-flex items-center gap-2 font-body text-sm font-medium text-ink/70 underline decoration-hairline decoration-2 underline-offset-4 transition-colors hover:text-forest"
             >
               Lihat alur kerjanya
@@ -149,5 +143,5 @@ export function Hero() {
         </div>
       </div>
     </section>
-  );
+  )
 }
