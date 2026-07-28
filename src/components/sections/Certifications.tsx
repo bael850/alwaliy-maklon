@@ -118,7 +118,7 @@ export function Certifications() {
                 <span className="font-mono text-[7px] font-semibold uppercase leading-tight tracking-widest text-stamp">
                   Verified
                   <br />
-                  Al-Waliy
+                  Al-Waliyy
                 </span>
               </div>
             </div>
