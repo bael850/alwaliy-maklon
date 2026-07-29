@@ -15,6 +15,21 @@ export default function Hero() {
   const ctaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Preload gambar Hero — pakai heroImage yang udah di-resolve Vite,
+    // jadi otomatis akurat meski nama file di-hash pas production build.
+    const link = document.createElement("link");
+    link.rel = "preload";
+    link.as = "image";
+    link.href = heroImage;
+    link.setAttribute("fetchpriority", "high");
+    document.head.appendChild(link);
+
+    return () => {
+      document.head.removeChild(link);
+    };
+  }, []);
+
+  useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
