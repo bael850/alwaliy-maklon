@@ -3,7 +3,7 @@ import { ChevronDown } from "lucide-react";
 
 const FAQS = [
   {
-    q: "Berapa minimal order untuk layanan makloon?",
+    q: "Berapa minimal order untuk layanan maklon?",
     a: "Minimal order kami sengaja fleksibel, disesuaikan jenis produk (serbuk, kapsul, cair, atau madu) dan kompleksitas formulasi — cocok baik untuk brand baru yang mau mulai skala kecil maupun yang sudah siap produksi lebih besar. Tim kami akan hitungkan MOQ paling efisien untuk Anda saat konsultasi.",
   },
   {
@@ -12,7 +12,7 @@ const FAQS = [
   },
   {
     q: "Apakah legalitas produk (BPOM/Halal) diurus oleh Al-Waliy?",
-    a: "Ya, kami membantu proses registrasi BPOM dan sertifikasi Halal MUI untuk produk yang diproduksi di fasilitas kami, sebagai bagian dari layanan makloon.",
+    a: "Ya, kami membantu proses registrasi BPOM dan sertifikasi Halal MUI untuk produk yang diproduksi di fasilitas kami, sebagai bagian dari layanan maklon.",
   },
   {
     q: "Berapa lama proses dari konsultasi sampai produk jadi?",

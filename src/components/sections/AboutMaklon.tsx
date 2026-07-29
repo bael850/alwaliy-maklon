@@ -15,7 +15,7 @@ const FACTS = [
   {
     icon: Users,
     title: "Dipercaya Banyak Mitra",
-    desc: "Melayani konsumen akhir, reseller, dan mitra makloon di seluruh Indonesia.",
+    desc: "Melayani konsumen akhir, reseller, dan mitra maklon di seluruh Indonesia.",
   },
 ];
 
@@ -36,7 +36,7 @@ export default function AboutMaklon() {
               CV Al-Waliy Sejahtera memproduksi madu herbal dan sari kurma
               premium sejak 2014. Selain melayani konsumen akhir lewat
               marketplace kami sendiri, kami juga membuka layanan{" "}
-              <strong className="text-forest">makloon</strong> — memproduksi
+              <strong className="text-forest">maklon</strong> — memproduksi
               herbal sesuai formulasi dan kebutuhan brand Anda, dengan standar
               kualitas yang sama seperti produk kami sendiri.
             </p>

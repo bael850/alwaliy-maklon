@@ -39,16 +39,9 @@ function FacebookIcon({ size = 16 }: { size?: number }) {
 const WA_NUMBER = "6281515264972";
 const WA_HREF = `https://wa.me/${WA_NUMBER}`;
 
-// ⚠️ GANTI dengan alamat lengkap (jalan + no) begitu tersedia — saat ini masih
-// pakai teks alamat singkat yang sudah ada, biar embed Maps-nya relevan.
-const ALAMAT_LENGKAP =
-  "Sumberjaya, Tambun Selatan, Kab. Bekasi, Jawa Barat 17510";
-const MAPS_EMBED_SRC = `https://www.google.com/maps?q=${encodeURIComponent(
-  "CV Al-Waliy Sejahtera, " + ALAMAT_LENGKAP,
-)}&output=embed`;
-const MAPS_LINK_HREF = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-  "CV Al-Waliy Sejahtera, " + ALAMAT_LENGKAP,
-)}`;
+// Lokasi masih proses verifikasi Google Business Profile — pakai teks dulu,
+// jangan pasang Maps embed/pin sampai lokasi baru terverifikasi.
+const ALAMAT_LENGKAP = "Sumberjaya, Tambun Selatan, Kab. Bekasi 17510";
 
 const LAYANAN_LINKS = [
   { label: "Madu Herbal", href: "#layanan" },
@@ -88,7 +81,7 @@ export default function Footer() {
             </p>
             <p className="mt-3 max-w-xs text-sm leading-relaxed">
               CV Al-Waliy Sejahtera — produsen herbal terpercaya sejak 2014,
-              kini membuka layanan makloon untuk brand Anda.
+              kini membuka layanan maklon untuk brand Anda.
             </p>
             <div className="mt-5 flex gap-3">
               <a
@@ -179,30 +172,12 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Maps embed — bukti lokasi fisik konkret */}
+        {/* Lokasi — teks dulu, Maps embed ditunda sampai verifikasi GBP kelar */}
         <div className="mt-12 border-t border-cream/10 pt-8">
-          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.12em] text-cream/40">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-cream/40">
             Lokasi Kami
           </p>
-          <div className="overflow-hidden rounded-[4px] border border-cream/15">
-            <iframe
-              title="Lokasi CV Al-Waliy Sejahtera"
-              src={MAPS_EMBED_SRC}
-              width="100%"
-              height="220"
-              style={{ border: 0 }}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            />
-          </div>
-          <a
-            href={MAPS_LINK_HREF}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-2 inline-block text-xs text-gold-light hover:underline"
-          >
-            Buka di Google Maps →
-          </a>
+          <p className="text-sm text-cream/80">{ALAMAT_LENGKAP}</p>
         </div>
 
         {/* Cert badges */}

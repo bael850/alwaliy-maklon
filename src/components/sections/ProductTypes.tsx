@@ -1,7 +1,7 @@
 import { Pill, FlaskConical, Droplets, Container } from "lucide-react";
 
 const WA_NUMBER = "6281515264972";
-const WA_MESSAGE = "Assalamualaikum, saya mau konsultasi soal makloon produk ";
+const WA_MESSAGE = "Assalamualaikum, saya mau konsultasi soal maklon produk ";
 const waHref = (product: string) =>
   `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MESSAGE + product)}`;
 

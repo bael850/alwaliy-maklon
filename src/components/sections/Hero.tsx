@@ -6,7 +6,7 @@ import heroImagePng from "../../assets/hero.png";
 
 const WA_NUMBER = "6281515264972";
 const WA_MESSAGE =
-  "Assalamualaikum, saya mau konsultasi soal layanan makloon Al-Waliy...";
+  "Assalamualaikum, saya mau konsultasi soal layanan maklon Al-Waliy...";
 const WA_HREF = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MESSAGE)}`;
 
 export default function Hero() {
@@ -114,9 +114,9 @@ export default function Hero() {
           ref={paraRef}
           className="mt-5 max-w-xl text-base leading-relaxed text-cream/85 md:text-lg"
         >
-          Jasa makloon produksi herbal dan madu dari produsen berpengalaman
-          sejak 2014 — dari formulasi, kemasan, hingga legalitas, tanpa Anda
-          perlu membangun pabrik sendiri.
+          Jasa maklon produksi herbal dan madu dari produsen berpengalaman sejak
+          2014 — dari formulasi, kemasan, hingga legalitas, tanpa Anda perlu
+          membangun pabrik sendiri.
         </p>
 
         <div ref={ctaRef} className="mt-8 flex flex-wrap items-center gap-4">
