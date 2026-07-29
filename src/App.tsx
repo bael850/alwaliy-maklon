@@ -1,13 +1,13 @@
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import Hero from "./components/sections/Hero";
-import AboutMaklon from "./components/sections/AboutMaklon";
-import WhyUs from "./components/sections/WhyUs";
-import ProductTypes from "./components/sections/ProductTypes";
-import Workflow from "./components/sections/Workflow";
-import Certifications from "./components/sections/Certifications";
-import Faq from "./components/sections/Faq";
-import Cta from "./components/sections/Cta";
+import Hero from "./components/components/sections/Hero";
+import AboutMaklon from "./components/components/sections/AboutMaklon";
+import WhyUs from "./components/components/sections/WhyUs";
+import ProductTypes from "./components/components/sections/ProductTypes";
+import Workflow from "./components/components/sections/Workflow";
+import Certifications from "./components/components/sections/Certifications";
+import Faq from "./components/components/sections/Faq";
+import Cta from "./components/components/sections/Cta";
 
 export default function App() {
   return (

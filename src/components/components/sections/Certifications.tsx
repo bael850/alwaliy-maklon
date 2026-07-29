@@ -1,4 +1,4 @@
-import { certifications } from "../../lib/data";
+import { certifications } from "../../../lib/data";
 
 export default function Certifications() {
   return (
