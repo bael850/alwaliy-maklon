@@ -14,6 +14,7 @@ export default function Hero() {
   const headingRef = useRef<HTMLHeadingElement>(null);
   const paraRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     // Preload gambar Hero — pakai heroImageWebp yang udah di-resolve Vite,
@@ -57,6 +58,16 @@ export default function Hero() {
       stagger: 0.12,
       delay: 0.2,
     });
+
+    // Ken Burns effect — background zoom pelan-pelan, kesan premium & hidup.
+    // Skip kalau prefers-reduced-motion (sudah di-handle di guard clause atas).
+    if (imageRef.current) {
+      gsap.fromTo(
+        imageRef.current,
+        { scale: 1 },
+        { scale: 1.08, duration: 12, ease: "none" },
+      );
+    }
   }, []);
 
   return (
@@ -69,6 +80,7 @@ export default function Hero() {
       <picture>
         <source srcSet={heroImageWebp} type="image/webp" />
         <img
+          ref={imageRef}
           src={heroImagePng}
           alt="Proses produksi herbal Al-Waliy"
           className="absolute inset-0 h-full w-full object-cover"
@@ -77,21 +89,23 @@ export default function Hero() {
           decoding="async"
         />
       </picture>
-      {/* Overlay gradient — gelap di bawah biar teks kebaca, tipis di atas biar navbar transparan tetap kontras */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
+      {/* Overlay gradient — gelap di bawah & kiri (tempat teks berada) biar kontras
+          konsisten di atas foto apa pun, tipis di kanan-atas biar navbar tetap terasa ringan */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/20" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-transparent" />
 
       {/* Content */}
       <div className="relative z-10 mx-auto w-full max-w-6xl px-5 pb-16 pt-40 md:px-8 md:pb-24">
         <p
           ref={eyebrowRef}
-          className="mb-4 text-xs md:text-sm font-semibold uppercase tracking-[0.18em] text-gold-light"
+          className="mb-4 text-xs md:text-sm font-semibold uppercase tracking-[0.18em] text-gold-light [text-shadow:0_1px_4px_rgba(0,0,0,0.6)]"
         >
           Produksi Bersertifikat Halal MUI &amp; BPOM
         </p>
 
         <h1
           ref={headingRef}
-          className="max-w-3xl font-heading text-4xl font-extrabold leading-[1.08] text-cream md:text-6xl"
+          className="max-w-3xl font-heading text-4xl font-extrabold leading-[1.08] text-cream [text-shadow:0_2px_8px_rgba(0,0,0,0.5)] md:text-6xl"
         >
           Wujudkan Brand Herbal &amp; Madu Anda Sendiri
         </h1>
@@ -110,21 +124,16 @@ export default function Hero() {
             href={WA_HREF}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex
-            items-center gap-2 rounded-[4px] border-[1.5px] border-cream px-6
-            py-3.5 text-sm font-semibold text-cream transition-colors
-            hover:bg-cream hover:text-forest"
+            className="inline-flex items-center gap-2 rounded-[4px] border-[1.5px] border-cream px-6 py-3.5 text-sm font-semibold text-cream transition-colors hover:bg-cream hover:text-forest"
           >
             Konsultasi Gratis
             <ArrowRight size={16} strokeWidth={2.5} />
           </a>
           <a
             href="#layanan"
-            className="inline-flex items-center gap-2 text-sm
-            font-semibold text-cream/90 underline underline-offset-4
-          transition-colors hover:text-gold-light"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-cream/90 underline underline-offset-4 transition-colors hover:text-gold-light"
           >
-            <a>Lihat Layanan</a>
+            Lihat Layanan
           </a>
         </div>
       </div>
