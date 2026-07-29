@@ -1,71 +1,76 @@
-@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap");
+/* Google Fonts — HARUS sebelum @import "tailwindcss" */
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap");
+
 @import "tailwindcss";
 
 @theme {
-  --color-forest: #152318;
-  --color-forest-800: #1c2e1f;
-  --color-forest-700: #243a28;
-  --color-forest-600: #2e4832;
+  /* === Warna — senada alwaliy-sejahtera.com === */
+  --color-forest: #1b4332;
+  --color-forest-light: #2d6a4f;
+  --color-gold: #d4af6a;
+  --color-gold-light: #e6c98f;
+  --color-cream: #faf8f4;
+  --color-ink: #1a1a1a;
 
-  --color-honey: #d9a441;
-  --color-honey-300: #efcb7c;
-  --color-honey-600: #b9862a;
+  /* === Font — dominan sans-serif === */
+  --font-heading: "Plus Jakarta Sans", sans-serif;
+  --font-body: "Inter", sans-serif;
 
-  --color-clay: #b5652d;
-  --color-clay-600: #8f4e22;
-
-  --color-parchment: #f4eedd;
-  --color-parchment-muted: #b4ac93;
-
-  --font-display: "Fraunces", serif;
-  --font-body: "Work Sans", sans-serif;
+  /* === Radius (4px, sesuai main site) === */
+  --radius-card: 4px;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
+/* === Base styles === */
 body {
-  @apply bg-forest text-parchment font-body antialiased;
+  font-family: var(--font-body);
+  background-color: var(--color-cream);
+  color: var(--color-ink);
 }
 
-@layer utilities {
-  .hex {
-    clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
-  }
-
-  .honeycomb-bg {
-    background-image:
-      radial-gradient(
-        circle at 20% 20%,
-        rgba(217, 164, 65, 0.08) 0,
-        transparent 45%
-      ),
-      radial-gradient(
-        circle at 80% 60%,
-        rgba(181, 101, 45, 0.1) 0,
-        transparent 40%
-      );
-  }
-
-  .bg-honey-drip {
-    background-image: radial-gradient(
-      120% 120% at 50% 0%,
-      rgba(217, 164, 65, 0.15) 0%,
-      rgba(21, 35, 24, 0) 60%
-    );
-  }
-
-  .focus-ring {
-    @apply outline-none focus-visible:ring-2 focus-visible:ring-honey-300 focus-visible:ring-offset-2 focus-visible:ring-offset-forest;
-  }
+h1,
+h2,
+h3,
+h4,
+.font-heading {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--color-forest);
+  letter-spacing: -0.01em;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
+/* Utility contoh — kartu ala main site */
+.card {
+  background: #ffffff;
+  border-radius: var(--radius-card);
+  border: 1px solid rgba(27, 67, 50, 0.08);
+}
+
+.btn-primary {
+  background-color: var(--color-forest);
+  color: var(--color-cream);
+  border-radius: var(--radius-card);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-forest-light);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--color-forest);
+  border: 1.5px solid var(--color-forest);
+  border-radius: var(--radius-card);
+  font-family: var(--font-heading);
+  font-weight: 600;
+}
+
+.btn-gold {
+  background-color: var(--color-gold);
+  color: var(--color-forest);
+  border-radius: var(--radius-card);
+  font-family: var(--font-heading);
+  font-weight: 600;
 }
