@@ -106,20 +106,25 @@ export default function Hero() {
         </p>
 
         <div ref={ctaRef} className="mt-8 flex flex-wrap items-center gap-4">
-          
+          <a
             href={WA_HREF}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-[4px] border-[1.5px] border-cream px-6 py-3.5 text-sm font-semibold text-cream transition-colors hover:bg-cream hover:text-forest"
+            className="inline-flex
+            items-center gap-2 rounded-[4px] border-[1.5px] border-cream px-6
+            py-3.5 text-sm font-semibold text-cream transition-colors
+            hover:bg-cream hover:text-forest"
           >
             Konsultasi Gratis
             <ArrowRight size={16} strokeWidth={2.5} />
           </a>
-          
+          <a
             href="#layanan"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-cream/90 underline underline-offset-4 transition-colors hover:text-gold-light"
+            className="inline-flex items-center gap-2 text-sm
+            font-semibold text-cream/90 underline underline-offset-4
+          transition-colors hover:text-gold-light"
           >
-            Lihat Layanan
+            <a>Lihat Layanan</a>
           </a>
         </div>
       </div>
