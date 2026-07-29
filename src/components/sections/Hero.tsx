@@ -73,7 +73,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative flex min-h-dvh items-end overflow-hidden"
+      className="relative flex min-h-[92vh] items-end overflow-hidden md:min-h-dvh"
     >
       {/* Background image — WebP utama (lebih ringan), fallback PNG buat browser lama.
           Ini elemen LCP (yang pertama dilihat user), jadi eager + fetchPriority high. */}
@@ -91,11 +91,11 @@ export default function Hero() {
       </picture>
       {/* Overlay gradient — gelap di bawah & kiri (tempat teks berada) biar kontras
           konsisten di atas foto apa pun, tipis di kanan-atas biar navbar tetap terasa ringan */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/20" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/55 to-black/25 md:from-black/85 md:via-black/45 md:to-black/20" />
       <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-transparent" />
 
       {/* Content */}
-      <div className="relative z-10 mx-auto w-full max-w-6xl px-5 pb-16 pt-40 md:px-8 md:pb-24">
+      <div className="relative z-10 mx-auto w-full max-w-6xl px-5 pb-14 pt-16 sm:pt-24 md:px-8 md:pb-24 md:pt-40">
         <p
           ref={eyebrowRef}
           className="mb-4 text-xs md:text-sm font-semibold uppercase tracking-[0.18em] text-gold-light [text-shadow:0_1px_4px_rgba(0,0,0,0.6)]"
