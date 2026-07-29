@@ -21,6 +21,22 @@
 }
 
 /* === Base styles === */
+html {
+  scroll-padding-top: 5rem; /* biar section nggak ketutup navbar fixed */
+}
+
+/* === Lenis smooth scroll — CSS wajib dari dokumentasi resmi === */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
 body {
   font-family: var(--font-body);
   background-color: var(--color-cream);

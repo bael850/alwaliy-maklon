@@ -1,4 +1,6 @@
+import { useEffect, useRef } from "react";
 import { ArrowRight } from "lucide-react";
+import gsap from "gsap";
 import heroImage from "../../assets/hero.png";
 
 const WA_NUMBER = "6281515264972";
@@ -7,6 +9,39 @@ const WA_MESSAGE =
 const WA_HREF = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MESSAGE)}`;
 
 export default function Hero() {
+  const eyebrowRef = useRef<HTMLParagraphElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const paraRef = useRef<HTMLParagraphElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    const els = [
+      eyebrowRef.current,
+      headingRef.current,
+      paraRef.current,
+      ctaRef.current,
+    ];
+
+    if (prefersReducedMotion) {
+      gsap.set(els, { opacity: 1, y: 0 });
+      return;
+    }
+
+    gsap.set(els, { opacity: 0, y: 24 });
+    gsap.to(els, {
+      opacity: 1,
+      y: 0,
+      duration: 0.9,
+      ease: "power3.out",
+      stagger: 0.12,
+      delay: 0.2,
+    });
+  }, []);
+
   return (
     <section
       id="hero"
@@ -23,21 +58,30 @@ export default function Hero() {
 
       {/* Content */}
       <div className="relative z-10 mx-auto w-full max-w-6xl px-5 pb-16 pt-40 md:px-8 md:pb-24">
-        <p className="mb-4 text-xs md:text-sm font-semibold uppercase tracking-[0.18em] text-gold-light">
+        <p
+          ref={eyebrowRef}
+          className="mb-4 text-xs md:text-sm font-semibold uppercase tracking-[0.18em] text-gold-light"
+        >
           Produksi Bersertifikat Halal MUI &amp; BPOM
         </p>
 
-        <h1 className="max-w-3xl font-heading text-4xl font-extrabold leading-[1.08] text-cream md:text-6xl">
+        <h1
+          ref={headingRef}
+          className="max-w-3xl font-heading text-4xl font-extrabold leading-[1.08] text-cream md:text-6xl"
+        >
           Wujudkan Brand Herbal &amp; Madu Anda Sendiri
         </h1>
 
-        <p className="mt-5 max-w-xl text-base leading-relaxed text-cream/85 md:text-lg">
+        <p
+          ref={paraRef}
+          className="mt-5 max-w-xl text-base leading-relaxed text-cream/85 md:text-lg"
+        >
           Jasa makloon produksi herbal dan madu dari produsen berpengalaman
           sejak 2014 — dari formulasi, kemasan, hingga legalitas, tanpa Anda
           perlu membangun pabrik sendiri.
         </p>
 
-        <div className="mt-8 flex flex-wrap items-center gap-4">
+        <div ref={ctaRef} className="mt-8 flex flex-wrap items-center gap-4">
           <a
             href={WA_HREF}
             target="_blank"

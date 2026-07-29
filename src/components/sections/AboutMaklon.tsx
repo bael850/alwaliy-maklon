@@ -1,4 +1,5 @@
 import { Building2, ShieldCheck, Users } from "lucide-react";
+import Reveal from "../Reveal";
 
 const FACTS = [
   {
@@ -24,7 +25,7 @@ export default function AboutMaklon() {
       <div className="mx-auto max-w-6xl px-5 md:px-8">
         <div className="grid gap-12 md:grid-cols-2 md:gap-16">
           {/* Kiri: narasi */}
-          <div>
+          <Reveal>
             <p className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.14em] text-gold">
               <span className="text-forest/40">01</span> Profil Kami
             </p>
@@ -45,27 +46,26 @@ export default function AboutMaklon() {
             >
               Lihat cara kerja sama kami
             </a>
-          </div>
+          </Reveal>
 
           {/* Kanan: fact cards */}
           <div className="flex flex-col gap-4">
-            {FACTS.map((fact) => (
-              <div
-                key={fact.title}
-                className="flex gap-4 rounded-[4px] border border-forest/10 bg-white p-5"
-              >
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[4px] bg-forest/5 text-forest">
-                  <fact.icon size={20} strokeWidth={2} />
+            {FACTS.map((fact, i) => (
+              <Reveal key={fact.title} delay={i * 0.1}>
+                <div className="flex gap-4 rounded-[4px] border border-forest/10 bg-white p-5">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[4px] bg-forest/5 text-forest">
+                    <fact.icon size={20} strokeWidth={2} />
+                  </div>
+                  <div>
+                    <h3 className="font-heading text-base font-bold text-forest">
+                      {fact.title}
+                    </h3>
+                    <p className="mt-1 text-sm leading-relaxed text-ink/70">
+                      {fact.desc}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-heading text-base font-bold text-forest">
-                    {fact.title}
-                  </h3>
-                  <p className="mt-1 text-sm leading-relaxed text-ink/70">
-                    {fact.desc}
-                  </p>
-                </div>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
