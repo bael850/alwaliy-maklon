@@ -1,4 +1,4 @@
-import { workflow } from "../../../lib/data";
+import { workflow } from "../../lib/data";
 
 export default function Workflow() {
   return (

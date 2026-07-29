@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { faqs } from "../../../lib/data";
+import { faqs } from "../../lib/data";
 
 export default function Faq() {
   const [openIdx, setOpenIdx] = useState<number | null>(0);

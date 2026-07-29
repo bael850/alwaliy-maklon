@@ -1,8 +1,25 @@
 @import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap");
+@import "tailwindcss";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@theme {
+  --color-forest: #152318;
+  --color-forest-800: #1c2e1f;
+  --color-forest-700: #243a28;
+  --color-forest-600: #2e4832;
+
+  --color-honey: #d9a441;
+  --color-honey-300: #efcb7c;
+  --color-honey-600: #b9862a;
+
+  --color-clay: #b5652d;
+  --color-clay-600: #8f4e22;
+
+  --color-parchment: #f4eedd;
+  --color-parchment-muted: #b4ac93;
+
+  --font-display: "Fraunces", serif;
+  --font-body: "Work Sans", sans-serif;
+}
 
 html {
   scroll-behavior: smooth;
@@ -16,6 +33,7 @@ body {
   .hex {
     clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
   }
+
   .honeycomb-bg {
     background-image:
       radial-gradient(
@@ -29,6 +47,15 @@ body {
         transparent 40%
       );
   }
+
+  .bg-honey-drip {
+    background-image: radial-gradient(
+      120% 120% at 50% 0%,
+      rgba(217, 164, 65, 0.15) 0%,
+      rgba(21, 35, 24, 0) 60%
+    );
+  }
+
   .focus-ring {
     @apply outline-none focus-visible:ring-2 focus-visible:ring-honey-300 focus-visible:ring-offset-2 focus-visible:ring-offset-forest;
   }
