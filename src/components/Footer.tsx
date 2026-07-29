@@ -1,4 +1,40 @@
-import { Instagram, Facebook, MessageCircle } from "lucide-react";
+import { MessageCircle } from "lucide-react";
+
+function InstagramIcon({ size = 16 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+      <path d="M16 11.37a4 4 0 1 1-7.914 1.174A4 4 0 0 1 16 11.37z" />
+      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+    </svg>
+  );
+}
+
+function FacebookIcon({ size = 16 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+    </svg>
+  );
+}
 
 const WA_NUMBER = "6281515264972";
 const WA_HREF = `https://wa.me/${WA_NUMBER}`;
@@ -51,7 +87,7 @@ export default function Footer() {
                 aria-label="Instagram"
                 className="flex h-9 w-9 items-center justify-center rounded-[4px] border border-cream/15 transition-colors hover:border-gold hover:text-gold-light"
               >
-                <Instagram size={16} />
+                <InstagramIcon size={16} />
               </a>
               <a
                 href="https://www.facebook.com/share/14J7AKuhvh7/"
@@ -60,7 +96,7 @@ export default function Footer() {
                 aria-label="Facebook"
                 className="flex h-9 w-9 items-center justify-center rounded-[4px] border border-cream/15 transition-colors hover:border-gold hover:text-gold-light"
               >
-                <Facebook size={16} />
+                <FacebookIcon size={16} />
               </a>
               <a
                 href={WA_HREF}
