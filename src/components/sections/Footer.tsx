@@ -1,23 +1,25 @@
-export function Footer() {
+export default function Footer() {
   return (
-    <footer id="footer" className="w-full bg-ink py-10 text-paper/70">
-      <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 px-6 text-center md:flex-row md:justify-between md:text-left">
+    <footer className="border-t border-forest-600/60 px-6 py-10">
+      <div className="mx-auto flex max-w-6xl flex-col gap-6 md:flex-row md:items-center md:justify-between">
         <div>
-          <span className="font-display text-base font-semibold text-paper">
-            Al-Waliy
-          </span>
-          <span className="ml-2 font-mono text-[10px] uppercase tracking-widest text-stamp">
-            Maklon
-          </span>
-          <p className="mt-1 font-body text-xs text-paper/50">
-            Maklon kosmetik &amp; skincare bersertifikat.
+          <div className="font-display text-lg font-semibold text-parchment">
+            CV Al-Waliy Sejahtera
+          </div>
+          <p className="mt-1 max-w-sm text-sm text-parchment-muted">
+            Jl. Santri, Perum Kavling Paramita Sembada No. 7 RT.004/037,
+            Sumberjaya, Kecamatan Tambun Selatan, Bekasi.
           </p>
         </div>
-        <p className="font-body text-xs text-paper/50">
-          © {new Date().getFullYear()} Al-Waliy Sejahtera. Seluruh hak cipta
-          dilindungi.
-        </p>
+        <div className="text-sm text-parchment-muted">
+          <div>0815-1526-4972</div>
+          <div>info@alwaliy-sejahtera.com</div>
+        </div>
       </div>
+      <p className="mx-auto mt-8 max-w-6xl text-xs text-parchment-muted/70">
+        © {new Date().getFullYear()} CV Al-Waliy Sejahtera. Seluruh hak cipta
+        dilindungi.
+      </p>
     </footer>
   );
 }

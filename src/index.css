@@ -1,48 +1,44 @@
-@import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap");
 
-/* ---------------------------------------------------
-   Brand tokens — Al-Waliy Maklon
-   Bahasa visual: dokumen resmi (sertifikat, CoA, batch)
---------------------------------------------------- */
-@theme {
-  --font-display: "Space Grotesk", sans-serif;
-  --font-mono: "IBM Plex Mono", monospace;
-  --font-body: "Inter", sans-serif;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  --color-forest: #123625;
-  --color-paper: #F1EEE3;
-  --color-ink: #1A1F1B;
-  --color-stamp: #AE3B2B;
-  --color-hairline: #CFC7AF;
+html {
+  scroll-behavior: smooth;
 }
 
-@layer base {
-  html {
-    scroll-behavior: smooth;
-  }
+body {
+  @apply bg-forest text-parchment font-body antialiased;
+}
 
-  body {
-    background-color: var(--color-paper);
-    color: var(--color-ink);
-    font-family: var(--font-body);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+@layer utilities {
+  .hex {
+    clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
   }
-
-  h1, h2, h3 {
-    font-family: var(--font-display);
+  .honeycomb-bg {
+    background-image:
+      radial-gradient(
+        circle at 20% 20%,
+        rgba(217, 164, 65, 0.08) 0,
+        transparent 45%
+      ),
+      radial-gradient(
+        circle at 80% 60%,
+        rgba(181, 101, 45, 0.1) 0,
+        transparent 40%
+      );
   }
-
-  code, .mono {
-    font-family: var(--font-mono);
+  .focus-ring {
+    @apply outline-none focus-visible:ring-2 focus-visible:ring-honey-300 focus-visible:ring-offset-2 focus-visible:ring-offset-forest;
   }
+}
 
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-      scroll-behavior: auto !important;
-    }
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

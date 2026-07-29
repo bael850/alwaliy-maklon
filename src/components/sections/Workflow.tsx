@@ -1,96 +1,26 @@
-import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { workflow } from "../../lib/data";
 
-gsap.registerPlugin(ScrollTrigger);
-
-const STEPS = [
-  {
-    num: "01",
-    title: "Konsultasi & Riset",
-    desc: "Diskusi konsep, target pasar, dan kebutuhan produk Anda.",
-  },
-  {
-    num: "02",
-    title: "Formulasi & Sample",
-    desc: "Tim R&D mengembangkan formula, Anda evaluasi dan revisi sample.",
-  },
-  {
-    num: "03",
-    title: "Legalitas",
-    desc: "Pengurusan sertifikasi halal, notifikasi BPOM, dan CoA.",
-  },
-  {
-    num: "04",
-    title: "Produksi",
-    desc: "Produksi massal sesuai standar GMP dengan quality control ketat.",
-  },
-  {
-    num: "05",
-    title: "Pengiriman",
-    desc: "Produk jadi dikemas dan dikirim, siap Anda pasarkan.",
-  },
-];
-
-export function Workflow() {
-  const rootRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from('[data-flow="heading"]', {
-        opacity: 0,
-        y: 20,
-        duration: 0.6,
-        ease: "power3.out",
-        scrollTrigger: { trigger: rootRef.current, start: "top 75%" },
-      });
-      gsap.from('[data-flow="step"]', {
-        opacity: 0,
-        x: -16,
-        duration: 0.5,
-        stagger: 0.1,
-        ease: "power3.out",
-        scrollTrigger: { trigger: '[data-flow="list"]', start: "top 80%" },
-      });
-    }, rootRef);
-    return () => ctx.revert();
-  }, []);
-
+export default function Workflow() {
   return (
     <section
-      ref={rootRef}
-      id="process"
-      className="border-b border-hairline py-20 md:py-28"
+      id="alur"
+      className="border-t border-forest-600/60 bg-forest-800/40 px-6 py-20"
     >
-      <div className="mx-auto max-w-6xl px-6">
-        <div data-flow="heading" className="max-w-2xl">
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-stamp">
-            Alur Kerja
-          </p>
-          <h2 className="mt-3 font-display text-3xl font-semibold leading-tight tracking-tight text-ink md:text-4xl">
-            Dari diskusi sampai produk di tangan Anda.
-          </h2>
-        </div>
-
-        <div
-          data-flow="list"
-          className="mt-14 divide-y divide-hairline border-t border-b border-hairline"
-        >
-          {STEPS.map((s) => (
-            <div
-              key={s.num}
-              data-flow="step"
-              className="flex flex-col gap-2 py-6 md:flex-row md:items-baseline md:gap-8 md:py-7"
-            >
-              <span className="font-mono text-sm text-stamp md:w-12 md:shrink-0">
-                {s.num}
-              </span>
-              <h3 className="font-display text-lg font-semibold text-ink md:w-56 md:shrink-0">
-                {s.title}
+      <div className="mx-auto max-w-6xl">
+        <h2 className="font-display text-3xl font-semibold text-parchment">
+          Alur kerja produksi
+        </h2>
+        <div className="relative mt-12 grid gap-8 md:grid-cols-5">
+          <div className="absolute left-0 right-0 top-5 hidden h-px bg-forest-600 md:block" />
+          {workflow.map((w) => (
+            <div key={w.step} className="relative">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-honey bg-forest font-display font-semibold text-honey">
+                {w.step}
+              </div>
+              <h3 className="mt-4 font-display text-lg font-semibold text-parchment">
+                {w.title}
               </h3>
-              <p className="font-body text-sm leading-relaxed text-ink/70 md:text-[15px]">
-                {s.desc}
-              </p>
+              <p className="mt-1 text-sm text-parchment-muted">{w.desc}</p>
             </div>
           ))}
         </div>

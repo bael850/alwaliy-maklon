@@ -1,29 +1,30 @@
-import { MessageCircle } from "lucide-react";
-
-export function Cta() {
+export default function Cta() {
   return (
-    <section id="cta" className="bg-forest py-20 text-paper md:py-28">
-      <div className="mx-auto max-w-3xl px-6 text-center">
-        <p className="font-mono text-xs uppercase tracking-[0.2em] text-paper/60">
-          Mulai Sekarang
-        </p>
-        <h2 className="mt-3 font-display text-3xl font-semibold leading-tight tracking-tight md:text-4xl">
-          Siap wujudkan produk Anda sendiri?
+    <section id="cta" className="border-t border-forest-600/60 px-6 py-20">
+      <div className="mx-auto max-w-4xl rounded-3xl bg-honey px-8 py-14 text-center">
+        <h2 className="font-display text-3xl font-semibold text-forest md:text-4xl">
+          Siap wujudkan produk herbal Anda sendiri?
         </h2>
-        <p className="mx-auto mt-5 max-w-lg font-body text-base leading-relaxed text-paper/80">
-          Konsultasi gratis dengan tim kami — ceritakan konsep produk Anda, kami
-          bantu hitung estimasi biaya dan waktu produksinya.
+        <p className="mx-auto mt-4 max-w-xl text-forest/80">
+          Konsultasikan ide produk Anda secara gratis. Tim kami siap membantu
+          dari formulasi hingga produk siap jual.
         </p>
-
-        <a
-          href="https://wa.me/6281234567890"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-9 inline-flex items-center gap-2 rounded-sm bg-stamp px-7 py-3.5 font-body text-sm font-medium text-paper transition-opacity hover:opacity-90"
-        >
-          <MessageCircle size={18} />
-          Konsultasi Gratis via WhatsApp
-        </a>
+        <div className="mt-8 flex flex-wrap justify-center gap-4">
+          <a
+            href="https://wa.me/6281515264972"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="focus-ring rounded-full bg-forest px-6 py-3 text-sm font-semibold text-honey transition-opacity hover:opacity-90"
+          >
+            Chat via WhatsApp
+          </a>
+          <a
+            href="mailto:info@alwaliy-sejahtera.com"
+            className="focus-ring rounded-full border-2 border-forest px-6 py-3 text-sm font-semibold text-forest transition-colors hover:bg-forest hover:text-honey"
+          >
+            Kirim Email
+          </a>
+        </div>
       </div>
     </section>
   );
