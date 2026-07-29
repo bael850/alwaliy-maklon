@@ -1,51 +1,58 @@
+import { ArrowRight } from "lucide-react";
+import heroImage from "../../assets/hero.png";
+
+const WA_NUMBER = "6281515264972";
+const WA_MESSAGE =
+  "Assalamualaikum, saya mau konsultasi soal layanan makloon Al-Waliy...";
+const WA_HREF = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MESSAGE)}`;
+
 export default function Hero() {
   return (
-    <section className="honeycomb-bg relative overflow-hidden bg-honey-drip px-6 pb-20 pt-16 md:pt-24">
-      <div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-2">
-        <div>
-          <span className="focus-ring inline-block rounded-full border border-honey/40 px-4 py-1 text-xs font-semibold uppercase tracking-widest text-honey">
-            Jasa Maklon Herbal & Madu
-          </span>
-          <h1 className="mt-6 font-display text-4xl font-semibold leading-tight text-parchment md:text-5xl">
-            Wujudkan produk herbal dan madu dengan
-            <span className="text-honey"> merek Anda sendiri</span>
-          </h1>
-          <p className="mt-5 max-w-md text-parchment-muted">
-            CV Al-Waliy Sejahtera membantu Anda dari formulasi, produksi, hingga
-            legalitas BPOM dan Halal — tanpa perlu membangun pabrik sendiri.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-4">
-            <a
-              href="#cta"
-              className="focus-ring rounded-full bg-honey px-6 py-3 text-sm font-semibold text-forest transition-colors hover:bg-honey-300"
-            >
-              Mulai Konsultasi
-            </a>
-            <a
-              href="#alur"
-              className="focus-ring rounded-full border border-parchment-muted/40 px-6 py-3 text-sm font-semibold text-parchment transition-colors hover:border-honey hover:text-honey"
-            >
-              Lihat Alur Kerja
-            </a>
-          </div>
-        </div>
+    <section
+      id="hero"
+      className="relative flex min-h-[92vh] items-end overflow-hidden"
+    >
+      {/* Background image */}
+      <img
+        src={heroImage}
+        alt="Proses produksi herbal Al-Waliy"
+        className="absolute inset-0 h-full w-full object-cover"
+      />
+      {/* Overlay gradient — gelap di bawah biar teks kebaca, tipis di atas biar navbar transparan tetap kontras */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
 
-        <div className="relative mx-auto aspect-square w-full max-w-sm">
-          <div className="absolute inset-0 grid grid-cols-3 gap-3 [&>div]:aspect-square">
-            {Array.from({ length: 9 }).map((_, i) => (
-              <div
-                key={i}
-                className="hex bg-forest-700"
-                style={{
-                  opacity: [0.9, 0.6, 0.9, 0.6, 1, 0.6, 0.9, 0.6, 0.9][i],
-                  transform: i % 2 === 0 ? "translateY(0)" : "translateY(10%)",
-                }}
-              />
-            ))}
-          </div>
-          <div className="hex absolute inset-[30%] flex items-center justify-center bg-honey text-forest shadow-lg">
-            <span className="font-display text-2xl font-bold">Al-Waliy</span>
-          </div>
+      {/* Content */}
+      <div className="relative z-10 mx-auto w-full max-w-6xl px-5 pb-16 pt-40 md:px-8 md:pb-24">
+        <p className="mb-4 text-xs md:text-sm font-semibold uppercase tracking-[0.18em] text-gold-light">
+          Produksi Bersertifikat Halal MUI &amp; BPOM
+        </p>
+
+        <h1 className="max-w-3xl font-heading text-4xl font-extrabold leading-[1.08] text-cream md:text-6xl">
+          Wujudkan Brand Herbal &amp; Madu Anda Sendiri
+        </h1>
+
+        <p className="mt-5 max-w-xl text-base leading-relaxed text-cream/85 md:text-lg">
+          Jasa makloon produksi herbal dan madu dari produsen berpengalaman
+          sejak 2014 — dari formulasi, kemasan, hingga legalitas, tanpa Anda
+          perlu membangun pabrik sendiri.
+        </p>
+
+        <div className="mt-8 flex flex-wrap items-center gap-4">
+          <a
+            href={WA_HREF}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-[4px] border-[1.5px] border-cream px-6 py-3.5 text-sm font-semibold text-cream transition-colors hover:bg-cream hover:text-forest"
+          >
+            Konsultasi Gratis
+            <ArrowRight size={16} strokeWidth={2.5} />
+          </a>
+          <a
+            href="#layanan"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-cream/90 underline underline-offset-4 transition-colors hover:text-gold-light"
+          >
+            Lihat Layanan
+          </a>
         </div>
       </div>
     </section>

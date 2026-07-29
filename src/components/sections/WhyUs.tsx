@@ -1,40 +1,56 @@
-const reasons = [
+import { ShieldCheck, PackagePlus, FileCheck2, Sparkles } from "lucide-react";
+
+const REASONS = [
   {
-    title: "Fasilitas Produksi Sendiri",
-    desc: "Proses produksi dilakukan di fasilitas kami sendiri, bukan melalui pihak ketiga.",
+    icon: ShieldCheck,
+    title: "Legalitas Lengkap",
+    desc: "Bantu pengurusan Halal MUI, BPOM, dan hak merek untuk produk Anda.",
   },
   {
-    title: "Tim Formulasi Berpengalaman",
-    desc: "Racikan disusun oleh tim yang memahami karakter bahan herbal dan madu lokal.",
+    icon: PackagePlus,
+    title: "Formulasi Fleksibel",
+    desc: "Serbuk, kapsul, cair, hingga madu — disesuaikan dengan konsep brand Anda.",
   },
   {
-    title: "Legalitas Terurus Lengkap",
-    desc: "Pendampingan izin edar BPOM dan sertifikasi Halal MUI hingga terbit.",
+    icon: FileCheck2,
+    title: "Standar CPOTB",
+    desc: "Diproduksi di fasilitas yang memenuhi Cara Pembuatan Obat Tradisional yang Baik.",
   },
   {
-    title: "Fleksibel untuk Skala Kecil",
-    desc: "Minimum order ramah untuk usaha yang baru memulai maupun yang ingin berkembang.",
+    icon: Sparkles,
+    title: "Desain & Kemasan",
+    desc: "Dukungan desain kemasan dan branding, bukan cuma urusan produksi.",
   },
 ];
 
 export default function WhyUs() {
   return (
-    <section className="border-t border-forest-600/60 bg-forest-800/40 px-6 py-20">
-      <div className="mx-auto max-w-6xl">
-        <h2 className="font-display text-3xl font-semibold text-parchment">
-          Kenapa memilih kami
-        </h2>
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {reasons.map((r) => (
+    <section className="bg-white py-20 md:py-28">
+      <div className="mx-auto max-w-6xl px-5 md:px-8">
+        <div className="mb-12 max-w-2xl">
+          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold">
+            Jaminan Kami
+          </p>
+          <h2 className="font-heading text-3xl font-extrabold leading-tight text-forest md:text-4xl">
+            Kenapa Pilih Al-Waliy sebagai Mitra Makloon
+          </h2>
+        </div>
+
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {REASONS.map((reason) => (
             <div
-              key={r.title}
-              className="rounded-2xl border border-forest-600/60 p-6"
+              key={reason.title}
+              className="rounded-[4px] border border-forest/10 bg-cream p-6"
             >
-              <div className="hex mb-4 h-10 w-10 bg-honey" />
-              <h3 className="font-display text-lg font-semibold text-parchment">
-                {r.title}
+              <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-[4px] bg-forest text-cream">
+                <reason.icon size={20} strokeWidth={2} />
+              </div>
+              <h3 className="font-heading text-base font-bold text-forest">
+                {reason.title}
               </h3>
-              <p className="mt-2 text-sm text-parchment-muted">{r.desc}</p>
+              <p className="mt-2 text-sm leading-relaxed text-ink/70">
+                {reason.desc}
+              </p>
             </div>
           ))}
         </div>

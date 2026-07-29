@@ -1,29 +1,93 @@
+import { MapPin, MessageCircle, Globe } from "lucide-react";
+
+const WA_NUMBER = "6281515264972";
+const WA_MESSAGE =
+  "Assalamualaikum, saya mau tanya terkait layanan makloon Al-Waliy...";
+const WA_HREF = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MESSAGE)}`;
+
 export default function Cta() {
   return (
-    <section id="cta" className="border-t border-forest-600/60 px-6 py-20">
-      <div className="mx-auto max-w-4xl rounded-3xl bg-honey px-8 py-14 text-center">
-        <h2 className="font-display text-3xl font-semibold text-forest md:text-4xl">
-          Siap wujudkan produk herbal Anda sendiri?
-        </h2>
-        <p className="mx-auto mt-4 max-w-xl text-forest/80">
-          Konsultasikan ide produk Anda secara gratis. Tim kami siap membantu
-          dari formulasi hingga produk siap jual.
-        </p>
-        <div className="mt-8 flex flex-wrap justify-center gap-4">
-          <a
-            href="https://wa.me/6281515264972"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="focus-ring rounded-full bg-forest px-6 py-3 text-sm font-semibold text-honey transition-opacity hover:opacity-90"
-          >
-            Chat via WhatsApp
-          </a>
-          <a
-            href="mailto:info@alwaliy-sejahtera.com"
-            className="focus-ring rounded-full border-2 border-forest px-6 py-3 text-sm font-semibold text-forest transition-colors hover:bg-forest hover:text-honey"
-          >
-            Kirim Email
-          </a>
+    <section className="bg-forest py-20 md:py-28">
+      <div className="mx-auto max-w-6xl px-5 md:px-8">
+        <div className="grid gap-10 md:grid-cols-2 md:items-center md:gap-16">
+          <div>
+            <p className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.14em] text-gold-light">
+              <span className="text-cream/30">04</span> Hubungi Kami
+            </p>
+            <h2 className="font-heading text-3xl font-extrabold leading-tight text-cream md:text-4xl">
+              Siap Wujudkan Produk Herbal dengan Brand Anda Sendiri?
+            </h2>
+            <p className="mt-4 max-w-md text-cream/80">
+              Tim kami siap membantu — dari informasi produk, formulasi, hingga
+              konsultasi produksi makloon sesuai kebutuhan brand Anda.
+            </p>
+
+            <a
+              href={WA_HREF}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-8 inline-flex items-center gap-2 rounded-[4px] bg-gold px-7 py-3.5 text-sm font-semibold text-forest transition-colors hover:bg-gold-light"
+            >
+              <MessageCircle size={18} strokeWidth={2.5} />
+              Chat WhatsApp Sekarang
+            </a>
+          </div>
+
+          <div className="flex flex-col gap-5 rounded-[4px] border border-cream/15 bg-forest-light/30 p-6 md:p-8">
+            <div className="flex items-start gap-3">
+              <MapPin
+                size={20}
+                strokeWidth={2}
+                className="mt-0.5 shrink-0 text-gold"
+              />
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-cream/50">
+                  Lokasi
+                </p>
+                <p className="text-cream">Tambun Selatan, Bekasi, Jawa Barat</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <MessageCircle
+                size={20}
+                strokeWidth={2}
+                className="mt-0.5 shrink-0 text-gold"
+              />
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-cream/50">
+                  WhatsApp
+                </p>
+                <a
+                  href={WA_HREF}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-cream hover:text-gold-light"
+                >
+                  +62 815-1526-4972
+                </a>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <Globe
+                size={20}
+                strokeWidth={2}
+                className="mt-0.5 shrink-0 text-gold"
+              />
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-cream/50">
+                  Website Utama
+                </p>
+                <a
+                  href="https://alwaliy-sejahtera.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-cream hover:text-gold-light"
+                >
+                  alwaliy-sejahtera.com
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

@@ -1,35 +1,73 @@
+import { Building2, ShieldCheck, Users } from "lucide-react";
+
+const FACTS = [
+  {
+    icon: Building2,
+    title: "Berdiri Sejak 2014",
+    desc: "Memproduksi madu herbal & sari kurma di fasilitas berstandar CPOTB, Bekasi.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Legalitas Terverifikasi",
+    desc: "Sertifikasi Halal MUI & BPJPH yang dapat diverifikasi publik, terdaftar BPOM.",
+  },
+  {
+    icon: Users,
+    title: "Dipercaya Banyak Mitra",
+    desc: "Melayani konsumen akhir, reseller, dan mitra makloon di seluruh Indonesia.",
+  },
+];
+
 export default function AboutMaklon() {
   return (
-    <section id="tentang" className="border-t border-forest-600/60 px-6 py-20">
-      <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-2 md:gap-16">
-        <div>
-          <h2 className="font-display text-3xl font-semibold text-parchment">
-            Apa itu jasa maklon?
-          </h2>
-          <p className="mt-4 text-parchment-muted">
-            Maklon adalah layanan produksi produk atas nama merek Anda sendiri
-            (private label). Anda cukup membawa ide dan merek, kami yang
-            menangani formulasi, produksi, pengemasan, hingga legalitas —
-            sehingga Anda bisa fokus membangun bisnis dan pemasaran.
-          </p>
-        </div>
-        <div className="grid grid-cols-2 gap-6">
-          {[
-            ["10+", "Tahun pengalaman produksi herbal"],
-            ["50+", "Merek yang telah kami bantu"],
-            ["4", "Kategori produk yang kami produksi"],
-            ["100%", "Pendampingan legalitas BPOM & Halal"],
-          ].map(([num, label]) => (
-            <div
-              key={label}
-              className="rounded-2xl border border-forest-600/60 bg-forest-800 p-5"
+    <section id="tentang" className="bg-cream py-20 md:py-28">
+      <div className="mx-auto max-w-6xl px-5 md:px-8">
+        <div className="grid gap-12 md:grid-cols-2 md:gap-16">
+          {/* Kiri: narasi */}
+          <div>
+            <p className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.14em] text-gold">
+              <span className="text-forest/40">01</span> Profil Kami
+            </p>
+            <h2 className="font-heading text-3xl font-extrabold leading-tight text-forest md:text-4xl">
+              Produsen Herbal Berpengalaman, Kini Terbuka untuk Brand Anda
+            </h2>
+            <p className="mt-5 text-base leading-relaxed text-ink/80 md:text-lg">
+              CV Al-Waliy Sejahtera memproduksi madu herbal dan sari kurma
+              premium sejak 2014. Selain melayani konsumen akhir lewat
+              marketplace kami sendiri, kami juga membuka layanan{" "}
+              <strong className="text-forest">makloon</strong> — memproduksi
+              herbal sesuai formulasi dan kebutuhan brand Anda, dengan standar
+              kualitas yang sama seperti produk kami sendiri.
+            </p>
+            <a
+              href="#proses"
+              className="mt-6 inline-flex items-center text-sm font-semibold text-forest underline underline-offset-4 hover:text-gold"
             >
-              <div className="font-display text-3xl font-semibold text-honey">
-                {num}
+              Lihat cara kerja sama kami
+            </a>
+          </div>
+
+          {/* Kanan: fact cards */}
+          <div className="flex flex-col gap-4">
+            {FACTS.map((fact) => (
+              <div
+                key={fact.title}
+                className="flex gap-4 rounded-[4px] border border-forest/10 bg-white p-5"
+              >
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[4px] bg-forest/5 text-forest">
+                  <fact.icon size={20} strokeWidth={2} />
+                </div>
+                <div>
+                  <h3 className="font-heading text-base font-bold text-forest">
+                    {fact.title}
+                  </h3>
+                  <p className="mt-1 text-sm leading-relaxed text-ink/70">
+                    {fact.desc}
+                  </p>
+                </div>
               </div>
-              <div className="mt-1 text-sm text-parchment-muted">{label}</div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>
