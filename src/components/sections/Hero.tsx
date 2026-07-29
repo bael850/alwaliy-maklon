@@ -1,7 +1,8 @@
 import { useEffect, useRef } from "react";
 import { ArrowRight } from "lucide-react";
 import gsap from "gsap";
-import heroImage from "../../assets/hero.png";
+import heroImageWebp from "../../assets/hero.webp";
+import heroImagePng from "../../assets/hero.png";
 
 const WA_NUMBER = "6281515264972";
 const WA_MESSAGE =
@@ -15,12 +16,13 @@ export default function Hero() {
   const ctaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Preload gambar Hero — pakai heroImage yang udah di-resolve Vite,
+    // Preload gambar Hero — pakai heroImageWebp yang udah di-resolve Vite,
     // jadi otomatis akurat meski nama file di-hash pas production build.
     const link = document.createElement("link");
     link.rel = "preload";
     link.as = "image";
-    link.href = heroImage;
+    link.href = heroImageWebp;
+    link.type = "image/webp";
     link.setAttribute("fetchpriority", "high");
     document.head.appendChild(link);
 
@@ -62,15 +64,19 @@ export default function Hero() {
       id="hero"
       className="relative flex min-h-dvh items-end overflow-hidden"
     >
-      {/* Background image — eager + fetchPriority high karena ini elemen LCP (yang pertama dilihat user) */}
-      <img
-        src={heroImage}
-        alt="Proses produksi herbal Al-Waliy"
-        className="absolute inset-0 h-full w-full object-cover"
-        loading="eager"
-        fetchPriority="high"
-        decoding="async"
-      />
+      {/* Background image — WebP utama (lebih ringan), fallback PNG buat browser lama.
+          Ini elemen LCP (yang pertama dilihat user), jadi eager + fetchPriority high. */}
+      <picture>
+        <source srcSet={heroImageWebp} type="image/webp" />
+        <img
+          src={heroImagePng}
+          alt="Proses produksi herbal Al-Waliy"
+          className="absolute inset-0 h-full w-full object-cover"
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
+        />
+      </picture>
       {/* Overlay gradient — gelap di bawah biar teks kebaca, tipis di atas biar navbar transparan tetap kontras */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
 
@@ -100,7 +106,7 @@ export default function Hero() {
         </p>
 
         <div ref={ctaRef} className="mt-8 flex flex-wrap items-center gap-4">
-          <a
+          
             href={WA_HREF}
             target="_blank"
             rel="noopener noreferrer"
@@ -109,7 +115,7 @@ export default function Hero() {
             Konsultasi Gratis
             <ArrowRight size={16} strokeWidth={2.5} />
           </a>
-          <a
+          
             href="#layanan"
             className="inline-flex items-center gap-2 text-sm font-semibold text-cream/90 underline underline-offset-4 transition-colors hover:text-gold-light"
           >
