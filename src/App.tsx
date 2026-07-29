@@ -1,5 +1,6 @@
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import FloatingWhatsApp from "./components/FloatingWhatsApp";
 import Hero from "./components/sections/Hero";
 import AboutMaklon from "./components/sections/AboutMaklon";
 import Certifications from "./components/sections/Certifications";
@@ -31,6 +32,7 @@ export default function App() {
         <Cta />
       </main>
       <Footer />
+      <FloatingWhatsApp />
     </>
   );
 }
