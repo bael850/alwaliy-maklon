@@ -15,7 +15,7 @@ export default function FloatingWhatsApp() {
       className="fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-gold text-forest shadow-lg shadow-black/20 transition-transform hover:scale-105 hover:bg-gold-light md:bottom-6 md:right-6"
     >
       <MessageCircle size={26} strokeWidth={2.25} />
-      <span className="sr-only">Chat via WhatsApp</span>
+      <span className="sr-only">Chat via WhatsAppp</span>
     </a>
   );
 }
