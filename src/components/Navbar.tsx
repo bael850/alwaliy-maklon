@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Menu, X, MessageCircle } from "lucide-react";
+import logoImage from "../assets/logo.png";
 
 const NAV_LINKS = [
   { label: "Tentang", href: "#tentang" },
@@ -47,22 +48,29 @@ export default function Navbar() {
       <div className="mx-auto max-w-6xl px-5 md:px-8">
         <div className="flex h-16 md:h-20 items-center justify-between">
           {/* Logo */}
-          <a href="#" className="flex items-baseline gap-2 shrink-0">
-            <span
-              className={[
-                "font-heading text-lg md:text-xl font-extrabold tracking-tight transition-colors",
-                scrolled ? "text-forest" : "text-cream",
-              ].join(" ")}
-            >
-              AL-WALIY
-            </span>
-            <span
-              className={[
-                "text-[11px] md:text-xs font-medium uppercase tracking-[0.14em] transition-colors",
-                scrolled ? "text-gold" : "text-gold-light",
-              ].join(" ")}
-            >
-              Maklon
+          <a href="#" className="flex items-center gap-2.5 shrink-0">
+            <img
+              src={logoImage}
+              alt="Logo Al-Waliy"
+              className="h-8 w-8 md:h-9 md:w-9 object-contain"
+            />
+            <span className="flex items-baseline gap-2">
+              <span
+                className={[
+                  "font-heading text-lg md:text-xl font-extrabold tracking-tight transition-colors",
+                  scrolled ? "text-forest" : "text-cream",
+                ].join(" ")}
+              >
+                AL-WALIY
+              </span>
+              <span
+                className={[
+                  "text-[11px] md:text-xs font-medium uppercase tracking-[0.14em] transition-colors",
+                  scrolled ? "text-gold" : "text-gold-light",
+                ].join(" ")}
+              >
+                Maklon
+              </span>
             </span>
           </a>
 
