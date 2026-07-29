@@ -83,7 +83,7 @@ export default function Cta() {
                   rel="noopener noreferrer"
                   className="text-cream hover:text-gold-light"
                 >
-                  alwaliy-sejahtera.com
+                  alwaliy-sejahteraa.com
                 </a>
               </div>
             </div>
