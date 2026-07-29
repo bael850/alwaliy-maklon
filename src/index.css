@@ -43,6 +43,29 @@ body {
   color: var(--color-ink);
 }
 
+/* === Accessibility: skip-link + focus state === */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  background: var(--color-forest);
+  color: var(--color-cream);
+  padding: 0.75rem 1.25rem;
+  border-radius: 0 0 4px 0;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+.skip-link:focus {
+  left: 0;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
 h1,
 h2,
 h3,
@@ -50,7 +73,6 @@ h4,
 .font-heading {
   font-family: var(--font-heading);
   font-weight: 700;
-  color: var(--color-forest);
   letter-spacing: -0.01em;
 }
 

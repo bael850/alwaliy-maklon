@@ -14,8 +14,11 @@ import Cta from "./components/sections/Cta";
 export default function App() {
   return (
     <>
+      <a href="#main-content" className="skip-link">
+        Lewati ke konten utama
+      </a>
       <Navbar />
-      <main>
+      <main id="main-content">
         <Hero />
         <AboutMaklon />
         <TrustBadgeStrip />

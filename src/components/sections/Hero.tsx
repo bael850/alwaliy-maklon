@@ -45,13 +45,16 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative flex min-h-[92vh] items-end overflow-hidden"
+      className="relative flex min-h-dvh items-end overflow-hidden"
     >
-      {/* Background image */}
+      {/* Background image — eager + fetchPriority high karena ini elemen LCP (yang pertama dilihat user) */}
       <img
         src={heroImage}
         alt="Proses produksi herbal Al-Waliy"
         className="absolute inset-0 h-full w-full object-cover"
+        loading="eager"
+        fetchPriority="high"
+        decoding="async"
       />
       {/* Overlay gradient — gelap di bawah biar teks kebaca, tipis di atas biar navbar transparan tetap kontras */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
