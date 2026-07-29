@@ -39,6 +39,17 @@ function FacebookIcon({ size = 16 }: { size?: number }) {
 const WA_NUMBER = "6281515264972";
 const WA_HREF = `https://wa.me/${WA_NUMBER}`;
 
+// ⚠️ GANTI dengan alamat lengkap (jalan + no) begitu tersedia — saat ini masih
+// pakai teks alamat singkat yang sudah ada, biar embed Maps-nya relevan.
+const ALAMAT_LENGKAP =
+  "Sumberjaya, Tambun Selatan, Kab. Bekasi, Jawa Barat 17510";
+const MAPS_EMBED_SRC = `https://www.google.com/maps?q=${encodeURIComponent(
+  "CV Al-Waliy Sejahtera, " + ALAMAT_LENGKAP,
+)}&output=embed`;
+const MAPS_LINK_HREF = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+  "CV Al-Waliy Sejahtera, " + ALAMAT_LENGKAP,
+)}`;
+
 const LAYANAN_LINKS = [
   { label: "Madu Herbal", href: "#layanan" },
   { label: "Kapsul & Tablet", href: "#layanan" },
@@ -168,8 +179,34 @@ export default function Footer() {
           </div>
         </div>
 
+        {/* Maps embed — bukti lokasi fisik konkret */}
+        <div className="mt-12 border-t border-cream/10 pt-8">
+          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.12em] text-cream/40">
+            Lokasi Kami
+          </p>
+          <div className="overflow-hidden rounded-[4px] border border-cream/15">
+            <iframe
+              title="Lokasi CV Al-Waliy Sejahtera"
+              src={MAPS_EMBED_SRC}
+              width="100%"
+              height="220"
+              style={{ border: 0 }}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          </div>
+          <a
+            href={MAPS_LINK_HREF}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-2 inline-block text-xs text-gold-light hover:underline"
+          >
+            Buka di Google Maps →
+          </a>
+        </div>
+
         {/* Cert badges */}
-        <div className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-cream/10 pt-8 text-xs font-semibold uppercase tracking-wide text-cream/50">
+        <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-cream/10 pt-8 text-xs font-semibold uppercase tracking-wide text-cream/50">
           <span>Halal MUI</span>
           <span>BPOM RI</span>
           <span>CPOTB</span>
@@ -178,7 +215,7 @@ export default function Footer() {
         {/* Copyright */}
         <div className="mt-8 flex flex-col gap-2 text-xs text-cream/40 sm:flex-row sm:items-center sm:justify-between">
           <p>© 2026 CV Al-Waliy Sejahtera. All rights reserved.</p>
-          <p>Sumberjaya, Kab. Bekasi, Jawa Barat</p>
+          <p>{ALAMAT_LENGKAP}</p>
         </div>
       </div>
     </footer>

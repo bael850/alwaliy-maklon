@@ -29,7 +29,7 @@ export default function Cta() {
               className="mt-8 inline-flex items-center gap-2 rounded-[4px] bg-gold px-7 py-3.5 text-sm font-semibold text-forest transition-colors hover:bg-gold-light"
             >
               <MessageCircle size={18} strokeWidth={2.5} />
-              Chat WhatsApp Sekarang
+              Konsultasi Gratis via WhatsApp
             </a>
           </div>
 
@@ -44,7 +44,9 @@ export default function Cta() {
                 <p className="text-xs font-semibold uppercase tracking-wide text-cream/50">
                   Lokasi
                 </p>
-                <p className="text-cream">Tambun Selatan, Bekasi, Jawa Barat</p>
+                <p className="text-cream">
+                  Sumberjaya, Tambun Selatan, Kab. Bekasi 17510
+                </p>
               </div>
             </div>
             <div className="flex items-start gap-3">

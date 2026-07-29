@@ -4,7 +4,7 @@ import { ChevronDown } from "lucide-react";
 const FAQS = [
   {
     q: "Berapa minimal order untuk layanan makloon?",
-    a: "Minimal order berbeda tergantung jenis produk (serbuk, kapsul, cair, atau madu). Hubungi tim kami via WhatsApp untuk info minimal order dan estimasi biaya sesuai kebutuhan Anda.",
+    a: "Minimal order kami sengaja fleksibel, disesuaikan jenis produk (serbuk, kapsul, cair, atau madu) dan kompleksitas formulasi — cocok baik untuk brand baru yang mau mulai skala kecil maupun yang sudah siap produksi lebih besar. Tim kami akan hitungkan MOQ paling efisien untuk Anda saat konsultasi.",
   },
   {
     q: "Apakah saya perlu formulasi sendiri?",
@@ -17,6 +17,10 @@ const FAQS = [
   {
     q: "Berapa lama proses dari konsultasi sampai produk jadi?",
     a: "Estimasi waktu tergantung kompleksitas formulasi dan proses legalitas, umumnya berkisar beberapa minggu hingga beberapa bulan. Timeline detail akan dibahas saat konsultasi awal.",
+  },
+  {
+    q: "Bagaimana skema pembayaran untuk maklon?",
+    a: "Skema pembayaran kami fleksibel dan disesuaikan dengan skala kerja sama, umumnya menggunakan sistem bertahap (DP di awal, pelunasan setelah produksi) agar lebih ringan bagi Anda. Detail lengkap akan dibahas saat konsultasi.",
   },
   {
     q: "Apakah kemasan dan desain juga disediakan?",

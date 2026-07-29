@@ -33,7 +33,7 @@ export default function WhyUs() {
             Jaminan Kami
           </p>
           <h2 className="font-heading text-3xl font-extrabold leading-tight text-forest md:text-4xl">
-            Kenapa Pilih Al-Waliy sebagai Mitra Makloon
+            Kenapa Pilih Al-Waliy sebagai Mitra Makloo
           </h2>
         </Reveal>
 
