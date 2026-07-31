@@ -12,7 +12,7 @@ const NAV_LINKS = [
 
 const WA_NUMBER = "6281515264972";
 const WA_MESSAGE =
-  "Assalamualaikum, saya mau tanya terkait layanan makloon Al-Waliy...";
+  "Assalamualaikum, saya mau tanya terkait layanan maklon Al-Waliy...";
 const WA_HREF = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MESSAGE)}`;
 
 export default function Navbar() {

@@ -86,7 +86,9 @@ export default function Workflow() {
               keseluruhan proses.
             </p>
 
-            {/* Kartu tahap aktif, ikut berubah pas step di kanan berganti */}
+            {/* Kartu tahap aktif — indikator status UI, bukan heading baru.
+                Judul tahapnya sendiri sudah ada sebagai <h3> di kolom kanan,
+                jadi di sini sengaja dipakai <p> biar nggak dobel heading di DOM. */}
             <div className="mt-8 hidden max-w-sm rounded-[4px] border border-forest/10 bg-cream p-6 md:block">
               <div className="flex items-center justify-between">
                 <span className="font-heading text-sm font-bold uppercase tracking-[0.1em] text-gold">
@@ -94,9 +96,9 @@ export default function Workflow() {
                 </span>
                 <ActiveIcon size={22} strokeWidth={2} className="text-forest" />
               </div>
-              <h3 className="mt-3 font-heading text-xl font-bold text-forest">
+              <p className="mt-3 font-heading text-xl font-bold text-forest">
                 {STEPS[activeIndex].title}
-              </h3>
+              </p>
               <p className="mt-2 text-sm leading-relaxed text-ink/70">
                 {STEPS[activeIndex].desc}
               </p>

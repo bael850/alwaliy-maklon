@@ -10,8 +10,12 @@
       name="description"
       content="Jasa maklon herbal, madu, kapsul, serbuk, dan cair bersertifikat Halal MUI, BPOM, dan CPOTB. Al-Waliy Sejahtera — mitra produksi dari formulasi sampai kemasan siap jual."
     />
+    <link rel="canonical" href="https://maklon.alwaliy-sejahtera.com/" />
 
+    <!-- Open Graph -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Al-Waliy Sejahtera — Maklon" />
+    <meta property="og:locale" content="id_ID" />
     <meta
       property="og:title"
       content="Jasa Maklon Herbal & Madu Bersertifikat | Al-Waliy Sejahtera"
@@ -20,8 +24,28 @@
       property="og:description"
       content="Jasa maklon herbal, madu, kapsul, serbuk, dan cair bersertifikat Halal MUI, BPOM, dan CPOTB. Dari formulasi sampai kemasan siap jual."
     />
-    <meta property="og:image" content="/og-image.jpg" />
-    <meta property="og:url" content="https://maklon.alwaliy-sejahtera.com" />
+    <meta
+      property="og:image"
+      content="https://maklon.alwaliy-sejahtera.com/og-image.jpg"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content="https://maklon.alwaliy-sejahtera.com/" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Jasa Maklon Herbal & Madu Bersertifikat | Al-Waliy Sejahtera"
+    />
+    <meta
+      name="twitter:description"
+      content="Jasa maklon herbal, madu, kapsul, serbuk, dan cair bersertifikat Halal MUI, BPOM, dan CPOTB."
+    />
+    <meta
+      name="twitter:image"
+      content="https://maklon.alwaliy-sejahtera.com/og-image.jpg"
+    />
 
     <!-- Font yang benar-benar dipakai situs ini: Plus Jakarta Sans (heading) + Inter (body) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -31,15 +55,18 @@
       rel="stylesheet"
     />
 
-    <!-- Structured data — bantu Google paham ini bisnis lokal apa -->
+    <!-- Structured data — bisnis & jasa maklon yang ditawarkan -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "LocalBusiness",
-        "name": "CV Al-Waliy Sejahtera — Layanan Makloon",
-        "description": "Jasa makloon produksi herbal dan madu — formulasi, kemasan, hingga legalitas Halal MUI & BPOM.",
+        "@type": ["LocalBusiness", "Organization"],
+        "name": "CV Al-Waliy Sejahtera — Layanan Maklon",
+        "description": "Jasa maklon produksi herbal dan madu — formulasi, kemasan, hingga legalitas Halal MUI & BPOM.",
         "url": "https://maklon.alwaliy-sejahtera.com",
+        "image": "https://maklon.alwaliy-sejahtera.com/og-image.jpg",
         "telephone": "+6281515264972",
+        "priceRange": "$$",
+        "areaServed": "ID",
         "address": {
           "@type": "PostalAddress",
           "streetAddress": "Sumberjaya",
@@ -51,6 +78,110 @@
         "sameAs": [
           "https://www.instagram.com/alwaliy.official/",
           "https://www.facebook.com/share/14J7AKuhvh7/"
+        ],
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Layanan Maklon Al-Waliy Sejahtera",
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Maklon Produk Herbal",
+                "serviceType": "Maklon Herbal"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Maklon Produk Madu",
+                "serviceType": "Maklon Madu"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Maklon Kapsul",
+                "serviceType": "Maklon Kapsul"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Maklon Serbuk",
+                "serviceType": "Maklon Serbuk"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Maklon Cair",
+                "serviceType": "Maklon Cair"
+              }
+            }
+          ]
+        }
+      }
+    </script>
+
+    <!-- Structured data — FAQ, disinkron persis dengan konten src/components/sections/Faq.tsx -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Berapa minimal order untuk layanan maklon?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Minimal order kami sengaja fleksibel, disesuaikan jenis produk (serbuk, kapsul, cair, atau madu) dan kompleksitas formulasi — cocok baik untuk brand baru yang mau mulai skala kecil maupun yang sudah siap produksi lebih besar. Tim kami akan hitungkan MOQ paling efisien untuk Anda saat konsultasi."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Apakah saya perlu formulasi sendiri?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Tidak wajib. Anda bisa datang dengan formulasi sendiri, atau berdiskusi dengan tim kami untuk mengembangkan formulasi baru sesuai konsep produk yang Anda inginkan."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Apakah legalitas produk (BPOM/Halal) diurus oleh Al-Waliy?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Ya, kami membantu proses registrasi BPOM dan sertifikasi Halal MUI untuk produk yang diproduksi di fasilitas kami, sebagai bagian dari layanan maklon."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Berapa lama proses dari konsultasi sampai produk jadi?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Estimasi waktu tergantung kompleksitas formulasi dan proses legalitas, umumnya berkisar beberapa minggu hingga beberapa bulan. Timeline detail akan dibahas saat konsultasi awal."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Bagaimana skema pembayaran untuk maklon?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Skema pembayaran kami fleksibel dan disesuaikan dengan skala kerja sama, umumnya menggunakan sistem bertahap (DP di awal, pelunasan setelah produksi) agar lebih ringan bagi Anda. Detail lengkap akan dibahas saat konsultasi."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Apakah kemasan dan desain juga disediakan?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Ya, kami menyediakan dukungan desain kemasan dan branding sebagai bagian dari layanan, sehingga produk Anda siap dipasarkan dengan identitas merek yang jelas."
+            }
+          }
         ]
       }
     </script>
