@@ -29,7 +29,7 @@ export default function Certifications() {
       <div className="mx-auto max-w-6xl px-5 md:px-8">
         <div className="mb-12 max-w-2xl">
           <p className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.14em] text-gold-light">
-            <span className="text-cream/30">03</span> Legalitas &amp; Standar
+            <span className="text-cream/30">02</span> Legalitas &amp; Standar
           </p>
           <h2 className="font-heading text-3xl font-extrabold leading-tight text-cream md:text-4xl">
             Bukan Sekadar Klaim — Ini Jaminan Tertulis

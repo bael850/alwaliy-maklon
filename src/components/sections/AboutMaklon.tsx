@@ -44,7 +44,7 @@ export default function AboutMaklon() {
               href="#proses"
               className="mt-6 inline-flex items-center text-sm font-semibold text-forest underline underline-offset-4 hover:text-gold"
             >
-              Lihat cara kerja sama kamii
+              Lihat cara kerja sama kami
             </a>
           </Reveal>
 
