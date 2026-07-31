@@ -1,0 +1,174 @@
+import { useEffect, useState } from "react";
+import {
+  BadgeCheck,
+  ShieldCheck,
+  Factory,
+  Scale,
+  X,
+  type LucideIcon,
+} from "lucide-react";
+import Reveal from "../Reveal";
+
+interface CertificateItem {
+  id: string;
+  title: string;
+  issuer: string;
+  icon: LucideIcon;
+  /** PLACEHOLDER — isi dengan hasil import scan/foto sertifikat asli begitu tersedia. */
+  image?: string;
+  note: string;
+}
+
+const CERTIFICATES: CertificateItem[] = [
+  {
+    id: "halal-mui",
+    title: "Sertifikat Halal MUI",
+    issuer: "Majelis Ulama Indonesia / BPJPH",
+    icon: BadgeCheck,
+    note: "Nomor sertifikat & masa berlaku akan ditampilkan di sini setelah scan dokumen tersedia.",
+  },
+  {
+    id: "bpom",
+    title: "Izin Edar BPOM",
+    issuer: "Badan Pengawas Obat dan Makanan RI",
+    icon: ShieldCheck,
+    note: "Nomor registrasi BPOM akan ditampilkan di sini setelah scan dokumen tersedia.",
+  },
+  {
+    id: "cpotb",
+    title: "Sertifikat CPOTB",
+    issuer: "Cara Pembuatan Obat Tradisional yang Baik",
+    icon: Factory,
+    note: "Detail sertifikasi fasilitas akan ditampilkan di sini setelah scan dokumen tersedia.",
+  },
+  {
+    id: "legalitas",
+    title: "Legalitas Badan Usaha",
+    issuer: "CV Al-Waliy Sejahtera",
+    icon: Scale,
+    note: "Dokumen legalitas usaha akan ditampilkan di sini setelah scan dokumen tersedia.",
+  },
+];
+
+export default function CertificateViewer() {
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const activeItem = CERTIFICATES.find((c) => c.id === activeId) ?? null;
+
+  useEffect(() => {
+    if (!activeItem) return;
+    document.body.style.overflow = "hidden";
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setActiveId(null);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [activeItem]);
+
+  return (
+    <section className="bg-cream py-20 md:py-28">
+      <div className="mx-auto max-w-6xl px-5 md:px-8">
+        <Reveal>
+          <div className="mb-10 max-w-2xl">
+            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold">
+              Dokumen Legalitas
+            </p>
+            <h2 className="font-heading text-3xl font-extrabold leading-tight text-forest md:text-4xl">
+              Sertifikat Asli, Bukan Sekadar Klaim
+            </h2>
+            <p className="mt-4 text-sm leading-relaxed text-ink/70 md:text-base">
+              Klik tiap sertifikat untuk melihat lebih detail.
+            </p>
+          </div>
+        </Reveal>
+
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {CERTIFICATES.map((cert, i) => (
+            <Reveal key={cert.id} delay={i * 0.08}>
+              <button
+                type="button"
+                onClick={() => setActiveId(cert.id)}
+                className="group flex w-full flex-col overflow-hidden rounded-[4px] border border-forest/10 bg-white text-left transition-colors hover:border-gold"
+              >
+                <div className="flex aspect-[3/4] items-center justify-center overflow-hidden bg-forest/5 transition-colors group-hover:bg-forest/10">
+                  {cert.image ? (
+                    <img
+                      src={cert.image}
+                      alt={cert.title}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <cert.icon
+                      size={40}
+                      strokeWidth={1.5}
+                      className="text-forest/40"
+                    />
+                  )}
+                </div>
+                <div className="p-4">
+                  <h3 className="font-heading text-sm font-bold text-forest">
+                    {cert.title}
+                  </h3>
+                  <p className="mt-1 text-xs text-ink/60">{cert.issuer}</p>
+                </div>
+              </button>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+
+      {activeItem && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-5 backdrop-blur-sm"
+          onClick={() => setActiveId(null)}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="certificate-modal-title"
+            onClick={(e) => e.stopPropagation()}
+            className="relative max-h-[90vh] w-full max-w-md overflow-y-auto rounded-[4px] bg-white p-6 md:p-8"
+          >
+            <button
+              type="button"
+              onClick={() => setActiveId(null)}
+              aria-label="Tutup"
+              className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-[4px] text-forest/50 transition-colors hover:bg-forest/5 hover:text-forest"
+            >
+              <X size={20} />
+            </button>
+
+            <div className="mb-5 flex aspect-[3/4] items-center justify-center overflow-hidden rounded-[4px] bg-forest/5">
+              {activeItem.image ? (
+                <img
+                  src={activeItem.image}
+                  alt={activeItem.title}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <activeItem.icon
+                  size={64}
+                  strokeWidth={1.5}
+                  className="text-forest/40"
+                />
+              )}
+            </div>
+
+            <h3
+              id="certificate-modal-title"
+              className="font-heading text-lg font-bold text-forest"
+            >
+              {activeItem.title}
+            </h3>
+            <p className="mt-1 text-sm text-ink/60">{activeItem.issuer}</p>
+            <p className="mt-3 text-sm leading-relaxed text-ink/70">
+              {activeItem.note}
+            </p>
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}

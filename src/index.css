@@ -109,3 +109,13 @@ h4,
   font-family: var(--font-heading);
   font-weight: 600;
 }
+
+/* === Sembunyikan scrollbar tapi tetap bisa discroll ===
+   Dipakai galeri horizontal-scroll (mis. FacilityGallery) */
+.hide-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge Chromium */
+}
