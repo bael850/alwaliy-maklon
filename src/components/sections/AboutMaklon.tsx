@@ -19,6 +19,18 @@ const FACTS = [
   },
 ];
 
+/**
+ * PLACEHOLDER — angka "50+ Brand Bermitra" dan "5 Jenis Kategori Produk" di bawah
+ * masih perkiraan/ilustrasi. Ganti dengan angka aktual (data internal) sebelum
+ * publish live, supaya klaim yang ditampilkan akurat dan bisa dipertanggungjawabkan.
+ */
+const STATS = [
+  { value: "10+", label: "Tahun Pengalaman Produksi" },
+  { value: "50+", label: "Brand Sudah Bermitra" },
+  { value: "4", label: "Standar Legalitas Terpenuhi" },
+  { value: "5", label: "Jenis Kategori Produk" },
+];
+
 export default function AboutMaklon() {
   return (
     <section id="tentang" className="bg-cream py-20 md:py-28">
@@ -69,6 +81,24 @@ export default function AboutMaklon() {
             ))}
           </div>
         </div>
+
+        {/* Stats strip — digabung ke sini dari StatsSection standalone,
+            biar angka kredibilitas nempel langsung sama narasi profil di atas,
+            bukan section terpisah yang berdiri sendiri. */}
+        <Reveal delay={0.15}>
+          <div className="mt-16 grid grid-cols-2 gap-8 border-t border-forest/10 pt-12 md:grid-cols-4 md:gap-6">
+            {STATS.map((stat) => (
+              <div key={stat.label} className="text-center">
+                <p className="font-heading text-3xl font-extrabold text-forest md:text-4xl">
+                  {stat.value}
+                </p>
+                <p className="mt-1 text-xs font-medium uppercase tracking-[0.08em] text-ink/60 md:text-sm">
+                  {stat.label}
+                </p>
+              </div>
+            ))}
+          </div>
+        </Reveal>
       </div>
     </section>
   );

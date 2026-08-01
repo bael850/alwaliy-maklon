@@ -1,9 +1,16 @@
-import { MapPin, MessageCircle, Globe } from "lucide-react";
+import { MapPin, MessageCircle, Globe, FileDown } from "lucide-react";
 
 const WA_NUMBER = "6281515264972";
 const WA_MESSAGE =
   "Assalamualaikum, saya mau tanya terkait layanan maklon Al-Waliy...";
 const WA_HREF = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MESSAGE)}`;
+
+/**
+ * PLACEHOLDER — arahkan href ke file PDF asli begitu company profile jadi.
+ * Taruh file di folder `public/` (mis. public/company-profile.pdf) supaya
+ * bisa diakses langsung lewat "/company-profile.pdf" tanpa perlu import.
+ */
+const COMPANY_PROFILE_HREF = "/company-profile.pdf";
 
 export default function Cta() {
   return (
@@ -22,15 +29,30 @@ export default function Cta() {
               konsultasi produksi maklon sesuai kebutuhan brand Anda.
             </p>
 
-            <a
-              href={WA_HREF}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-8 inline-flex items-center gap-2 rounded-[4px] bg-gold px-7 py-3.5 text-sm font-semibold text-forest transition-colors hover:bg-gold-light"
-            >
-              <MessageCircle size={18} strokeWidth={2.5} />
-              Konsultasi Gratis via WhatsApp
-            </a>
+            {/* CTA ganda — WhatsApp jadi aksi utama (konsultasi langsung),
+                download company profile jadi aksi sekunder buat yang masih
+                riset internal sebelum berani chat. Digabung ke sini dari
+                CompanyProfileDownload standalone, karena sama-sama ajakan
+                aksi di akhir halaman. */}
+            <div className="mt-8 flex flex-wrap items-center gap-4">
+              <a
+                href={WA_HREF}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-[4px] bg-gold px-7 py-3.5 text-sm font-semibold text-forest transition-colors hover:bg-gold-light"
+              >
+                <MessageCircle size={18} strokeWidth={2.5} />
+                Konsultasi Gratis via WhatsApp
+              </a>
+              <a
+                href={COMPANY_PROFILE_HREF}
+                download
+                className="inline-flex items-center gap-2 rounded-[4px] border-[1.5px] border-cream/30 px-7 py-3.5 text-sm font-semibold text-cream transition-colors hover:border-cream hover:bg-cream/5"
+              >
+                <FileDown size={18} strokeWidth={2.25} />
+                Download Company Profile
+              </a>
+            </div>
           </div>
 
           <div className="flex flex-col gap-5 rounded-[4px] border border-cream/15 bg-forest-light/30 p-6 md:p-8">
