@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import {
   Building2,
-  Factory,
   Blend,
   Droplets,
   FlaskConical,
