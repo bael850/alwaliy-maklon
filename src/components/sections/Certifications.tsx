@@ -121,17 +121,21 @@ export default function Certifications() {
                 onClick={() => setActiveId(cert.id)}
                 className="group flex h-full w-full flex-col rounded-[4px] border border-cream/15 bg-forest-light/40 p-6 text-left transition-colors hover:border-gold"
               >
-                <div className="mb-4 flex h-11 w-11 items-center justify-center overflow-hidden rounded-[4px] bg-gold text-forest">
+                <div className="mb-4 flex h-11 w-11 items-center justify-center overflow-hidden rounded-[4px] bg-cream p-1.5">
                   {cert.image ? (
                     <img
                       src={cert.image}
                       alt={cert.title}
                       loading="lazy"
                       decoding="async"
-                      className="h-full w-full object-cover"
+                      className="h-full w-full object-contain"
                     />
                   ) : (
-                    <cert.icon size={20} strokeWidth={2} />
+                    <cert.icon
+                      size={20}
+                      strokeWidth={2}
+                      className="text-forest"
+                    />
                   )}
                 </div>
                 <h3 className="font-heading text-base font-bold text-cream">
@@ -184,14 +188,14 @@ export default function Certifications() {
               data-lenis-prevent
               className="flex-1 overflow-y-auto overscroll-contain p-5 md:p-8"
             >
-              <div className="mb-5 flex aspect-[3/4] items-center justify-center overflow-hidden rounded-[4px] bg-forest/5">
+              <div className="mb-5 flex aspect-[3/4] items-center justify-center overflow-hidden rounded-[4px] bg-forest/5 p-6">
                 {activeItem.image ? (
                   <img
                     src={activeItem.image}
                     alt={activeItem.title}
                     loading="lazy"
                     decoding="async"
-                    className="h-full w-full object-cover"
+                    className="h-full w-full object-contain"
                   />
                 ) : (
                   <activeItem.icon
