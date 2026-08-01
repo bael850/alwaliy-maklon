@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { BadgeCheck, ShieldCheck, Factory, Scale, X } from "lucide-react";
 import Reveal from "../Reveal";
+import halalImg from "../../assets/certificates/halal-mui.png";
+import bpomImg from "../../assets/certificates/bpom.png";
+import cpotbImg from "../../assets/certificates/cpotb.png";
 
 interface CertItem {
   id: string;
@@ -19,6 +22,7 @@ const CERTS: CertItem[] = [
     title: "Halal MUI / BPJPH",
     issuer: "Majelis Ulama Indonesia / BPJPH",
     icon: BadgeCheck,
+    image: halalImg,
     desc: "Sertifikasi halal resmi dari Majelis Ulama Indonesia dan Badan Penyelenggara Jaminan Produk Halal.",
     note: "Nomor sertifikat & masa berlaku akan ditampilkan di sini setelah scan dokumen tersedia.",
   },
@@ -27,6 +31,7 @@ const CERTS: CertItem[] = [
     title: "Terdaftar BPOM",
     issuer: "Badan Pengawas Obat dan Makanan RI",
     icon: ShieldCheck,
+    image: bpomImg,
     desc: "Produk melalui evaluasi dan terdaftar di Badan Pengawas Obat dan Makanan Republik Indonesia.",
     note: "Nomor registrasi BPOM akan ditampilkan di sini setelah scan dokumen tersedia.",
   },
@@ -35,6 +40,7 @@ const CERTS: CertItem[] = [
     title: "Standar CPOTB",
     issuer: "Cara Pembuatan Obat Tradisional yang Baik",
     icon: Factory,
+    image: cpotbImg,
     desc: "Memenuhi Cara Pembuatan Obat Tradisional yang Baik — standar produksi herbal tertinggi di Indonesia.",
     note: "Detail sertifikasi fasilitas akan ditampilkan di sini setelah scan dokumen tersedia.",
   },
