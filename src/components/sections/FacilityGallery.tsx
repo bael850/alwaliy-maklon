@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import {
   Building2,
   Factory,
+  Blend,
+  Droplets,
   FlaskConical,
   PackageCheck,
   Shirt,
@@ -45,18 +47,38 @@ const FACILITY_ITEMS: FacilityItem[] = [
       { label: "Standar", value: "CPOTB" },
     ],
   },
+
+  /* ── "Alat Tempur" produksi — dipecah per mesin, masing-masing punya
+     spek sendiri, biar keliatan konkret ke calon klien (bukan cuma
+     klaim generik "punya alat produksi"). Tambah mesin lain di masa
+     depan tinggal duplikat pola item di bawah ini. ── */
   {
-    id: "alat-produksi",
+    id: "mesin-mixing",
     category: "Peralatan",
-    title: "Alat & Mesin Produksi",
-    icon: Factory,
+    title: "Mesin Mixing",
+    icon: Blend,
     description:
-      "Peralatan produksi untuk mengolah bahan baku herbal dan madu menjadi produk jadi, mulai dari pencampuran, pemasakan, hingga pengisian ke kemasan.",
+      "Mesin pencampur untuk mengolah dan menghomogenkan bahan baku herbal maupun madu sebelum masuk tahap pengisian, memastikan komposisi tiap batch konsisten.",
     specs: [
       { label: "Kapasitas", value: "Detail akan diperbarui" },
+      { label: "Fungsi", value: "Homogenisasi bahan baku" },
       { label: "Perawatan", value: "Terjadwal & terdokumentasi" },
     ],
   },
+  {
+    id: "mesin-filling",
+    category: "Peralatan",
+    title: "Mesin Filling",
+    icon: Droplets,
+    description:
+      "Mesin pengisian untuk menuang produk cair, madu, maupun serbuk ke dalam kemasan secara presisi dan higienis, menjaga takaran tiap unit tetap konsisten.",
+    specs: [
+      { label: "Kapasitas", value: "Detail akan diperbarui" },
+      { label: "Fungsi", value: "Pengisian ke kemasan" },
+      { label: "Perawatan", value: "Terjadwal & terdokumentasi" },
+    ],
+  },
+
   {
     id: "ruang-penuangan",
     category: "Ruang Produksi",
