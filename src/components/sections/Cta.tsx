@@ -11,8 +11,8 @@ export default function Cta() {
       <div className="mx-auto max-w-6xl px-5 md:px-8">
         <div className="grid gap-10 md:grid-cols-2 md:items-center md:gap-16">
           <div>
-            <p className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.14em] text-gold-light">
-              <span className="text-cream/30">04</span> Hubungi Kami
+            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold-light">
+              Hubungi Kami
             </p>
             <h2 className="font-heading text-3xl font-extrabold leading-tight text-cream md:text-4xl">
               Siap Wujudkan Produk Herbal dengan Brand Anda Sendiri?

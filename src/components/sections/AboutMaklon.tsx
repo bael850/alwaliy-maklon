@@ -26,8 +26,8 @@ export default function AboutMaklon() {
         <div className="grid gap-12 md:grid-cols-2 md:gap-16">
           {/* Kiri: narasi */}
           <Reveal>
-            <p className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.14em] text-gold">
-              <span className="text-forest/40">01</span> Profil Kami
+            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold">
+              Profil Kami
             </p>
             <h2 className="font-heading text-3xl font-extrabold leading-tight text-forest md:text-4xl">
               Produsen Herbal Berpengalaman, Kini Terbuka untuk Brand Anda

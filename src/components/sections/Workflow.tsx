@@ -75,8 +75,8 @@ export default function Workflow() {
         <div className="grid gap-10 md:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] md:gap-16">
           {/* Panel kiri — nempel selama user scroll ngelewatin 6 tahap di kanan */}
           <div className="md:sticky md:top-28 md:self-start">
-            <p className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.14em] text-gold">
-              <span className="text-forest/40">03</span> Alur Kerja Sama
+            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold">
+              Alur Kerja Sama
             </p>
             <h2 className="font-heading text-3xl font-extrabold leading-tight text-forest md:text-4xl">
               Enam Tahap, dari Ide sampai Produk Jadi
