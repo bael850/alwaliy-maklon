@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { BadgeCheck, ShieldCheck, Factory, Scale, X } from "lucide-react";
 import Reveal from "../Reveal";
-import halalImg from "../../assets/certificates/halal-mui.png";
-import bpomImg from "../../assets/certificates/bpom.png";
-import cpotbImg from "../../assets/certificates/cpotb.png";
+import SmartImage from "../SmartImage";
 
 interface CertItem {
   id: string;
@@ -11,8 +9,12 @@ interface CertItem {
   issuer: string;
   icon: typeof BadgeCheck;
   desc: string;
-  /** PLACEHOLDER — isi dengan hasil import scan/foto sertifikat asli begitu tersedia. */
-  image?: string;
+  /**
+   * PLACEHOLDER — path TANPA ekstensi ke public/images/certifications/<nama>.
+   * Taruh file di public/images/certifications/<nama>.webp (atau .jpg / .png,
+   * bebas salah satu) — otomatis kedeteksi, gak perlu ubah kode ini.
+   */
+  imageBase?: string;
   note: string;
 }
 
@@ -22,7 +24,7 @@ const CERTS: CertItem[] = [
     title: "Halal MUI / BPJPH",
     issuer: "Majelis Ulama Indonesia / BPJPH",
     icon: BadgeCheck,
-    image: halalImg,
+    imageBase: "/images/certifications/halal-mui",
     desc: "Sertifikasi halal resmi dari Majelis Ulama Indonesia dan Badan Penyelenggara Jaminan Produk Halal.",
     note: "Nomor sertifikat & masa berlaku akan ditampilkan di sini setelah scan dokumen tersedia.",
   },
@@ -31,7 +33,7 @@ const CERTS: CertItem[] = [
     title: "Terdaftar BPOM",
     issuer: "Badan Pengawas Obat dan Makanan RI",
     icon: ShieldCheck,
-    image: bpomImg,
+    imageBase: "/images/certifications/bpom",
     desc: "Produk melalui evaluasi dan terdaftar di Badan Pengawas Obat dan Makanan Republik Indonesia.",
     note: "Nomor registrasi BPOM akan ditampilkan di sini setelah scan dokumen tersedia.",
   },
@@ -40,7 +42,7 @@ const CERTS: CertItem[] = [
     title: "Standar CPOTB",
     issuer: "Cara Pembuatan Obat Tradisional yang Baik",
     icon: Factory,
-    image: cpotbImg,
+    imageBase: "/images/certifications/cpotb",
     desc: "Memenuhi Cara Pembuatan Obat Tradisional yang Baik — standar produksi herbal tertinggi di Indonesia.",
     note: "Detail sertifikasi fasilitas akan ditampilkan di sini setelah scan dokumen tersedia.",
   },
@@ -49,6 +51,7 @@ const CERTS: CertItem[] = [
     title: "Badan Hukum Resmi",
     issuer: "CV Al-Waliy Sejahtera",
     icon: Scale,
+    imageBase: "/images/certifications/legalitas",
     desc: "CV Al-Waliy Sejahtera terdaftar sebagai badan hukum resmi dengan legalitas usaha lengkap.",
     note: "Dokumen legalitas usaha akan ditampilkan di sini setelah scan dokumen tersedia.",
   },
@@ -122,13 +125,18 @@ export default function Certifications() {
                 className="group flex h-full w-full flex-col rounded-[4px] border border-cream/15 bg-forest-light/40 p-6 text-left transition-colors hover:border-gold"
               >
                 <div className="mb-4 flex h-11 w-11 items-center justify-center overflow-hidden rounded-[4px] bg-cream p-1.5">
-                  {cert.image ? (
-                    <img
-                      src={cert.image}
+                  {cert.imageBase ? (
+                    <SmartImage
+                      basePath={cert.imageBase}
                       alt={cert.title}
-                      loading="lazy"
-                      decoding="async"
                       className="h-full w-full object-contain"
+                      fallback={
+                        <cert.icon
+                          size={20}
+                          strokeWidth={2}
+                          className="text-forest"
+                        />
+                      }
                     />
                   ) : (
                     <cert.icon
@@ -189,13 +197,18 @@ export default function Certifications() {
               className="flex-1 overflow-y-auto overscroll-contain p-5 md:p-8"
             >
               <div className="mb-5 flex aspect-[3/4] items-center justify-center overflow-hidden rounded-[4px] bg-forest/5 p-6">
-                {activeItem.image ? (
-                  <img
-                    src={activeItem.image}
+                {activeItem.imageBase ? (
+                  <SmartImage
+                    basePath={activeItem.imageBase}
                     alt={activeItem.title}
-                    loading="lazy"
-                    decoding="async"
                     className="h-full w-full object-contain"
+                    fallback={
+                      <activeItem.icon
+                        size={64}
+                        strokeWidth={1.5}
+                        className="text-forest/40"
+                      />
+                    }
                   />
                 ) : (
                   <activeItem.icon

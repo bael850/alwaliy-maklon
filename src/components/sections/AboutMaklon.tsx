@@ -6,17 +6,18 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import Reveal from "../Reveal";
+import SmartImage from "../SmartImage";
 
 interface AboutPhoto {
   id: string;
   label: string;
   icon: LucideIcon;
   /**
-   * PLACEHOLDER ASET — kosongkan/undefined = tampil ikon generik + label.
-   * Begitu foto asli tersedia: import gambarnya (mis. dari src/assets/about/...)
-   * lalu isi field ini. Tinggal ganti nilai, gak perlu ubah struktur JSX.
+   * PLACEHOLDER — path TANPA ekstensi ke public/images/about/<nama>.
+   * Taruh file di public/images/about/<nama>.webp (atau .jpg / .png, bebas
+   * salah satu) — otomatis kedeteksi, gak perlu ubah kode ini.
    */
-  image?: string;
+  imageBase: string;
 }
 
 // Foto besar (kiri) + 2 foto kecil (kanan) — sesuaikan label & urutan
@@ -25,11 +26,22 @@ const MAIN_PHOTO: AboutPhoto = {
   id: "gedung",
   label: "Gedung Produksi",
   icon: Building2,
+  imageBase: "/images/about/gedung",
 };
 
 const SIDE_PHOTOS: AboutPhoto[] = [
-  { id: "interior", label: "Interior & Ruang Kerja", icon: DoorOpen },
-  { id: "tim", label: "Tim Al-Waliy", icon: Users },
+  {
+    id: "interior",
+    label: "Interior & Ruang Kerja",
+    icon: DoorOpen,
+    imageBase: "/images/about/interior",
+  },
+  {
+    id: "tim",
+    label: "Tim Al-Waliy",
+    icon: Users,
+    imageBase: "/images/about/tim",
+  },
 ];
 
 const FACTS = [
@@ -75,26 +87,23 @@ function PhotoTile({
     <div
       className={`relative overflow-hidden rounded-[4px] border border-forest/10 bg-forest/5 ${className}`}
     >
-      {photo.image ? (
-        <img
-          src={photo.image}
-          alt={photo.label}
-          loading="lazy"
-          decoding="async"
-          className="h-full w-full object-cover"
-        />
-      ) : (
-        <div className="flex h-full w-full flex-col items-center justify-center gap-2 p-4 text-center">
-          <photo.icon
-            size={iconSize}
-            strokeWidth={1.5}
-            className="text-forest/30"
-          />
-          <span className="text-[11px] font-medium uppercase tracking-[0.08em] text-forest/40">
-            {photo.label}
-          </span>
-        </div>
-      )}
+      <SmartImage
+        basePath={photo.imageBase}
+        alt={photo.label}
+        className="h-full w-full object-cover"
+        fallback={
+          <div className="flex h-full w-full flex-col items-center justify-center gap-2 p-4 text-center">
+            <photo.icon
+              size={iconSize}
+              strokeWidth={1.5}
+              className="text-forest/30"
+            />
+            <span className="text-[11px] font-medium uppercase tracking-[0.08em] text-forest/40">
+              {photo.label}
+            </span>
+          </div>
+        }
+      />
     </div>
   );
 }
@@ -129,8 +138,9 @@ export default function AboutMaklon() {
           </Reveal>
 
           {/* Kanan: mini galeri foto — 1 foto besar + 2 foto kecil.
-              PLACEHOLDER: isi field `image` di MAIN_PHOTO / SIDE_PHOTOS di atas
-              begitu foto gedung/interior/lobby asli tersedia. */}
+              PLACEHOLDER: taruh file di public/images/about/<nama>.(webp|jpg|png)
+              sesuai imageBase di MAIN_PHOTO / SIDE_PHOTOS di atas — otomatis
+              kedeteksi, gak perlu ubah kode. */}
           <Reveal delay={0.1}>
             <div className="grid grid-cols-2 gap-3 md:gap-4">
               <PhotoTile

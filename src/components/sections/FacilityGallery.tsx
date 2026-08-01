@@ -11,6 +11,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import Reveal from "../Reveal";
+import SmartImage from "../SmartImage";
 
 interface FacilitySpec {
   label: string;
@@ -23,12 +24,11 @@ interface FacilityItem {
   title: string;
   icon: LucideIcon;
   /**
-   * PLACEHOLDER ASET — kosongkan/undefined = tampil ikon generik.
-   * Begitu foto asli tersedia: import gambarnya (mis. dari src/assets/facility/...)
-   * lalu isi field ini dengan hasil import tsb. Kartu & modal otomatis pakai <img>
-   * begitu field ini terisi, tidak perlu ubah struktur lain.
+   * PLACEHOLDER — path TANPA ekstensi ke public/images/facility/<nama>.
+   * Taruh file di public/images/facility/<nama>.webp (atau .jpg / .png,
+   * bebas salah satu) — otomatis kedeteksi, gak perlu ubah kode ini.
    */
-  image?: string;
+  imageBase: string;
   description: string;
   specs: FacilitySpec[];
 }
@@ -39,6 +39,7 @@ const FACILITY_ITEMS: FacilityItem[] = [
     category: "Fasilitas",
     title: "Gedung Produksi",
     icon: Building2,
+    imageBase: "/images/facility/gedung",
     description:
       "Bangunan produksi milik sendiri di Bekasi, dirancang mengikuti alur produksi satu arah sesuai standar CPOTB — dari penerimaan bahan baku sampai gudang produk jadi.",
     specs: [
@@ -56,6 +57,7 @@ const FACILITY_ITEMS: FacilityItem[] = [
     category: "Peralatan",
     title: "Mesin Mixing",
     icon: Blend,
+    imageBase: "/images/facility/mesin-mixing",
     description:
       "Mesin pencampur untuk mengolah dan menghomogenkan bahan baku herbal maupun madu sebelum masuk tahap pengisian, memastikan komposisi tiap batch konsisten.",
     specs: [
@@ -69,6 +71,7 @@ const FACILITY_ITEMS: FacilityItem[] = [
     category: "Peralatan",
     title: "Mesin Filling",
     icon: Droplets,
+    imageBase: "/images/facility/mesin-filling",
     description:
       "Mesin pengisian untuk menuang produk cair, madu, maupun serbuk ke dalam kemasan secara presisi dan higienis, menjaga takaran tiap unit tetap konsisten.",
     specs: [
@@ -83,6 +86,7 @@ const FACILITY_ITEMS: FacilityItem[] = [
     category: "Ruang Produksi",
     title: "Ruang Penuangan (Filling)",
     icon: FlaskConical,
+    imageBase: "/images/facility/ruang-penuangan",
     description:
       "Ruang khusus untuk proses penuangan produk cair dan madu ke dalam kemasan, dijaga kebersihan dan suhunya sesuai standar CPOTB.",
     specs: [
@@ -95,6 +99,7 @@ const FACILITY_ITEMS: FacilityItem[] = [
     category: "Ruang Produksi",
     title: "Ruang Pengemasan",
     icon: PackageCheck,
+    imageBase: "/images/facility/ruang-pengemasan",
     description:
       "Ruang tempat produk jadi dikemas dan diberi label sebelum masuk tahap penyimpanan dan distribusi ke mitra.",
     specs: [
@@ -107,6 +112,7 @@ const FACILITY_ITEMS: FacilityItem[] = [
     category: "Standar Kerja",
     title: "Pakaian & APD Produksi",
     icon: Shirt,
+    imageBase: "/images/facility/pakaian-produksi",
     description:
       "Seluruh staf produksi menggunakan pakaian dan alat pelindung diri (APD) sesuai standar higienitas produksi herbal.",
     specs: [
@@ -118,6 +124,7 @@ const FACILITY_ITEMS: FacilityItem[] = [
     category: "Kemasan",
     title: "Stiker & Label Kemasan",
     icon: Tag,
+    imageBase: "/images/facility/stiker-label",
     description:
       "Label kemasan mencantumkan informasi produk, legalitas (BPOM/Halal), dan identitas brand sesuai kebutuhan mitra maklon.",
     specs: [{ label: "Kustomisasi", value: "Sesuai identitas brand mitra" }],
@@ -277,22 +284,18 @@ export default function FacilityGallery() {
               className="group w-64 shrink-0 snap-start overflow-hidden rounded-[4px] border border-forest/10 bg-white text-left transition-colors hover:border-gold md:w-72"
             >
               <div className="flex aspect-[4/3] items-center justify-center overflow-hidden bg-forest/5 transition-colors group-hover:bg-forest/10">
-                {item.image ? (
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    loading="lazy"
-                    decoding="async"
-                    draggable={false}
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <item.icon
-                    size={36}
-                    strokeWidth={1.5}
-                    className="text-forest/40"
-                  />
-                )}
+                <SmartImage
+                  basePath={item.imageBase}
+                  alt={item.title}
+                  className="h-full w-full object-cover pointer-events-none"
+                  fallback={
+                    <item.icon
+                      size={36}
+                      strokeWidth={1.5}
+                      className="text-forest/40"
+                    />
+                  }
+                />
               </div>
               <div className="p-4">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-gold">
@@ -352,21 +355,18 @@ export default function FacilityGallery() {
               className="flex-1 overflow-y-auto overscroll-contain p-5 md:p-8"
             >
               <div className="mb-5 flex aspect-[4/3] items-center justify-center overflow-hidden rounded-[4px] bg-forest/5">
-                {activeItem.image ? (
-                  <img
-                    src={activeItem.image}
-                    alt={activeItem.title}
-                    loading="lazy"
-                    decoding="async"
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <activeItem.icon
-                    size={56}
-                    strokeWidth={1.5}
-                    className="text-forest/40"
-                  />
-                )}
+                <SmartImage
+                  basePath={activeItem.imageBase}
+                  alt={activeItem.title}
+                  className="h-full w-full object-cover"
+                  fallback={
+                    <activeItem.icon
+                      size={56}
+                      strokeWidth={1.5}
+                      className="text-forest/40"
+                    />
+                  }
+                />
               </div>
 
               <p className="text-sm leading-relaxed text-ink/70">
