@@ -90,7 +90,7 @@ function PhotoTile({
       <SmartImage
         basePath={photo.imageBase}
         alt={photo.label}
-        className="h-full w-full object-cover"
+        className="h-full w-full object-cover object-top"
         fallback={
           <div className="flex h-full w-full flex-col items-center justify-center gap-2 p-4 text-center">
             <photo.icon
