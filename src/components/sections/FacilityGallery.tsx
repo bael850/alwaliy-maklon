@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Building2,
   Blend,
@@ -129,6 +129,91 @@ export default function FacilityGallery() {
   const activeItem =
     FACILITY_ITEMS.find((item) => item.id === activeId) ?? null;
 
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  // true selama drag aktif secara fisik menggerakkan mouse; dipakai untuk
+  // membedakan "klik" vs "drag" supaya klik kartu buat buka modal tetap jalan
+  // normal walau container-nya juga bisa di-drag buat scroll.
+  const draggingRef = useRef(false);
+  const hasDraggedRef = useRef(false);
+
+  // Konversi scroll roda mouse (vertikal) jadi gerakan horizontal di galeri —
+  // tanpa ini, user dengan mouse biasa (bukan trackpad) gak bisa scroll galeri
+  // ini sama sekali karena browser secara default cuma scroll vertikal.
+  useEffect(() => {
+    const el = scrollerRef.current;
+    if (!el) return;
+
+    const onWheel = (e: WheelEvent) => {
+      if (el.scrollWidth <= el.clientWidth) return;
+      // Kalau user memang lagi scroll horizontal (trackpad/shift+wheel),
+      // biarkan browser handle sendiri secara native.
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+
+      e.preventDefault();
+      el.scrollLeft += e.deltaY;
+    };
+
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, []);
+
+  // Drag-to-scroll dengan mouse (klik-tahan-geser) — dukung juga user desktop
+  // yang gak punya trackpad/scroll horizontal sama sekali.
+  useEffect(() => {
+    const el = scrollerRef.current;
+    if (!el) return;
+
+    let startX = 0;
+    let startScrollLeft = 0;
+
+    const onPointerDown = (e: PointerEvent) => {
+      if (e.pointerType !== "mouse") return; // touch pakai native scroll
+      draggingRef.current = true;
+      hasDraggedRef.current = false;
+      startX = e.clientX;
+      startScrollLeft = el.scrollLeft;
+      el.setPointerCapture(e.pointerId);
+      el.classList.add("cursor-grabbing");
+    };
+
+    const onPointerMove = (e: PointerEvent) => {
+      if (!draggingRef.current) return;
+      const dx = e.clientX - startX;
+      if (Math.abs(dx) > 4) hasDraggedRef.current = true;
+      el.scrollLeft = startScrollLeft - dx;
+    };
+
+    const endDrag = (e: PointerEvent) => {
+      if (!draggingRef.current) return;
+      draggingRef.current = false;
+      el.classList.remove("cursor-grabbing");
+      try {
+        el.releasePointerCapture(e.pointerId);
+      } catch {
+        // no-op — pointer capture mungkin sudah lepas duluan
+      }
+    };
+
+    el.addEventListener("pointerdown", onPointerDown);
+    el.addEventListener("pointermove", onPointerMove);
+    el.addEventListener("pointerup", endDrag);
+    el.addEventListener("pointercancel", endDrag);
+
+    return () => {
+      el.removeEventListener("pointerdown", onPointerDown);
+      el.removeEventListener("pointermove", onPointerMove);
+      el.removeEventListener("pointerup", endDrag);
+      el.removeEventListener("pointercancel", endDrag);
+    };
+  }, []);
+
+  const handleItemClick = (id: string) => {
+    // Kalau baru aja selesai drag (mouse bergerak > 4px), jangan buka modal —
+    // itu artinya user lagi geser galeri, bukan mau klik kartunya.
+    if (hasDraggedRef.current) return;
+    setActiveId(id);
+  };
+
   // Body-scroll lock yang lebih robust: pakai position:fixed + simpan posisi
   // scroll, biar (a) gak ada scroll-chaining ke halaman belakang, dan
   // (b) posisi scroll user gak "loncat" ke atas begitu modal ditutup.
@@ -169,20 +254,26 @@ export default function FacilityGallery() {
               Lihat Langsung Tempat Produk Anda Dibuat
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-ink/70 md:text-base">
-              Klik tiap foto untuk lihat detail dan spesifikasinya.
+              Scroll atau geser (klik-tahan-tarik) untuk lihat semua fasilitas —
+              klik tiap foto untuk detail dan spesifikasinya.
             </p>
           </div>
         </Reveal>
       </div>
 
-      {/* Scroll horizontal — full-bleed dari max-w container biar leluasa di mobile */}
+      {/* Scroll horizontal — full-bleed dari max-w container biar leluasa di mobile.
+          cursor-grab menandakan area ini bisa di-drag; select-none biar teks
+          gak ke-select tanpa sengaja pas drag. */}
       <Reveal delay={0.1}>
-        <div className="hide-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-2 md:px-8">
+        <div
+          ref={scrollerRef}
+          className="hide-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-2 md:px-8 cursor-grab select-none"
+        >
           {FACILITY_ITEMS.map((item) => (
             <button
               key={item.id}
               type="button"
-              onClick={() => setActiveId(item.id)}
+              onClick={() => handleItemClick(item.id)}
               className="group w-64 shrink-0 snap-start overflow-hidden rounded-[4px] border border-forest/10 bg-white text-left transition-colors hover:border-gold md:w-72"
             >
               <div className="flex aspect-[4/3] items-center justify-center overflow-hidden bg-forest/5 transition-colors group-hover:bg-forest/10">
@@ -192,6 +283,7 @@ export default function FacilityGallery() {
                     alt={item.title}
                     loading="lazy"
                     decoding="async"
+                    draggable={false}
                     className="h-full w-full object-cover"
                   />
                 ) : (

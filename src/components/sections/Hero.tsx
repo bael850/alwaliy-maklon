@@ -14,7 +14,6 @@ export default function Hero() {
   const headingRef = useRef<HTMLHeadingElement>(null);
   const paraRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
-  const imageRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     // Preload gambar Hero — pakai heroImageWebp yang udah di-resolve Vite,
@@ -59,15 +58,8 @@ export default function Hero() {
       delay: 0.2,
     });
 
-    // Ken Burns effect — background zoom pelan-pelan, kesan premium & hidup.
-    // Skip kalau prefers-reduced-motion (sudah di-handle di guard clause atas).
-    if (imageRef.current) {
-      gsap.fromTo(
-        imageRef.current,
-        { scale: 1 },
-        { scale: 1.08, duration: 12, ease: "none" },
-      );
-    }
+    // Catatan: background gambar sengaja dibuat statis (tanpa efek zoom/Ken
+    // Burns) — cuma teks & CTA yang punya animasi masuk di atas.
   }, []);
 
   return (
@@ -75,12 +67,12 @@ export default function Hero() {
       id="hero"
       className="relative flex min-h-[92vh] items-end overflow-hidden md:min-h-dvh"
     >
-      {/* Background image — WebP utama (lebih ringan), fallback PNG buat browser lama.
-          Ini elemen LCP (yang pertama dilihat user), jadi eager + fetchPriority high. */}
+      {/* Background image — statis, WebP utama (lebih ringan), fallback PNG
+          buat browser lama. Ini elemen LCP (yang pertama dilihat user), jadi
+          eager + fetchPriority high. */}
       <picture>
         <source srcSet={heroImageWebp} type="image/webp" />
         <img
-          ref={imageRef}
           src={heroImagePng}
           alt="Proses produksi herbal Al-Waliy"
           className="absolute inset-0 h-full w-full object-cover"
