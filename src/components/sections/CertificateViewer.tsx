@@ -54,15 +54,30 @@ export default function CertificateViewer() {
   const [activeId, setActiveId] = useState<string | null>(null);
   const activeItem = CERTIFICATES.find((c) => c.id === activeId) ?? null;
 
+  // Body-scroll lock yang lebih robust: pakai position:fixed + simpan posisi
+  // scroll, biar (a) gak ada scroll-chaining ke halaman belakang, dan
+  // (b) posisi scroll user gak "loncat" ke atas begitu modal ditutup.
   useEffect(() => {
     if (!activeItem) return;
-    document.body.style.overflow = "hidden";
+
+    const scrollY = window.scrollY;
+    const { style } = document.body;
+    style.position = "fixed";
+    style.top = `-${scrollY}px`;
+    style.left = "0";
+    style.right = "0";
+
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") setActiveId(null);
     };
     window.addEventListener("keydown", onKeyDown);
+
     return () => {
-      document.body.style.overflow = "";
+      style.position = "";
+      style.top = "";
+      style.left = "";
+      style.right = "";
+      window.scrollTo(0, scrollY);
       window.removeEventListener("keydown", onKeyDown);
     };
   }, [activeItem]);
@@ -97,6 +112,8 @@ export default function CertificateViewer() {
                     <img
                       src={cert.image}
                       alt={cert.title}
+                      loading="lazy"
+                      decoding="async"
                       className="h-full w-full object-cover"
                     />
                   ) : (
@@ -121,51 +138,65 @@ export default function CertificateViewer() {
 
       {activeItem && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-5 backdrop-blur-sm"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm sm:p-5"
           onClick={() => setActiveId(null)}
         >
+          {/* Mobile: full-screen (h-full, tanpa rounded).
+              Desktop (sm:): card di tengah, max-height 85vh. */}
           <div
             role="dialog"
             aria-modal="true"
             aria-labelledby="certificate-modal-title"
             onClick={(e) => e.stopPropagation()}
-            className="relative max-h-[90vh] w-full max-w-md overflow-y-auto rounded-[4px] bg-white p-6 md:p-8"
+            className="relative flex h-full w-full flex-col overflow-hidden bg-white sm:h-auto sm:max-h-[85vh] sm:w-full sm:max-w-md sm:rounded-[4px]"
           >
-            <button
-              type="button"
-              onClick={() => setActiveId(null)}
-              aria-label="Tutup"
-              className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-[4px] text-forest/50 transition-colors hover:bg-forest/5 hover:text-forest"
-            >
-              <X size={20} />
-            </button>
-
-            <div className="mb-5 flex aspect-[3/4] items-center justify-center overflow-hidden rounded-[4px] bg-forest/5">
-              {activeItem.image ? (
-                <img
-                  src={activeItem.image}
-                  alt={activeItem.title}
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <activeItem.icon
-                  size={64}
-                  strokeWidth={1.5}
-                  className="text-forest/40"
-                />
-              )}
+            {/* Header sticky — tombol close SELALU keliatan & gak ikut discroll */}
+            <div className="flex shrink-0 items-center justify-between gap-4 border-b border-forest/10 px-5 py-3.5">
+              <h3
+                id="certificate-modal-title"
+                className="font-heading text-sm font-bold text-forest md:text-base"
+              >
+                {activeItem.title}
+              </h3>
+              <button
+                type="button"
+                onClick={() => setActiveId(null)}
+                aria-label="Tutup"
+                className="-mr-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-forest/60 transition-colors hover:bg-forest/5 hover:text-forest active:bg-forest/10"
+              >
+                <X size={22} />
+              </button>
             </div>
 
-            <h3
-              id="certificate-modal-title"
-              className="font-heading text-lg font-bold text-forest"
+            {/* Konten scrollable — overscroll-contain biar scroll berhenti
+                di sini, gak "bocor" nge-scroll halaman di belakangnya. */}
+            <div
+              data-lenis-prevent
+              className="flex-1 overflow-y-auto overscroll-contain p-5 md:p-8"
             >
-              {activeItem.title}
-            </h3>
-            <p className="mt-1 text-sm text-ink/60">{activeItem.issuer}</p>
-            <p className="mt-3 text-sm leading-relaxed text-ink/70">
-              {activeItem.note}
-            </p>
+              <div className="mb-5 flex aspect-[3/4] items-center justify-center overflow-hidden rounded-[4px] bg-forest/5">
+                {activeItem.image ? (
+                  <img
+                    src={activeItem.image}
+                    alt={activeItem.title}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <activeItem.icon
+                    size={64}
+                    strokeWidth={1.5}
+                    className="text-forest/40"
+                  />
+                )}
+              </div>
+
+              <p className="text-sm text-ink/60">{activeItem.issuer}</p>
+              <p className="mt-3 text-sm leading-relaxed text-ink/70">
+                {activeItem.note}
+              </p>
+            </div>
           </div>
         </div>
       )}
