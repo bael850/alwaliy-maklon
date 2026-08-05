@@ -86,9 +86,7 @@ export default function Workflow() {
               keseluruhan proses.
             </p>
 
-            {/* Kartu tahap aktif — indikator status UI, bukan heading baru.
-                Judul tahapnya sendiri sudah ada sebagai <h3> di kolom kanan,
-                jadi di sini sengaja dipakai <p> biar nggak dobel heading di DOM. */}
+            {/* Kartu tahap aktif */}
             <div className="mt-8 hidden max-w-sm rounded-[4px] border border-forest/10 bg-cream p-6 md:block">
               <div className="flex items-center justify-between">
                 <span className="font-heading text-sm font-bold uppercase tracking-[0.1em] text-gold">
@@ -103,14 +101,18 @@ export default function Workflow() {
                 {STEPS[activeIndex].desc}
               </p>
 
-              {/* Progress dots */}
+              {/* Progress — strip blister kapsul, bukan titik-titik polos.
+                  Nyambung ke tema produk (kapsul/obat) yang jadi salah satu
+                  jenis produksi Al-Waliy, sekaligus beda dari dot-bar generik. */}
               <div className="mt-6 flex gap-1.5">
                 {STEPS.map((step, i) => (
                   <span
                     key={step.title}
                     className={[
-                      "h-1.5 flex-1 rounded-full transition-colors duration-300",
-                      i <= activeIndex ? "bg-gold" : "bg-forest/10",
+                      "h-3 flex-1 rounded-full border transition-colors duration-300",
+                      i <= activeIndex
+                        ? "border-gold bg-gold"
+                        : "border-forest/15 bg-transparent",
                     ].join(" ")}
                   />
                 ))}
@@ -118,8 +120,14 @@ export default function Workflow() {
             </div>
           </div>
 
-          {/* Kanan — 6 tahap, tiap kartu jadi trigger buat panel kiri */}
-          <div className="flex flex-col gap-6">
+          {/* Kanan — 6 tahap dihubungkan garis pipeline vertikal di belakang
+              nomor tahap, biar kerasa satu alur berkelanjutan, bukan cuma
+              daftar terpisah-pisah. */}
+          <div className="relative flex flex-col gap-6">
+            <div
+              aria-hidden="true"
+              className="absolute bottom-5 left-5 top-5 hidden w-px bg-forest/12 md:block"
+            />
             {STEPS.map((step, i) => (
               <div
                 key={step.title}
@@ -130,7 +138,7 @@ export default function Workflow() {
                 <Reveal>
                   <div
                     className={[
-                      "flex items-start gap-4 rounded-[4px] border p-6 transition-colors duration-300",
+                      "relative flex items-start gap-4 rounded-[4px] border p-6 transition-colors duration-300",
                       i === activeIndex
                         ? "border-forest/30 bg-forest/[0.03]"
                         : "border-forest/10 bg-white",
@@ -138,10 +146,10 @@ export default function Workflow() {
                   >
                     <span
                       className={[
-                        "flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold transition-colors duration-300",
+                        "relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold transition-colors duration-300",
                         i === activeIndex
-                          ? "bg-forest text-cream"
-                          : "bg-forest/5 text-forest",
+                          ? "bg-forest text-cream shadow-[0_0_0_5px_rgba(27,67,50,0.08)]"
+                          : "bg-white text-forest ring-1 ring-inset ring-forest/20",
                       ].join(" ")}
                     >
                       {String(i + 1).padStart(2, "0")}
