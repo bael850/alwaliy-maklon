@@ -58,16 +58,25 @@ export default function WhyUs() {
                 <div className="absolute left-1/2 top-1/2 h-2 w-14 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#6f6f6a]" />
               </div>
 
-              {/* Lubang ring binder di margin kiri */}
-              <div className="absolute bottom-6 left-3 top-9 flex flex-col justify-between md:left-4">
-                {[0, 1, 2].map((k) => (
-                  <span
-                    key={k}
-                    aria-hidden="true"
-                    className="h-3 w-3 rounded-full border border-forest/15 bg-cream shadow-[inset_0_1px_2px_rgba(0,0,0,0.15)]"
-                  />
-                ))}
-              </div>
+              {/* Lubang ring binder di margin kiri — strip mask berulang
+                  (teknik sama seperti sprocket film & tepi nota), jadi
+                  otomatis rapi ngikutin tinggi card berapa pun, gak
+                  "nyasar" ke tengah teks seperti versi 3-titik sebelumnya. */}
+              <div
+                aria-hidden="true"
+                className="absolute bottom-6 left-3 top-9 w-3 md:left-4"
+                style={{
+                  WebkitMaskImage:
+                    "radial-gradient(circle at 6px 8px, transparent 4px, black 4.5px)",
+                  maskImage:
+                    "radial-gradient(circle at 6px 8px, transparent 4px, black 4.5px)",
+                  WebkitMaskSize: "12px 26px",
+                  maskSize: "12px 26px",
+                  WebkitMaskRepeat: "repeat-y",
+                  maskRepeat: "repeat-y",
+                  backgroundColor: "rgba(27,67,50,0.12)",
+                }}
+              />
 
               {/* Judul lembar, ala kop dokumen QC */}
               <div className="mb-1 border-b border-dashed border-forest/20 pb-3">
@@ -100,16 +109,9 @@ export default function WhyUs() {
                         </svg>
                       </span>
                       <div>
-                        <div className="flex items-center gap-2">
-                          <reason.icon
-                            size={16}
-                            strokeWidth={2}
-                            className="text-gold"
-                          />
-                          <h3 className="font-heading text-base font-bold text-forest">
-                            {reason.title}
-                          </h3>
-                        </div>
+                        <h3 className="font-heading text-base font-bold text-forest">
+                          {reason.title}
+                        </h3>
                         <p className="mt-1 text-sm leading-relaxed text-ink/70">
                           {reason.desc}
                         </p>

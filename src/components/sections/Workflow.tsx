@@ -67,8 +67,6 @@ export default function Workflow() {
     };
   }, []);
 
-  const ActiveIcon = STEPS[activeIndex].icon;
-
   return (
     <section id="proses" className="bg-white py-20 md:py-28">
       <div className="mx-auto max-w-6xl px-5 md:px-8">
@@ -92,7 +90,6 @@ export default function Workflow() {
                 <span className="font-heading text-sm font-bold uppercase tracking-[0.1em] text-gold">
                   Tahap {String(activeIndex + 1).padStart(2, "0")} / 06
                 </span>
-                <ActiveIcon size={22} strokeWidth={2} className="text-forest" />
               </div>
               <p className="mt-3 font-heading text-xl font-bold text-forest">
                 {STEPS[activeIndex].title}
@@ -155,16 +152,9 @@ export default function Workflow() {
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <div>
-                      <div className="flex items-center gap-2">
-                        <step.icon
-                          size={18}
-                          strokeWidth={2}
-                          className="text-gold"
-                        />
-                        <h3 className="font-heading text-lg font-bold text-forest">
-                          {step.title}
-                        </h3>
-                      </div>
+                      <h3 className="font-heading text-lg font-bold text-forest">
+                        {step.title}
+                      </h3>
                       <p className="mt-1.5 text-sm leading-relaxed text-ink/70 md:text-base">
                         {step.desc}
                       </p>
