@@ -1,37 +1,11 @@
-import {
-  ShieldCheck,
-  PackagePlus,
-  FileCheck2,
-  Sparkles,
-  Camera,
-} from "lucide-react";
+import { Camera } from "lucide-react";
 import Reveal from "../Reveal";
 import SmartImage from "../SmartImage";
-
-const REASONS = [
-  {
-    icon: ShieldCheck,
-    title: "Legalitas Lengkap",
-    desc: "Bantu pengurusan Halal MUI, BPOM, dan hak merek untuk produk Anda.",
-  },
-  {
-    icon: PackagePlus,
-    title: "Formulasi Fleksibel",
-    desc: "Serbuk, kapsul, cair, hingga madu — disesuaikan dengan konsep brand Anda.",
-  },
-  {
-    icon: FileCheck2,
-    title: "Standar CPOTB",
-    desc: "Diproduksi di fasilitas yang memenuhi Cara Pembuatan Obat Tradisional yang Baik.",
-  },
-  {
-    icon: Sparkles,
-    title: "Desain & Kemasan",
-    desc: "Dukungan desain kemasan dan branding, bukan cuma urusan produksi.",
-  },
-];
+import { useLanguage } from "../../i18n/LanguageContext";
 
 export default function WhyUs() {
+  const { t } = useLanguage();
+
   return (
     <section className="bg-white py-20 md:py-28">
       <div className="mx-auto max-w-6xl px-5 md:px-8">
@@ -39,14 +13,13 @@ export default function WhyUs() {
           {/* Kiri: framing singkat */}
           <Reveal>
             <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold">
-              Jaminan Kami
+              {t.whyUs.eyebrow}
             </p>
             <h2 className="font-heading text-3xl font-extrabold leading-tight text-forest md:text-4xl">
-              Kenapa Pilih Al-Waliy sebagai Mitra Maklon
+              {t.whyUs.heading}
             </h2>
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-ink/70 md:text-base">
-              Bukan cuma soal produksi — kami pegang tanggung jawab dari
-              legalitas sampai brand Anda siap dipasarkan.
+              {t.whyUs.paragraph}
             </p>
           </Reveal>
 
@@ -76,7 +49,7 @@ export default function WhyUs() {
                   <div className="flex aspect-[4/5] items-center justify-center overflow-hidden bg-forest/5">
                     <SmartImage
                       basePath="/images/whyus/bukti-mutu"
-                      alt="Dokumentasi pemeriksaan mutu produksi"
+                      alt={t.whyUs.photoAlt}
                       className="h-full w-full object-cover"
                       fallback={
                         <Camera
@@ -113,12 +86,12 @@ export default function WhyUs() {
               {/* Judul lembar, ala kop dokumen QC */}
               <div className="mb-1 border-b border-dashed border-forest/20 pb-3">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-gold">
-                  Lembar Jaminan Mutu
+                  {t.whyUs.sheetTitle}
                 </p>
               </div>
 
               <div className="divide-y divide-dashed divide-forest/15">
-                {REASONS.map((reason, i) => (
+                {t.whyUs.reasons.map((reason, i) => (
                   <Reveal key={reason.title} delay={0.14 + i * 0.08}>
                     <div className="flex items-start gap-4 py-5">
                       {/* Checkbox tercentang */}
