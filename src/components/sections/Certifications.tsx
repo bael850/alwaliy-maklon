@@ -214,7 +214,7 @@ export default function Certifications() {
                 "repeating-linear-gradient(to right, rgba(250,248,244,0.18) 0 6px, transparent 6px 16px)",
             }}
           />
-          <div className="relative flex flex-wrap justify-center gap-x-10 gap-y-14 md:gap-x-14">
+          <div className="relative flex flex-wrap justify-center gap-x-6 gap-y-10 md:gap-x-14 md:gap-y-14">
             {CERTS.map((cert, i) => (
               <Reveal key={cert.id} delay={i * 0.08}>
                 <button

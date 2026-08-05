@@ -128,7 +128,7 @@ export default function ProductTypes() {
             aria-hidden="true"
             className="absolute left-0 right-0 top-0 hidden h-px bg-forest/15 md:block"
           />
-          <div className="relative flex flex-wrap items-start justify-center gap-x-10 gap-y-14">
+          <div className="relative flex flex-wrap items-start justify-center gap-x-6 gap-y-9 md:gap-x-10 md:gap-y-14">
             {PRODUCT_TYPES.map((type, i) => (
               <ProductTag key={type.title} type={type} index={i} />
             ))}

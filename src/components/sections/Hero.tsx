@@ -65,7 +65,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative flex min-h-[92vh] items-end overflow-hidden md:min-h-dvh"
+      className="relative flex min-h-[100svh] items-end overflow-hidden md:min-h-dvh"
     >
       {/* Background image — statis, WebP utama (lebih ringan), fallback PNG
           buat browser lama. Ini elemen LCP (yang pertama dilihat user), jadi

@@ -53,20 +53,31 @@ export default function Workflow() {
   const stepRefs = useRef<Array<HTMLDivElement | null>>([]);
 
   useEffect(() => {
-    const triggers = stepRefs.current.map((el, i) => {
-      if (!el) return null;
-      return ScrollTrigger.create({
-        trigger: el,
-        start: "top 55%",
-        end: "bottom 55%",
-        onEnter: () => setActiveIndex(i),
-        onEnterBack: () => setActiveIndex(i),
+    // Kartu "tahap aktif" yang di-drive activeIndex cuma tampil di md ke
+    // atas (hidden md:block). Di mobile, bikin ScrollTrigger utk elemen
+    // yang gak keliatan cuma buang-buang kerja tiap frame scroll — jadi
+    // di-skip di bawah breakpoint md, dan dibikin ulang kalau resize
+    // ngelewatin breakpoint (misal rotate layar / desktop window resize).
+    const mm = gsap.matchMedia();
+
+    mm.add("(min-width: 768px)", () => {
+      const triggers = stepRefs.current.map((el, i) => {
+        if (!el) return null;
+        return ScrollTrigger.create({
+          trigger: el,
+          start: "top 55%",
+          end: "bottom 55%",
+          onEnter: () => setActiveIndex(i),
+          onEnterBack: () => setActiveIndex(i),
+        });
       });
+
+      return () => {
+        triggers.forEach((t) => t?.kill());
+      };
     });
 
-    return () => {
-      triggers.forEach((t) => t?.kill());
-    };
+    return () => mm.revert();
   }, []);
 
   return (
