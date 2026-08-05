@@ -46,12 +46,6 @@ const id = {
         desc: "Melayani konsumen akhir, reseller, dan mitra maklon di seluruh Indonesia.",
       },
     ],
-    stats: [
-      { value: "10+", label: "Tahun Pengalaman Produksi" },
-      { value: "50+", label: "Brand Sudah Bermitra" },
-      { value: "4", label: "Standar Legalitas Terpenuhi" },
-      { value: "5", label: "Jenis Kategori Produk" },
-    ],
   },
   productTypes: {
     eyebrow: "Layanan Kami",
@@ -502,12 +496,6 @@ const en: typeof id = {
         title: "Trusted by Many Partners",
         desc: "Serving end consumers, resellers, and white-label partners across Indonesia.",
       },
-    ],
-    stats: [
-      { value: "10+", label: "Years of Production Experience" },
-      { value: "50+", label: "Brands Partnered" },
-      { value: "4", label: "Legal Standards Met" },
-      { value: "5", label: "Product Categories" },
     ],
   },
   productTypes: {

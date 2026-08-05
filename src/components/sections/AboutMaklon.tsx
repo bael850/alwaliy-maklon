@@ -278,22 +278,6 @@ export default function AboutMaklon() {
             );
           })}
         </div>
-
-        {/* Stats strip */}
-        <Reveal delay={0.15}>
-          <div className="mt-14 grid grid-cols-2 gap-8 border-t border-forest/10 pt-12 md:grid-cols-4 md:gap-6">
-            {t.aboutMaklon.stats.map((stat) => (
-              <div key={stat.label} className="text-center">
-                <p className="font-heading text-3xl font-extrabold text-forest md:text-4xl">
-                  {stat.value}
-                </p>
-                <p className="mt-1 text-xs font-medium uppercase tracking-[0.08em] text-ink/60 md:text-sm">
-                  {stat.label}
-                </p>
-              </div>
-            ))}
-          </div>
-        </Reveal>
       </div>
     </section>
   );
