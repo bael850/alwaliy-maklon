@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import {
   BadgeCheck,
   ShieldCheck,
@@ -77,7 +77,6 @@ const ARABIC_QUOTE =
 // "dicap tangan satu-satu" (gak pernah presisi sejajar), bukan hasil print
 // komputer yang simetris sempurna.
 const SEAL_ROTATIONS = [-5, 4, -3, 6];
-const SEAL_OFFSETS = ["md:mt-0", "md:mt-9", "md:mt-2", "md:mt-11"];
 
 function CertSeal({ cert, index }: { cert: CertItem; index: number }) {
   const rot = SEAL_ROTATIONS[index % SEAL_ROTATIONS.length];
@@ -86,7 +85,7 @@ function CertSeal({ cert, index }: { cert: CertItem; index: number }) {
   return (
     <div
       className="group flex flex-col items-center"
-      style={{ "--rot": `${rot}deg` } as React.CSSProperties}
+      style={{ "--rot": `${rot}deg` } as CSSProperties}
     >
       <div className="relative h-32 w-32 rotate-[var(--rot)] transition-transform duration-500 ease-out group-hover:rotate-0 md:h-36 md:w-36">
         {/* Cincin luar — border ganda ala stempel/notaris resmi */}
