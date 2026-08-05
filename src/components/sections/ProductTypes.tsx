@@ -6,46 +6,36 @@ import {
   Container,
   type LucideIcon,
 } from "lucide-react";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 const WA_NUMBER = "6281515264972";
-const WA_MESSAGE = "Assalamualaikum, saya mau konsultasi soal maklon produk ";
-const waHref = (product: string) =>
-  `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MESSAGE + product)}`;
 
-interface ProductType {
-  icon: LucideIcon;
+interface ProductTypeText {
   title: string;
   desc: string;
 }
 
-const PRODUCT_TYPES: ProductType[] = [
-  {
-    icon: Container,
-    title: "Madu Herbal",
-    desc: "Madu murni dikombinasikan dengan ekstrak herbal sesuai formulasi brand Anda.",
-  },
-  {
-    icon: Pill,
-    title: "Kapsul & Tablet",
-    desc: "Suplemen herbal dalam bentuk kapsul atau tablet, praktis dan mudah dikonsumsi.",
-  },
-  {
-    icon: FlaskConical,
-    title: "Serbuk",
-    desc: "Jamu atau minuman herbal serbuk, siap seduh dengan berbagai varian rasa.",
-  },
-  {
-    icon: Droplets,
-    title: "Cair / Sirup",
-    desc: "Sari kurma, sirup herbal, hingga cuka alami dalam kemasan botol.",
-  },
-];
+const PRODUCT_ICONS: LucideIcon[] = [Container, Pill, FlaskConical, Droplets];
 
 // Tiap label digantung dengan sudit sedikit beda-beda — kayak label kertas
 // asli yang digantung tangan di rak apotek/jamu, bukan hasil cetak simetris.
 const TAG_ROTATIONS = [-3, 2, -2, 4];
 
-function ProductTag({ type, index }: { type: ProductType; index: number }) {
+function ProductTag({
+  type,
+  icon: Icon,
+  index,
+  numberPrefix,
+  ctaLabel,
+  waHref,
+}: {
+  type: ProductTypeText;
+  icon: LucideIcon;
+  index: number;
+  numberPrefix: string;
+  ctaLabel: string;
+  waHref: string;
+}) {
   const rot = TAG_ROTATIONS[index % TAG_ROTATIONS.length];
 
   return (
@@ -64,11 +54,11 @@ function ProductTag({ type, index }: { type: ProductType; index: number }) {
         />
 
         <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-gold">
-          No. {String(index + 1).padStart(2, "0")}
+          {numberPrefix} {String(index + 1).padStart(2, "0")}
         </p>
 
         <div className="mt-3 flex h-10 w-10 items-center justify-center rounded-full bg-forest/5 text-forest">
-          <type.icon size={18} strokeWidth={2} />
+          <Icon size={18} strokeWidth={2} />
         </div>
 
         <h3 className="mt-3 font-heading text-base font-bold text-forest">
@@ -77,12 +67,12 @@ function ProductTag({ type, index }: { type: ProductType; index: number }) {
         <p className="mt-2 text-xs leading-relaxed text-ink/70">{type.desc}</p>
 
         <a
-          href={waHref(type.title)}
+          href={waHref}
           target="_blank"
           rel="noopener noreferrer"
           className="mt-4 inline-flex items-center text-xs font-semibold text-forest underline underline-offset-4 hover:text-gold"
         >
-          Konsultasikan
+          {ctaLabel}
         </a>
       </div>
     </div>
@@ -90,6 +80,8 @@ function ProductTag({ type, index }: { type: ProductType; index: number }) {
 }
 
 export default function ProductTypes() {
+  const { t } = useLanguage();
+
   return (
     <section id="layanan" className="overflow-hidden bg-cream py-20 md:py-28">
       {/* Animasi "berayun" pas hover — sudut awal (--rot) tetap jadi titik
@@ -114,10 +106,10 @@ export default function ProductTypes() {
       <div className="mx-auto max-w-6xl px-5 md:px-8">
         <div className="mb-16 max-w-2xl">
           <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold">
-            Layanan Kami
+            {t.productTypes.eyebrow}
           </p>
           <h2 className="font-heading text-3xl font-extrabold leading-tight text-forest md:text-4xl">
-            Jenis Produk yang Bisa Kami Produksi
+            {t.productTypes.heading}
           </h2>
         </div>
 
@@ -129,8 +121,18 @@ export default function ProductTypes() {
             className="absolute left-0 right-0 top-0 hidden h-px bg-forest/15 md:block"
           />
           <div className="relative flex flex-wrap items-start justify-center gap-x-6 gap-y-9 md:gap-x-10 md:gap-y-14">
-            {PRODUCT_TYPES.map((type, i) => (
-              <ProductTag key={type.title} type={type} index={i} />
+            {t.productTypes.types.map((type, i) => (
+              <ProductTag
+                key={type.title}
+                type={type}
+                icon={PRODUCT_ICONS[i % PRODUCT_ICONS.length]}
+                index={i}
+                numberPrefix={t.productTypes.numberPrefix}
+                ctaLabel={t.productTypes.ctaLabel}
+                waHref={`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(
+                  t.productTypes.waMessagePrefix + type.title,
+                )}`}
+              />
             ))}
           </div>
         </div>
