@@ -283,7 +283,7 @@ const id = {
         title: "Halal MUI / BPJPH",
         issuer: "Majelis Ulama Indonesia / BPJPH",
         desc: "Sertifikasi halal resmi dari Majelis Ulama Indonesia dan Badan Penyelenggara Jaminan Produk Halal.",
-        note: "Nomor sertifikat & masa berlaku akan ditampilkan di sini setelah scan dokumen tersedia.",
+        note: "No. Sertifikat 01121250821020. Masa berlaku belum tercantum di dokumen yang kami miliki — akan diperbarui begitu tersedia.",
         ringText: "• SERTIFIKAT HALAL RESMI",
       },
       {
@@ -730,7 +730,7 @@ const en: typeof id = {
         title: "Halal MUI / BPJPH",
         issuer: "Indonesian Ulema Council / BPJPH",
         desc: "Official halal certification from the Indonesian Ulema Council and the Halal Product Assurance Organizing Body.",
-        note: "Certificate number & validity period will be shown here once the document scan is available.",
+        note: "Certificate No. 01121250821020. Validity period isn't listed in the document we have on file — will be updated once available.",
         ringText: "• OFFICIAL HALAL CERTIFICATE",
       },
       {
