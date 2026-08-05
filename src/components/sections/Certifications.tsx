@@ -6,67 +6,51 @@ import {
   Scale,
   Check,
   X,
+  type LucideIcon,
 } from "lucide-react";
 import Reveal from "../Reveal";
 import SmartImage from "../SmartImage";
+import { useLanguage } from "../../i18n/LanguageContext";
+import type { Translations } from "../../i18n/translations";
 
-interface CertItem {
+interface CertMeta {
   id: string;
-  title: string;
-  issuer: string;
-  icon: typeof BadgeCheck;
-  desc: string;
+  icon: LucideIcon;
   /**
    * PLACEHOLDER — path TANPA ekstensi ke public/images/certifications/<nama>.
    * Taruh file di public/images/certifications/<nama>.webp (atau .jpg / .png,
    * bebas salah satu) — otomatis kedeteksi, gak perlu ubah kode ini.
    */
   imageBase?: string;
-  note: string;
-  /** Teks pendek yang melingkar di cincin luar stempel — ganti sesuai istilah resmi tiap sertifikat. */
-  ringText: string;
 }
 
-const CERTS: CertItem[] = [
+type CertText = Translations["certifications"]["certs"][number];
+
+interface CertItem extends CertMeta, CertText {}
+
+// Bagian non-teks (id, ikon, path gambar) tetap konstanta terpisah — urutannya
+// HARUS 1:1 sama dengan urutan t.certifications.certs di translations.ts,
+// karena di-zip pakai index.
+const CERT_META: CertMeta[] = [
   {
     id: "halal-mui",
-    title: "Halal MUI / BPJPH",
-    issuer: "Majelis Ulama Indonesia / BPJPH",
     icon: BadgeCheck,
     imageBase: "/images/certifications/halal-mui",
-    desc: "Sertifikasi halal resmi dari Majelis Ulama Indonesia dan Badan Penyelenggara Jaminan Produk Halal.",
-    note: "Nomor sertifikat & masa berlaku akan ditampilkan di sini setelah scan dokumen tersedia.",
-    ringText: "• SERTIFIKAT HALAL RESMI",
   },
   {
     id: "bpom",
-    title: "Terdaftar BPOM",
-    issuer: "Badan Pengawas Obat dan Makanan RI",
     icon: ShieldCheck,
     imageBase: "/images/certifications/bpom",
-    desc: "Produk melalui evaluasi dan terdaftar di Badan Pengawas Obat dan Makanan Republik Indonesia.",
-    note: "Nomor registrasi BPOM akan ditampilkan di sini setelah scan dokumen tersedia.",
-    ringText: "• TERDAFTAR & DIAWASI",
   },
   {
     id: "cpotb",
-    title: "Standar CPOTB",
-    issuer: "Cara Pembuatan Obat Tradisional yang Baik",
     icon: Factory,
     imageBase: "/images/certifications/cpotb",
-    desc: "Memenuhi Cara Pembuatan Obat Tradisional yang Baik — standar produksi herbal tertinggi di Indonesia.",
-    note: "Detail sertifikasi fasilitas akan ditampilkan di sini setelah scan dokumen tersedia.",
-    ringText: "• STANDAR PRODUKSI RESMI",
   },
   {
     id: "legalitas",
-    title: "Badan Hukum Resmi",
-    issuer: "CV Al-Waliy Sejahtera",
     icon: Scale,
     imageBase: "/images/certifications/legalitas",
-    desc: "CV Al-Waliy Sejahtera terdaftar sebagai badan hukum resmi dengan legalitas usaha lengkap.",
-    note: "Dokumen legalitas usaha akan ditampilkan di sini setelah scan dokumen tersedia.",
-    ringText: "• BADAN HUKUM TERDAFTAR",
   },
 ];
 
@@ -146,6 +130,13 @@ function CertSeal({ cert, index }: { cert: CertItem; index: number }) {
 }
 
 export default function Certifications() {
+  const { t } = useLanguage();
+
+  const CERTS: CertItem[] = CERT_META.map((meta, i) => ({
+    ...meta,
+    ...t.certifications.certs[i],
+  }));
+
   const [activeId, setActiveId] = useState<string | null>(null);
   const activeItem = CERTS.find((c) => c.id === activeId) ?? null;
 
@@ -190,14 +181,13 @@ export default function Certifications() {
 
           <div className="mb-16 max-w-2xl">
             <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold-light">
-              Legalitas &amp; Standar
+              {t.certifications.eyebrow}
             </p>
             <h2 className="font-heading text-3xl font-extrabold leading-tight text-cream md:text-4xl">
-              Bukan Sekadar Klaim — Ini Jaminan Tertulis
+              {t.certifications.heading}
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-cream/70 md:text-base">
-              Tiap sertifikat adalah dokumen resmi yang bisa diverifikasi —
-              ketuk stempelnya untuk lihat detail.
+              {t.certifications.paragraph}
             </p>
           </div>
         </Reveal>
@@ -220,7 +210,7 @@ export default function Certifications() {
                 <button
                   type="button"
                   onClick={() => setActiveId(cert.id)}
-                  aria-label={`Lihat detail ${cert.title}`}
+                  aria-label={`${t.certifications.viewDetailAriaPrefix}${cert.title}`}
                   className="rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold"
                 >
                   <CertSeal cert={cert} index={i} />
@@ -256,7 +246,7 @@ export default function Certifications() {
               <button
                 type="button"
                 onClick={() => setActiveId(null)}
-                aria-label="Tutup"
+                aria-label={t.certifications.closeAria}
                 className="-mr-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-forest/60 transition-colors hover:bg-forest/5 hover:text-forest active:bg-forest/10"
               >
                 <X size={22} />
