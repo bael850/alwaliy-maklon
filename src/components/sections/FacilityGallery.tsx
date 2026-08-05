@@ -131,6 +131,28 @@ const FACILITY_ITEMS: FacilityItem[] = [
   },
 ];
 
+// Baris lubang sprocket ala pita film — dibuat pakai mask radial-gradient
+// berulang (teknik sama seperti tepi sobekan nota di MaklonComparison),
+// jadi tak perlu asset gambar sama sekali.
+function SprocketRow() {
+  return (
+    <div
+      aria-hidden="true"
+      className="h-3.5 w-full bg-[#1c1c1c]"
+      style={{
+        WebkitMaskImage:
+          "radial-gradient(circle at 9px 7px, transparent 3.5px, black 4px)",
+        maskImage:
+          "radial-gradient(circle at 9px 7px, transparent 3.5px, black 4px)",
+        WebkitMaskSize: "18px 14px",
+        maskSize: "18px 14px",
+        WebkitMaskRepeat: "repeat-x",
+        maskRepeat: "repeat-x",
+      }}
+    />
+  );
+}
+
 export default function FacilityGallery() {
   const [activeId, setActiveId] = useState<string | null>(null);
   const activeItem =
@@ -324,49 +346,60 @@ export default function FacilityGallery() {
         </Reveal>
       </div>
 
-      {/* Scroll horizontal — full-bleed dari max-w container biar leluasa di mobile.
-          cursor-grab menandakan area ini bisa di-drag; select-none biar teks
-          gak ke-select tanpa sengaja pas drag.
-          snap-proximity (bukan snap-mandatory) — cuma "menarik lembut" ke
-          kartu terdekat kalau posisinya udah cukup dekat, gak maksa lompat
-          tiap kali scroll berhenti, jadi gak bentrok sama easing/momentum
-          di atas. */}
+      {/* Pita film — band gelap full-bleed dengan lubang sprocket di atas
+          & bawah, tiap fasilitas ditampilkan sebagai "cetakan foto" bingkai
+          putih di atasnya. Ini beda total dari grid kartu putih generik di
+          section lain, dan pas dengan framing teks di atas ("lihat langsung
+          tempat produk dibuat" — kesan tur pabrik/dokumenter). Logika
+          drag-scroll & momentum di bawah TIDAK diubah, cuma tampilannya. */}
       <Reveal delay={0.1}>
-        <div
-          ref={scrollerRef}
-          className="hide-scrollbar flex snap-x snap-proximity gap-4 overflow-x-auto px-5 pb-2 md:px-8 cursor-grab select-none"
-        >
-          {FACILITY_ITEMS.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => handleItemClick(item.id)}
-              className="group w-64 shrink-0 snap-start overflow-hidden rounded-[4px] border border-forest/10 bg-white text-left transition-colors hover:border-gold md:w-72"
-            >
-              <div className="flex aspect-[4/3] items-center justify-center overflow-hidden bg-forest/5 transition-colors group-hover:bg-forest/10">
-                <SmartImage
-                  basePath={item.imageBase}
-                  alt={item.title}
-                  className="h-full w-full object-cover pointer-events-none"
-                  fallback={
-                    <item.icon
-                      size={36}
-                      strokeWidth={1.5}
-                      className="text-forest/40"
+        <div className="bg-[#1c1c1c] py-5">
+          <SprocketRow />
+          <div
+            ref={scrollerRef}
+            className="hide-scrollbar flex snap-x snap-proximity gap-5 overflow-x-auto px-5 py-6 md:px-8 cursor-grab select-none"
+          >
+            {FACILITY_ITEMS.map((item, i) => (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => handleItemClick(item.id)}
+                className="group w-64 shrink-0 snap-start text-left md:w-72"
+              >
+                <div className="relative border-[6px] border-white bg-white shadow-[0_8px_24px_rgba(0,0,0,0.45)] transition-transform duration-300 group-hover:-translate-y-1">
+                  <span
+                    className="absolute -left-2.5 -top-2.5 z-10 flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-gold text-[10px] font-bold text-forest shadow-md"
+                    aria-hidden="true"
+                  >
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <div className="flex aspect-[4/3] items-center justify-center overflow-hidden bg-forest/5 transition-colors group-hover:bg-forest/10">
+                    <SmartImage
+                      basePath={item.imageBase}
+                      alt={item.title}
+                      className="h-full w-full object-cover pointer-events-none"
+                      fallback={
+                        <item.icon
+                          size={36}
+                          strokeWidth={1.5}
+                          className="text-forest/40"
+                        />
+                      }
                     />
-                  }
-                />
-              </div>
-              <div className="p-4">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-gold">
-                  {item.category}
-                </p>
-                <h3 className="mt-1 font-heading text-base font-bold text-forest">
-                  {item.title}
-                </h3>
-              </div>
-            </button>
-          ))}
+                  </div>
+                </div>
+                <div className="mt-3 px-0.5">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-gold-light/90">
+                    {item.category}
+                  </p>
+                  <h3 className="mt-1 font-heading text-base font-bold text-cream">
+                    {item.title}
+                  </h3>
+                </div>
+              </button>
+            ))}
+          </div>
+          <SprocketRow />
         </div>
       </Reveal>
 
@@ -389,7 +422,11 @@ export default function FacilityGallery() {
             <div className="flex shrink-0 items-center justify-between gap-4 border-b border-forest/10 px-5 py-3.5">
               <div className="min-w-0">
                 <p className="truncate text-[11px] font-semibold uppercase tracking-[0.1em] text-gold">
-                  {activeItem.category}
+                  {activeItem.category} · No.{" "}
+                  {String(
+                    FACILITY_ITEMS.findIndex((i) => i.id === activeItem.id) + 1,
+                  ).padStart(2, "0")}
+                  /{String(FACILITY_ITEMS.length).padStart(2, "0")}
                 </p>
                 <h3
                   id="facility-modal-title"

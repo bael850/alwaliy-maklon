@@ -89,7 +89,7 @@ function ReceiptRow({
   positive: boolean;
 }) {
   return (
-    <li className="flex items-baseline gap-2 py-2.5">
+    <li className="flex items-baseline gap-2 py-3">
       {positive ? (
         <Check
           size={14}
@@ -99,7 +99,7 @@ function ReceiptRow({
       ) : (
         <X size={14} strokeWidth={3} className="mt-1 shrink-0 text-ink/30" />
       )}
-      <span className="shrink-0 font-mono text-[12.5px] font-semibold text-forest">
+      <span className="shrink-0 text-sm font-semibold text-forest">
         {label}
       </span>
       <span
@@ -107,7 +107,7 @@ function ReceiptRow({
         aria-hidden="true"
       />
       <span
-        className={`max-w-[45%] text-right font-mono text-[12px] leading-snug ${
+        className={`max-w-[45%] text-right text-sm leading-snug ${
           positive ? "text-ink/75" : "text-ink/45"
         }`}
       >
