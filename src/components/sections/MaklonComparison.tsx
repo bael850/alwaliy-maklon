@@ -1,60 +1,6 @@
 import { Check, X, ArrowUpRight } from "lucide-react";
 import Reveal from "../Reveal";
-
-const ROWS = [
-  {
-    aspect: "Modal Awal",
-    maklon: "Rendah — tanpa perlu bangun pabrik",
-    sendiri: "Sangat tinggi — bangunan, alat, perizinan",
-  },
-  {
-    aspect: "Waktu ke Pasar",
-    maklon: "Lebih cepat, hitungan minggu-bulan",
-    sendiri: "Bisa 1-2 tahun sebelum siap produksi",
-  },
-  {
-    aspect: "Pengurusan Legalitas",
-    maklon: "Dibantu tim berpengalaman",
-    sendiri: "Diurus sendiri dari nol",
-  },
-  {
-    aspect: "Risiko Operasional",
-    maklon: "Ditanggung fasilitas produksi",
-    sendiri: "Ditanggung sepenuhnya oleh brand",
-  },
-  {
-    aspect: "Skalabilitas",
-    maklon: "Fleksibel sesuai permintaan pasar",
-    sendiri: "Terbatas kapasitas mesin sendiri",
-  },
-];
-
-/**
- * PLACEHOLDER — studi kasus di bawah anonim by design (kategori produk, bukan nama
- * brand), karena menyebut detail klien nyata butuh izin. Bisa diisi cerita nyata
- * (dengan izin klien) atau dibiarkan anonim permanen kalau klien tidak berkenan
- * disebut namanya.
- */
-const CASE_STUDIES = [
-  {
-    category: "Madu Herbal",
-    title: "Dari Konsep ke Produk Siap Jual",
-    summary:
-      "Brand baru memulai dari formulasi awal hingga siap dipasarkan dengan kemasan dan legalitas lengkap.",
-  },
-  {
-    category: "Kapsul Suplemen",
-    title: "Reformulasi untuk Perluasan Pasar",
-    summary:
-      "Membantu brand existing menyesuaikan formulasi produk agar memenuhi standar BPOM untuk kategori baru.",
-  },
-  {
-    category: "Serbuk Minuman Herbal",
-    title: "Kemasan & Branding dari Nol",
-    summary:
-      "Mendampingi brand tanpa pengalaman produksi sebelumnya, dari ide produk sampai siap jual.",
-  },
-];
+import { useLanguage } from "../../i18n/LanguageContext";
 
 // Strip bergerigi di kepala tiap "nota" — meniru sobekan kertas roll kasir.
 // Dibuat pakai mask radial-gradient berulang, jadi tak perlu asset gambar.
@@ -118,16 +64,19 @@ function ReceiptRow({
 }
 
 export default function MaklonComparison() {
+  const { t } = useLanguage();
+  const { rows, caseStudies } = t.maklonComparison;
+
   return (
     <section className="bg-white py-20 md:py-28">
       <div className="mx-auto max-w-6xl px-5 md:px-8">
         <Reveal>
           <div className="mb-12 max-w-2xl">
             <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold">
-              Maklon vs Bangun Pabrik Sendiri
+              {t.maklonComparison.eyebrow}
             </p>
             <h2 className="font-heading text-3xl font-extrabold leading-tight text-forest md:text-4xl">
-              Kenapa Banyak Brand Memilih Maklon
+              {t.maklonComparison.heading}
             </h2>
           </div>
         </Reveal>
@@ -151,14 +100,14 @@ export default function MaklonComparison() {
               <div className="px-6 pb-6 pt-2">
                 <div className="mb-1 flex items-center justify-between border-b border-dashed border-forest/20 pb-3">
                   <p className="font-heading text-sm font-extrabold uppercase tracking-[0.08em] text-forest">
-                    Maklon Al-Waliy
+                    {t.maklonComparison.colMaklonLabel}
                   </p>
                   <span className="rounded-full bg-forest px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-gold-light">
-                    Rekomendasi
+                    {t.maklonComparison.badgeRekomendasi}
                   </span>
                 </div>
                 <ul className="divide-y divide-forest/10">
-                  {ROWS.map((row) => (
+                  {rows.map((row) => (
                     <ReceiptRow
                       key={row.aspect}
                       label={row.aspect}
@@ -178,11 +127,11 @@ export default function MaklonComparison() {
               <div className="px-6 pb-6 pt-2">
                 <div className="mb-1 flex items-center justify-between border-b border-dashed border-ink/15 pb-3">
                   <p className="font-heading text-sm font-extrabold uppercase tracking-[0.08em] text-ink/50">
-                    Bangun Pabrik Sendiri
+                    {t.maklonComparison.colSendiriLabel}
                   </p>
                 </div>
                 <ul className="divide-y divide-ink/10">
-                  {ROWS.map((row) => (
+                  {rows.map((row) => (
                     <ReceiptRow
                       key={row.aspect}
                       label={row.aspect}
@@ -201,16 +150,16 @@ export default function MaklonComparison() {
           <Reveal>
             <div className="mb-8 max-w-2xl">
               <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold">
-                Studi Kasus
+                {t.maklonComparison.caseStudiesEyebrow}
               </p>
               <h3 className="font-heading text-2xl font-extrabold leading-tight text-forest md:text-3xl">
-                Contoh Hasil Kerja Sama Maklon
+                {t.maklonComparison.caseStudiesHeading}
               </h3>
             </div>
           </Reveal>
 
           <div className="grid gap-6 md:grid-cols-3">
-            {CASE_STUDIES.map((cs, i) => (
+            {caseStudies.map((cs, i) => (
               <Reveal key={cs.title} delay={i * 0.1}>
                 <div className="group flex h-full flex-col rounded-[4px] border border-forest/10 bg-cream/40 p-6 transition-colors hover:border-gold">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-gold">
@@ -223,7 +172,7 @@ export default function MaklonComparison() {
                     {cs.summary}
                   </p>
                   <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-forest/50">
-                    Detail menyusul
+                    {t.maklonComparison.detailMenyusul}
                     <ArrowUpRight size={14} strokeWidth={2.5} />
                   </span>
                 </div>
