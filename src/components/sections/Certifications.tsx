@@ -105,11 +105,15 @@ function CertSeal({ cert, index }: { cert: CertItem; index: number }) {
               alt={cert.title}
               className="h-full w-full object-contain"
               fallback={
-                <cert.icon size={26} strokeWidth={2} className="text-forest" />
+                <cert.icon
+                  size={42}
+                  strokeWidth={1.75}
+                  className="text-forest"
+                />
               }
             />
           ) : (
-            <cert.icon size={26} strokeWidth={2} className="text-forest" />
+            <cert.icon size={42} strokeWidth={1.75} className="text-forest" />
           )}
         </div>
 
