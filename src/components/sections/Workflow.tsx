@@ -6,10 +6,12 @@ import {
   Palette,
   Factory,
   Truck,
+  Users,
 } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Reveal from "../Reveal";
+import SmartImage from "../SmartImage";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -83,6 +85,28 @@ export default function Workflow() {
               Scroll untuk lihat tiap tahap — kartu ini menandai posisi Anda di
               keseluruhan proses.
             </p>
+
+            {/* Foto pendukung — PLACEHOLDER: taruh file di
+                public/images/workflow/tim-produksi.(webp|jpg|png). Tampil
+                di kedua ukuran layar (beda dari kartu tahap aktif di bawah
+                yang cuma muncul di desktop), biar versi mobile juga tetap
+                dapat elemen visual, bukan cuma teks. */}
+            <div className="mt-6 aspect-[4/3] max-w-sm overflow-hidden rounded-[4px] border border-forest/10 bg-forest/5">
+              <SmartImage
+                basePath="/images/workflow/tim-produksi"
+                alt="Tim produksi Al-Waliy bekerja"
+                className="h-full w-full object-cover"
+                fallback={
+                  <div className="flex h-full w-full items-center justify-center">
+                    <Users
+                      size={32}
+                      strokeWidth={1.5}
+                      className="text-forest/30"
+                    />
+                  </div>
+                }
+              />
+            </div>
 
             {/* Kartu tahap aktif */}
             <div className="mt-8 hidden max-w-sm rounded-[4px] border border-forest/10 bg-cream p-6 md:block">

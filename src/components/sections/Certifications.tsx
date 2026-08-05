@@ -70,9 +70,6 @@ const CERTS: CertItem[] = [
   },
 ];
 
-const ARABIC_QUOTE =
-  "كَانَ النَّبِيُّ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ يُعْجِبُهُ الْحَلْوَاءُ وَالْعَسَلُ";
-
 // Tiap stempel dikasih rotasi & offset vertikal beda-beda — biar berasa
 // "dicap tangan satu-satu" (gak pernah presisi sejajar), bukan hasil print
 // komputer yang simetris sempurna.
@@ -188,7 +185,7 @@ export default function Certifications() {
             dir="rtl"
             className="mb-6 text-center font-heading text-sm text-gold-light/80 md:text-base"
           >
-            {ARABIC_QUOTE}
+            {/* {ARABIC_QUOTE} */}
           </p>
 
           <div className="mb-16 max-w-2xl">

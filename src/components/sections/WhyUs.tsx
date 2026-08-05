@@ -1,5 +1,12 @@
-import { ShieldCheck, PackagePlus, FileCheck2, Sparkles } from "lucide-react";
+import {
+  ShieldCheck,
+  PackagePlus,
+  FileCheck2,
+  Sparkles,
+  Camera,
+} from "lucide-react";
 import Reveal from "../Reveal";
+import SmartImage from "../SmartImage";
 
 const REASONS = [
   {
@@ -56,6 +63,31 @@ export default function WhyUs() {
                 className="absolute left-1/2 top-0 h-6 w-24 -translate-x-1/2 -translate-y-1/2 rounded-[4px] bg-gradient-to-b from-[#d9d9d4] via-[#a8a8a2] to-[#8a8a84] shadow-[0_2px_6px_rgba(0,0,0,0.35)]"
               >
                 <div className="absolute left-1/2 top-1/2 h-2 w-14 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#6f6f6a]" />
+              </div>
+
+              {/* Foto bukti — PLACEHOLDER: taruh file di
+                  public/images/whyus/bukti-mutu.(webp|jpg|png). Ditampilkan
+                  miring & menempel di pojok, seolah foto beneran dilampirkan
+                  ke lembar checklist (kayak dokumentasi inspeksi mutu asli).
+                  Disembunyikan di layar sangat kecil biar gak numpuk sama
+                  jepitan clipboard. */}
+              <div className="absolute -right-3 -top-4 z-20 hidden w-24 rotate-6 sm:block md:-right-5 md:-top-6 md:w-28">
+                <div className="border-[5px] border-white bg-white shadow-[0_10px_20px_rgba(0,0,0,0.25)]">
+                  <div className="flex aspect-[4/5] items-center justify-center overflow-hidden bg-forest/5">
+                    <SmartImage
+                      basePath="/images/whyus/bukti-mutu"
+                      alt="Dokumentasi pemeriksaan mutu produksi"
+                      className="h-full w-full object-cover"
+                      fallback={
+                        <Camera
+                          size={22}
+                          strokeWidth={1.5}
+                          className="text-forest/30"
+                        />
+                      }
+                    />
+                  </div>
+                </div>
               </div>
 
               {/* Lubang ring binder di margin kiri — strip mask berulang
