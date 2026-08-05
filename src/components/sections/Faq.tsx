@@ -1,34 +1,9 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
-
-const FAQS = [
-  {
-    q: "Berapa minimal order untuk layanan maklon?",
-    a: "Minimal order kami sengaja fleksibel, disesuaikan jenis produk (serbuk, kapsul, cair, atau madu) dan kompleksitas formulasi — cocok baik untuk brand baru yang mau mulai skala kecil maupun yang sudah siap produksi lebih besar. Tim kami akan hitungkan MOQ paling efisien untuk Anda saat konsultasi.",
-  },
-  {
-    q: "Apakah saya perlu formulasi sendiri?",
-    a: "Tidak wajib. Anda bisa datang dengan formulasi sendiri, atau berdiskusi dengan tim kami untuk mengembangkan formulasi baru sesuai konsep produk yang Anda inginkan.",
-  },
-  {
-    q: "Apakah legalitas produk (BPOM/Halal) diurus oleh Al-Waliy?",
-    a: "Ya, kami membantu proses registrasi BPOM dan sertifikasi Halal MUI untuk produk yang diproduksi di fasilitas kami, sebagai bagian dari layanan maklon.",
-  },
-  {
-    q: "Berapa lama proses dari konsultasi sampai produk jadi?",
-    a: "Estimasi waktu tergantung kompleksitas formulasi dan proses legalitas, umumnya berkisar beberapa minggu hingga beberapa bulan. Timeline detail akan dibahas saat konsultasi awal.",
-  },
-  {
-    q: "Bagaimana skema pembayaran untuk maklon?",
-    a: "Skema pembayaran kami fleksibel dan disesuaikan dengan skala kerja sama, umumnya menggunakan sistem bertahap (DP di awal, pelunasan setelah produksi) agar lebih ringan bagi Anda. Detail lengkap akan dibahas saat konsultasi.",
-  },
-  {
-    q: "Apakah kemasan dan desain juga disediakan?",
-    a: "Ya, kami menyediakan dukungan desain kemasan dan branding sebagai bagian dari layanan, sehingga produk Anda siap dipasarkan dengan identitas merek yang jelas.",
-  },
-];
+import { useLanguage } from "../../i18n/LanguageContext";
 
 export default function Faq() {
+  const { t } = useLanguage();
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
@@ -36,15 +11,15 @@ export default function Faq() {
       <div className="mx-auto max-w-3xl px-5 md:px-8">
         <div className="mb-12">
           <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold">
-            Pertanyaan Umum
+            {t.faq.eyebrow}
           </p>
           <h2 className="font-heading text-3xl font-extrabold leading-tight text-forest md:text-4xl">
-            Masih Ada yang Ingin Ditanyakan?
+            {t.faq.heading}
           </h2>
         </div>
 
         <div className="divide-y divide-forest/10 border-y border-forest/10">
-          {FAQS.map((item, i) => {
+          {t.faq.faqs.map((item, i) => {
             const isOpen = openIndex === i;
             return (
               <div key={item.q}>
@@ -54,8 +29,9 @@ export default function Faq() {
                   aria-expanded={isOpen}
                   className="flex w-full items-center gap-3.5 py-5 text-left"
                 >
-                  {/* Badge "T" — biar kerasa sesi tanya-jawab konsultasi,
-                      bukan accordion FAQ generik */}
+                  {/* Badge huruf — biar kerasa sesi tanya-jawab konsultasi,
+                      bukan accordion FAQ generik. Hurufnya ikut bahasa aktif
+                      ("T" untuk Tanya, "Q" untuk Question). */}
                   <span
                     aria-hidden="true"
                     className={[
@@ -65,7 +41,7 @@ export default function Faq() {
                         : "border-forest/25 text-forest/60",
                     ].join(" ")}
                   >
-                    T
+                    {t.faq.badgeLetter}
                   </span>
                   <span className="flex-1 font-heading text-base font-bold text-forest md:text-lg">
                     {item.q}
@@ -89,7 +65,7 @@ export default function Faq() {
                 >
                   <div className="min-h-0 pl-[2.6rem]">
                     {/* Aksen garis kiri pada jawaban — kesan "kutipan
-                        jawaban konsultasi", nyambung ke badge "T" di atas */}
+                        jawaban konsultasi", nyambung ke badge huruf di atas */}
                     <p className="border-l-2 border-gold/40 pl-4 text-sm leading-relaxed text-ink/70 md:text-base">
                       {item.a}
                     </p>

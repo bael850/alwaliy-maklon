@@ -1,6 +1,9 @@
 import { Leaf } from "lucide-react";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 export default function PullQuote() {
+  const { t } = useLanguage();
+
   return (
     <section className="overflow-hidden bg-cream py-20 md:py-28">
       <div className="relative mx-auto max-w-3xl px-5 text-center md:px-8">
@@ -14,8 +17,7 @@ export default function PullQuote() {
         </span>
 
         <p className="relative font-heading text-2xl italic leading-snug text-forest md:text-3xl">
-          "Alam menyediakan, kami meracik — kini giliran brand Anda yang
-          memasarkan."
+          "{t.pullQuote.quote}"
         </p>
 
         {/* Pemisah kecil bermotif daun — nyambung ke identitas herbal brand,
@@ -30,7 +32,7 @@ export default function PullQuote() {
         </div>
 
         <p className="mt-4 text-sm font-medium uppercase tracking-[0.14em] text-gold">
-          CV Al-Waliy Sejahtera — sejak 2014
+          {t.pullQuote.attribution}
         </p>
       </div>
     </section>
