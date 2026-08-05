@@ -3,13 +3,14 @@ import { ArrowRight } from "lucide-react";
 import gsap from "gsap";
 import heroImageWebp from "../../assets/hero.webp";
 import heroImagePng from "../../assets/hero.png";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 const WA_NUMBER = "6281515264972";
-const WA_MESSAGE =
-  "Assalamualaikum, saya mau konsultasi soal layanan maklon Al-Waliy...";
-const WA_HREF = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MESSAGE)}`;
+const waHref = (message: string) =>
+  `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(message)}`;
 
 export default function Hero() {
+  const { t } = useLanguage();
   const eyebrowRef = useRef<HTMLParagraphElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const paraRef = useRef<HTMLParagraphElement>(null);
@@ -74,7 +75,7 @@ export default function Hero() {
         <source srcSet={heroImageWebp} type="image/webp" />
         <img
           src={heroImagePng}
-          alt="Proses produksi herbal Al-Waliy"
+          alt={t.hero.imageAlt}
           className="absolute inset-0 h-full w-full object-cover"
           loading="eager"
           fetchPriority="high"
@@ -92,40 +93,38 @@ export default function Hero() {
           ref={eyebrowRef}
           className="mb-4 text-xs md:text-sm font-semibold uppercase tracking-[0.18em] text-gold-light [text-shadow:0_1px_4px_rgba(0,0,0,0.6)]"
         >
-          Produksi Bersertifikat Halal MUI &amp; BPOM
+          {t.hero.eyebrow}
         </p>
 
         <h1
           ref={headingRef}
           className="max-w-3xl font-heading text-4xl font-extrabold leading-[1.08] text-cream [text-shadow:0_2px_8px_rgba(0,0,0,0.5)] md:text-6xl"
         >
-          Wujudkan Brand Herbal &amp; Madu Anda Sendiri
+          {t.hero.heading}
         </h1>
 
         <p
           ref={paraRef}
           className="mt-5 max-w-xl text-base leading-relaxed text-cream/85 md:text-lg"
         >
-          Jasa maklon produksi herbal dan madu dari produsen berpengalaman sejak
-          2014 — dari formulasi, kemasan, hingga legalitas, tanpa Anda perlu
-          membangun pabrik sendiri.
+          {t.hero.paragraph}
         </p>
 
         <div ref={ctaRef} className="mt-8 flex flex-wrap items-center gap-4">
           <a
-            href={WA_HREF}
+            href={waHref(t.hero.waMessage)}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 rounded-[4px] border-[1.5px] border-cream px-6 py-3.5 text-sm font-semibold text-cream transition-colors hover:bg-cream hover:text-forest"
           >
-            Konsultasi Gratis
+            {t.hero.ctaPrimary}
             <ArrowRight size={16} strokeWidth={2.5} />
           </a>
           <a
             href="#layanan"
             className="inline-flex items-center gap-2 text-sm font-semibold text-cream/90 underline underline-offset-4 transition-colors hover:text-gold-light"
           >
-            Lihat Layanan
+            {t.hero.ctaSecondary}
           </a>
         </div>
       </div>

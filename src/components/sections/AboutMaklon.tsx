@@ -1,10 +1,10 @@
 import { Building2, ShieldCheck, Users, type LucideIcon } from "lucide-react";
 import Reveal from "../Reveal";
 import SmartImage from "../SmartImage";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 interface AboutPhoto {
   id: string;
-  label: string;
   icon: LucideIcon;
   /**
    * PLACEHOLDER — path TANPA ekstensi ke public/images/about/<nama>.
@@ -19,40 +19,11 @@ interface AboutPhoto {
 // foto interior/tim yang siap, ikuti pola AboutPhoto di atas.
 const MAIN_PHOTO: AboutPhoto = {
   id: "gedung",
-  label: "Gedung Produksi",
   icon: Building2,
   imageBase: "/images/about/gedung",
 };
 
-const FACTS = [
-  {
-    icon: Building2,
-    title: "Berdiri Sejak 2014",
-    desc: "Memproduksi madu herbal & sari kurma di fasilitas berstandar CPOTB, Bekasi.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Legalitas Terverifikasi",
-    desc: "Sertifikasi Halal MUI & BPJPH yang dapat diverifikasi publik, terdaftar BPOM.",
-  },
-  {
-    icon: Users,
-    title: "Dipercaya Banyak Mitra",
-    desc: "Melayani konsumen akhir, reseller, dan mitra maklon di seluruh Indonesia.",
-  },
-];
-
-/**
- * PLACEHOLDER — angka "50+ Brand Bermitra" dan "5 Jenis Kategori Produk" di bawah
- * masih perkiraan/ilustrasi. Ganti dengan angka aktual (data internal) sebelum
- * publish live, supaya klaim yang ditampilkan akurat dan bisa dipertanggungjawabkan.
- */
-const STATS = [
-  { value: "10+", label: "Tahun Pengalaman Produksi" },
-  { value: "50+", label: "Brand Sudah Bermitra" },
-  { value: "4", label: "Standar Legalitas Terpenuhi" },
-  { value: "5", label: "Jenis Kategori Produk" },
-];
+const FACT_ICONS = [Building2, ShieldCheck, Users];
 
 /**
  * WireContinuation — "melanjutkan" kabel listrik yang kepotong di tepi kiri
@@ -130,11 +101,13 @@ function WireContinuation() {
 
 function PhotoTile({
   photo,
+  label,
   className = "",
   iconSize = 32,
   signature = false,
 }: {
   photo: AboutPhoto;
+  label: string;
   className?: string;
   iconSize?: number;
   /** Foto "hero" mini-galeri — dapat treatment sinematik (feather + grade tipis) + lanjutan kabel. */
@@ -172,7 +145,7 @@ function PhotoTile({
       >
         <SmartImage
           basePath={photo.imageBase}
-          alt={photo.label}
+          alt={label}
           className="h-full w-full object-cover"
           fallback={
             <div className="flex h-full w-full flex-col items-center justify-center gap-2 p-4 text-center">
@@ -182,7 +155,7 @@ function PhotoTile({
                 className="text-forest/30"
               />
               <span className="text-[11px] font-medium uppercase tracking-[0.08em] text-forest/40">
-                {photo.label}
+                {label}
               </span>
             </div>
           }
@@ -202,6 +175,8 @@ function PhotoTile({
 }
 
 export default function AboutMaklon() {
+  const { t } = useLanguage();
+
   return (
     <section id="tentang" className="bg-cream py-20 md:py-28">
       {/* Keyframe kabel "menggambar diri sendiri" — sekali jalan pas section muncul */}
@@ -241,24 +216,23 @@ export default function AboutMaklon() {
           {/* Kiri: narasi */}
           <Reveal>
             <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold">
-              Profil Kami
+              {t.aboutMaklon.eyebrow}
             </p>
             <h2 className="font-heading text-3xl font-extrabold leading-tight text-forest md:text-4xl">
-              Produsen Herbal Berpengalaman, Kini Terbuka untuk Brand Anda
+              {t.aboutMaklon.heading}
             </h2>
             <p className="mt-5 text-base leading-relaxed text-ink/80 md:text-lg">
-              CV Al-Waliy Sejahtera memproduksi madu herbal dan sari kurma
-              premium sejak 2014. Selain melayani konsumen akhir lewat
-              marketplace kami sendiri, kami juga membuka layanan{" "}
-              <strong className="text-forest">maklon</strong> — memproduksi
-              herbal sesuai formulasi dan kebutuhan brand Anda, dengan standar
-              kualitas yang sama seperti produk kami sendiri.
+              {t.aboutMaklon.paragraphBefore}
+              <strong className="text-forest">
+                {t.aboutMaklon.paragraphStrong}
+              </strong>
+              {t.aboutMaklon.paragraphAfter}
             </p>
             <a
               href="#proses"
               className="mt-6 inline-flex items-center text-sm font-semibold text-forest underline underline-offset-4 hover:text-gold"
             >
-              Lihat cara kerja sama kami
+              {t.aboutMaklon.linkText}
             </a>
           </Reveal>
 
@@ -272,6 +246,7 @@ export default function AboutMaklon() {
           <Reveal delay={0.1}>
             <PhotoTile
               photo={MAIN_PHOTO}
+              label={t.aboutMaklon.photoLabel}
               className="aspect-[4/5]"
               iconSize={40}
               signature
@@ -282,29 +257,32 @@ export default function AboutMaklon() {
         {/* Fact cards — dipindah jadi baris horizontal di bawah, biar kolom
             kanan di atas fokus buat galeri foto. */}
         <div className="mt-14 grid gap-4 sm:grid-cols-3">
-          {FACTS.map((fact, i) => (
-            <Reveal key={fact.title} delay={i * 0.08}>
-              <div className="flex h-full gap-4 rounded-[4px] border border-forest/10 bg-white p-5">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[4px] bg-forest/5 text-forest">
-                  <fact.icon size={20} strokeWidth={2} />
+          {t.aboutMaklon.facts.map((fact, i) => {
+            const Icon = FACT_ICONS[i % FACT_ICONS.length];
+            return (
+              <Reveal key={fact.title} delay={i * 0.08}>
+                <div className="flex h-full gap-4 rounded-[4px] border border-forest/10 bg-white p-5">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[4px] bg-forest/5 text-forest">
+                    <Icon size={20} strokeWidth={2} />
+                  </div>
+                  <div>
+                    <h3 className="font-heading text-base font-bold text-forest">
+                      {fact.title}
+                    </h3>
+                    <p className="mt-1 text-sm leading-relaxed text-ink/70">
+                      {fact.desc}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-heading text-base font-bold text-forest">
-                    {fact.title}
-                  </h3>
-                  <p className="mt-1 text-sm leading-relaxed text-ink/70">
-                    {fact.desc}
-                  </p>
-                </div>
-              </div>
-            </Reveal>
-          ))}
+              </Reveal>
+            );
+          })}
         </div>
 
         {/* Stats strip */}
         <Reveal delay={0.15}>
           <div className="mt-14 grid grid-cols-2 gap-8 border-t border-forest/10 pt-12 md:grid-cols-4 md:gap-6">
-            {STATS.map((stat) => (
+            {t.aboutMaklon.stats.map((stat) => (
               <div key={stat.label} className="text-center">
                 <p className="font-heading text-3xl font-extrabold text-forest md:text-4xl">
                   {stat.value}
