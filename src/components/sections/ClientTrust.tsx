@@ -13,6 +13,27 @@ export default function ClientTrust() {
 
   return (
     <section className="bg-forest py-20 md:py-28">
+      {/* Marquee logo klien — dobel list-nya biar loop-nya mulus (translateX
+          -50% pas nyampe titik di mana set kedua persis nyambung sama set
+          pertama, jadi gak kerasa "loncat"). Pause pas di-hover biar user
+          yang penasaran bisa berhenti baca satu nama tanpa keburu geser. */}
+      <style>{`
+        @keyframes clientMarquee {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+        .marquee-track {
+          animation: clientMarquee 32s linear infinite;
+          will-change: transform;
+        }
+        .marquee-pause:hover .marquee-track {
+          animation-play-state: paused;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .marquee-track { animation: none; }
+        }
+      `}</style>
+
       <div className="mx-auto max-w-6xl px-5 md:px-8">
         {/* Logo strip */}
         <Reveal>
@@ -21,24 +42,27 @@ export default function ClientTrust() {
           </p>
         </Reveal>
         <Reveal delay={0.06}>
-          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-5">
-            {clients.map((client) => (
-              <div
-                key={client}
-                className="flex h-16 w-40 items-center justify-center gap-2 rounded-[4px] border border-cream/15 opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
-              >
-                {/* Placeholder ikon — ganti dengan <img src={client.logo} alt={client.name}
-                    className="h-full w-full object-contain p-3" /> begitu logo asli siap */}
-                <Building2
-                  size={18}
-                  strokeWidth={1.75}
-                  className="text-cream/60"
-                />
-                <span className="text-xs font-medium text-cream/60">
-                  {client}
-                </span>
-              </div>
-            ))}
+          <div className="marquee-pause relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+            <div className="marquee-track flex w-max items-center gap-6">
+              {[...clients, ...clients].map((client, i) => (
+                <div
+                  key={`${client}-${i}`}
+                  aria-hidden={i >= clients.length}
+                  className="flex h-16 w-40 shrink-0 items-center justify-center gap-2 rounded-[4px] border border-cream/15 opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                >
+                  {/* Placeholder ikon — ganti dengan <img src={client.logo} alt={client.name}
+                      className="h-full w-full object-contain p-3" /> begitu logo asli siap */}
+                  <Building2
+                    size={18}
+                    strokeWidth={1.75}
+                    className="text-cream/60"
+                  />
+                  <span className="text-xs font-medium text-cream/60">
+                    {client}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         </Reveal>
 
