@@ -13,12 +13,15 @@ import Workflow from "./components/sections/Workflow";
 import PullQuote from "./components/sections/PullQuote";
 import Faq from "./components/sections/Faq";
 import Cta from "./components/sections/Cta";
+import { LanguageProvider, useLanguage } from "./i18n/LanguageContext";
 
-export default function App() {
+function AppContent() {
+  const { t } = useLanguage();
+
   return (
     <>
       <a href="#main-content" className="skip-link">
-        Lewati ke konten utama
+        {t.common.skipToContent}
       </a>
       <Navbar />
       <main id="main-content">
@@ -38,5 +41,13 @@ export default function App() {
       <Footer />
       <FloatingWhatsApp />
     </>
+  );
+}
+
+export default function App() {
+  return (
+    <LanguageProvider>
+      <AppContent />
+    </LanguageProvider>
   );
 }

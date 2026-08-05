@@ -9,6 +9,7 @@ export type Lang = "id" | "en";
 const id = {
   common: {
     switchLanguageAria: "Ganti bahasa ke Inggris",
+    skipToContent: "Lewati ke konten utama",
   },
   hero: {
     eyebrow: "Produksi Bersertifikat Halal MUI & BPOM",
@@ -408,11 +409,64 @@ const id = {
       "Unduh company profile kami dalam format PDF — lengkap dengan profil perusahaan, legalitas, dan jenis layanan maklon.",
     buttonLabel: "Download Company Profile",
   },
+  navbar: {
+    navLinks: [
+      { label: "Tentang", href: "#tentang" },
+      { label: "Layanan", href: "#layanan" },
+      { label: "Proses", href: "#proses" },
+      { label: "Sertifikasi", href: "#sertifikasi" },
+      { label: "FAQ", href: "#faq" },
+    ],
+    ctaLabel: "Konsultasi Gratis",
+    openMenuAria: "Buka menu",
+    closeMenuAria: "Tutup menu",
+    waMessage:
+      "Assalamualaikum, saya mau tanya terkait layanan maklon Al-Waliy...",
+  },
+  floatingWhatsApp: {
+    ariaLabel: "Chat via WhatsApp",
+    waMessage:
+      "Assalamualaikum, saya mau tanya terkait layanan maklon Al-Waliy...",
+  },
+  footer: {
+    tagline:
+      "CV Al-Waliy Sejahtera — produsen herbal terpercaya sejak 2014, kini membuka layanan maklon untuk brand Anda.",
+    layananHeading: "Layanan",
+    layananLinks: [
+      { label: "Madu Herbal", href: "#layanan" },
+      { label: "Kapsul & Tablet", href: "#layanan" },
+      { label: "Serbuk", href: "#layanan" },
+      { label: "Cair / Sirup", href: "#layanan" },
+    ],
+    perusahaanHeading: "Perusahaan",
+    perusahaanLinks: [
+      { label: "Profil Kami", href: "#tentang" },
+      { label: "Alur Kerja Sama", href: "#proses" },
+      { label: "Sertifikasi", href: "#sertifikasi" },
+      { label: "Toko Retail Al-Waliy", href: "https://alwaliy-sejahtera.com" },
+    ],
+    bantuanHeading: "Bantuan",
+    bantuanLinks: [
+      { label: "FAQ", href: "#faq" },
+      {
+        label: "Kebijakan Privasi",
+        href: "https://alwaliy-sejahtera.com/privacy-policy",
+      },
+      {
+        label: "Syarat & Ketentuan",
+        href: "https://alwaliy-sejahtera.com/terms-conditions",
+      },
+    ],
+    lokasiHeading: "Lokasi Kami",
+    alamatLengkap: "Sumberjaya, Tambun Selatan, Kab. Bekasi 17510",
+    copyright: "© 2026 CV Al-Waliy Sejahtera. All rights reserved.",
+  },
 };
 
 const en: typeof id = {
   common: {
     switchLanguageAria: "Switch language to Indonesian",
+    skipToContent: "Skip to main content",
   },
   hero: {
     eyebrow: "Halal MUI & BPOM Certified Production",
@@ -806,6 +860,58 @@ const en: typeof id = {
     paragraph:
       "Download our company profile in PDF format — complete with company profile, legal information, and types of maklon services.",
     buttonLabel: "Download Company Profile",
+  },
+  navbar: {
+    navLinks: [
+      { label: "About", href: "#tentang" },
+      { label: "Services", href: "#layanan" },
+      { label: "Process", href: "#proses" },
+      { label: "Certifications", href: "#sertifikasi" },
+      { label: "FAQ", href: "#faq" },
+    ],
+    ctaLabel: "Free Consultation",
+    openMenuAria: "Open menu",
+    closeMenuAria: "Close menu",
+    waMessage:
+      "Hello, I'd like to ask about Al-Waliy's maklon manufacturing service...",
+  },
+  floatingWhatsApp: {
+    ariaLabel: "Chat via WhatsApp",
+    waMessage:
+      "Hello, I'd like to ask about Al-Waliy's maklon manufacturing service...",
+  },
+  footer: {
+    tagline:
+      "CV Al-Waliy Sejahtera — a trusted herbal manufacturer since 2014, now open for white-label (maklon) partnerships with your brand.",
+    layananHeading: "Services",
+    layananLinks: [
+      { label: "Herbal Honey", href: "#layanan" },
+      { label: "Capsules & Tablets", href: "#layanan" },
+      { label: "Powder", href: "#layanan" },
+      { label: "Liquid / Syrup", href: "#layanan" },
+    ],
+    perusahaanHeading: "Company",
+    perusahaanLinks: [
+      { label: "Our Profile", href: "#tentang" },
+      { label: "Partnership Process", href: "#proses" },
+      { label: "Certifications", href: "#sertifikasi" },
+      { label: "Al-Waliy Retail Store", href: "https://alwaliy-sejahtera.com" },
+    ],
+    bantuanHeading: "Support",
+    bantuanLinks: [
+      { label: "FAQ", href: "#faq" },
+      {
+        label: "Privacy Policy",
+        href: "https://alwaliy-sejahtera.com/privacy-policy",
+      },
+      {
+        label: "Terms & Conditions",
+        href: "https://alwaliy-sejahtera.com/terms-conditions",
+      },
+    ],
+    lokasiHeading: "Our Location",
+    alamatLengkap: "Sumberjaya, Tambun Selatan, Bekasi Regency 17510",
+    copyright: "© 2026 CV Al-Waliy Sejahtera. All rights reserved.",
   },
 };
 

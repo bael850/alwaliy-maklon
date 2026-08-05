@@ -1,4 +1,5 @@
 import { MessageCircle } from "lucide-react";
+import { useLanguage } from "../i18n/LanguageContext";
 
 function InstagramIcon({ size = 16 }: { size?: number }) {
   return (
@@ -39,37 +40,9 @@ function FacebookIcon({ size = 16 }: { size?: number }) {
 const WA_NUMBER = "6281515264972";
 const WA_HREF = `https://wa.me/${WA_NUMBER}`;
 
-// Lokasi masih proses verifikasi Google Business Profile — pakai teks dulu,
-// jangan pasang Maps embed/pin sampai lokasi baru terverifikasi.
-const ALAMAT_LENGKAP = "Sumberjaya, Tambun Selatan, Kab. Bekasi 17510";
-
-const LAYANAN_LINKS = [
-  { label: "Madu Herbal", href: "#layanan" },
-  { label: "Kapsul & Tablet", href: "#layanan" },
-  { label: "Serbuk", href: "#layanan" },
-  { label: "Cair / Sirup", href: "#layanan" },
-];
-
-const PERUSAHAAN_LINKS = [
-  { label: "Profil Kami", href: "#tentang" },
-  { label: "Alur Kerja Sama", href: "#proses" },
-  { label: "Sertifikasi", href: "#sertifikasi" },
-  { label: "Toko Retail Al-Waliy", href: "https://alwaliy-sejahtera.com" },
-];
-
-const BANTUAN_LINKS = [
-  { label: "FAQ", href: "#faq" },
-  {
-    label: "Kebijakan Privasi",
-    href: "https://alwaliy-sejahtera.com/privacy-policy",
-  },
-  {
-    label: "Syarat & Ketentuan",
-    href: "https://alwaliy-sejahtera.com/terms-conditions",
-  },
-];
-
 export default function Footer() {
+  const { t } = useLanguage();
+
   return (
     <footer className="bg-ink text-cream/70">
       <div className="mx-auto max-w-6xl px-5 py-16 md:px-8">
@@ -80,8 +53,7 @@ export default function Footer() {
               AL-WALIY <span className="text-gold-light">Maklon</span>
             </p>
             <p className="mt-3 max-w-xs text-sm leading-relaxed">
-              CV Al-Waliy Sejahtera — produsen herbal terpercaya sejak 2014,
-              kini membuka layanan maklon untuk brand Anda.
+              {t.footer.tagline}
             </p>
             <div className="mt-5 flex gap-3">
               <a
@@ -117,10 +89,10 @@ export default function Footer() {
           {/* Layanan */}
           <div>
             <p className="mb-4 text-xs font-semibold uppercase tracking-[0.12em] text-cream/40">
-              Layanan
+              {t.footer.layananHeading}
             </p>
             <ul className="flex flex-col gap-2.5 text-sm">
-              {LAYANAN_LINKS.map((l) => (
+              {t.footer.layananLinks.map((l) => (
                 <li key={l.label}>
                   <a
                     href={l.href}
@@ -136,10 +108,10 @@ export default function Footer() {
           {/* Perusahaan */}
           <div>
             <p className="mb-4 text-xs font-semibold uppercase tracking-[0.12em] text-cream/40">
-              Perusahaan
+              {t.footer.perusahaanHeading}
             </p>
             <ul className="flex flex-col gap-2.5 text-sm">
-              {PERUSAHAAN_LINKS.map((l) => (
+              {t.footer.perusahaanLinks.map((l) => (
                 <li key={l.label}>
                   <a
                     href={l.href}
@@ -155,10 +127,10 @@ export default function Footer() {
           {/* Bantuan */}
           <div>
             <p className="mb-4 text-xs font-semibold uppercase tracking-[0.12em] text-cream/40">
-              Bantuan
+              {t.footer.bantuanHeading}
             </p>
             <ul className="flex flex-col gap-2.5 text-sm">
-              {BANTUAN_LINKS.map((l) => (
+              {t.footer.bantuanLinks.map((l) => (
                 <li key={l.label}>
                   <a
                     href={l.href}
@@ -175,9 +147,9 @@ export default function Footer() {
         {/* Lokasi — teks dulu, Maps embed ditunda sampai verifikasi GBP kelar */}
         <div className="mt-12 border-t border-cream/10 pt-8">
           <p className="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-cream/40">
-            Lokasi Kami
+            {t.footer.lokasiHeading}
           </p>
-          <p className="text-sm text-cream/80">{ALAMAT_LENGKAP}</p>
+          <p className="text-sm text-cream/80">{t.footer.alamatLengkap}</p>
         </div>
 
         {/* Cert badges */}
@@ -189,8 +161,8 @@ export default function Footer() {
 
         {/* Copyright */}
         <div className="mt-8 flex flex-col gap-2 text-xs text-cream/40 sm:flex-row sm:items-center sm:justify-between">
-          <p>© 2026 CV Al-Waliy Sejahtera. All rights reserved.</p>
-          <p>{ALAMAT_LENGKAP}</p>
+          <p>{t.footer.copyright}</p>
+          <p>{t.footer.alamatLengkap}</p>
         </div>
       </div>
     </footer>

@@ -1,23 +1,17 @@
 import { useEffect, useState } from "react";
 import { Menu, X, MessageCircle } from "lucide-react";
 import logoImage from "../assets/logo.png";
-
-const NAV_LINKS = [
-  { label: "Tentang", href: "#tentang" },
-  { label: "Layanan", href: "#layanan" },
-  { label: "Proses", href: "#proses" },
-  { label: "Sertifikasi", href: "#sertifikasi" },
-  { label: "FAQ", href: "#faq" },
-];
+import { useLanguage } from "../i18n/LanguageContext";
+import LanguageSwitch from "../i18n/LanguageSwitch";
 
 const WA_NUMBER = "6281515264972";
-const WA_MESSAGE =
-  "Assalamualaikum, saya mau tanya terkait layanan maklon Al-Waliy...";
-const WA_HREF = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MESSAGE)}`;
 
 export default function Navbar() {
+  const { t } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const waHref = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(t.navbar.waMessage)}`;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -76,7 +70,7 @@ export default function Navbar() {
 
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-8">
-            {NAV_LINKS.map((link) => (
+            {t.navbar.navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
@@ -91,21 +85,26 @@ export default function Navbar() {
           </nav>
 
           {/* Desktop CTA */}
-          <a
-            href={WA_HREF}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden md:inline-flex items-center gap-2 rounded-[4px] bg-forest px-5 py-2.5 text-sm font-semibold text-cream transition-colors hover:bg-forest-light"
-          >
-            <MessageCircle size={16} strokeWidth={2.5} />
-            Konsultasi Gratis
-          </a>
+          <div className="hidden md:flex items-center gap-5">
+            <LanguageSwitch className={scrolled ? "text-ink" : "text-cream"} />
+            <a
+              href={waHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-[4px] bg-forest px-5 py-2.5 text-sm font-semibold text-cream transition-colors hover:bg-forest-light"
+            >
+              <MessageCircle size={16} strokeWidth={2.5} />
+              {t.navbar.ctaLabel}
+            </a>
+          </div>
 
           {/* Mobile toggle */}
           <button
             type="button"
             onClick={() => setMenuOpen((v) => !v)}
-            aria-label={menuOpen ? "Tutup menu" : "Buka menu"}
+            aria-label={
+              menuOpen ? t.navbar.closeMenuAria : t.navbar.openMenuAria
+            }
             aria-expanded={menuOpen}
             className={[
               "md:hidden inline-flex h-10 w-10 items-center justify-center rounded-[4px] transition-colors",
@@ -125,7 +124,7 @@ export default function Navbar() {
         ].join(" ")}
       >
         <nav className="flex flex-col gap-1 px-5 pb-6 pt-2">
-          {NAV_LINKS.map((link) => (
+          {t.navbar.navLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
@@ -135,15 +134,18 @@ export default function Navbar() {
               {link.label}
             </a>
           ))}
+          <div className="mt-2 px-3">
+            <LanguageSwitch className="text-ink" />
+          </div>
           <a
-            href={WA_HREF}
+            href={waHref}
             target="_blank"
             rel="noopener noreferrer"
             onClick={handleLinkClick}
             className="mt-2 inline-flex items-center justify-center gap-2 rounded-[4px] bg-forest px-5 py-3 text-sm font-semibold text-cream"
           >
             <MessageCircle size={16} strokeWidth={2.5} />
-            Konsultasi Gratis
+            {t.navbar.ctaLabel}
           </a>
         </nav>
       </div>
