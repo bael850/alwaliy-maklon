@@ -1,9 +1,7 @@
 import { MapPin, MessageCircle, Globe, FileDown, Scissors } from "lucide-react";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 const WA_NUMBER = "6281515264972";
-const WA_MESSAGE =
-  "Assalamualaikum, saya mau tanya terkait layanan maklon Al-Waliy...";
-const WA_HREF = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MESSAGE)}`;
 
 /**
  * PLACEHOLDER — arahkan href ke file PDF asli begitu company profile jadi.
@@ -13,31 +11,33 @@ const WA_HREF = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(WA_MESSAGE
 const COMPANY_PROFILE_HREF = "/company-profile.pdf";
 
 export default function Cta() {
+  const { t } = useLanguage();
+  const waHref = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(
+    t.cta.waMessage,
+  )}`;
+
   return (
     <section className="bg-forest py-20 md:py-28">
       <div className="mx-auto max-w-6xl px-5 md:px-8">
         <div className="grid gap-10 md:grid-cols-2 md:items-center md:gap-16">
           <div>
             <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold-light">
-              Hubungi Kami
+              {t.cta.eyebrow}
             </p>
             <h2 className="font-heading text-3xl font-extrabold leading-tight text-cream md:text-4xl">
-              Siap Wujudkan Produk Herbal dengan Brand Anda Sendiri?
+              {t.cta.heading}
             </h2>
-            <p className="mt-4 max-w-md text-cream/80">
-              Tim kami siap membantu — dari informasi produk, formulasi, hingga
-              konsultasi produksi maklon sesuai kebutuhan brand Anda.
-            </p>
+            <p className="mt-4 max-w-md text-cream/80">{t.cta.paragraph}</p>
 
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <a
-                href={WA_HREF}
+                href={waHref}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-[4px] bg-gold px-7 py-3.5 text-sm font-semibold text-forest transition-colors hover:bg-gold-light"
               >
                 <MessageCircle size={18} strokeWidth={2.5} />
-                Konsultasi Gratis via WhatsApp
+                {t.cta.waButtonLabel}
               </a>
               <a
                 href={COMPANY_PROFILE_HREF}
@@ -45,7 +45,7 @@ export default function Cta() {
                 className="inline-flex items-center gap-2 rounded-[4px] border-[1.5px] border-cream/30 px-7 py-3.5 text-sm font-semibold text-cream transition-colors hover:border-cream hover:bg-cream/5"
               >
                 <FileDown size={18} strokeWidth={2.25} />
-                Download Company Profile
+                {t.cta.downloadButtonLabel}
               </a>
             </div>
           </div>
@@ -58,7 +58,7 @@ export default function Cta() {
             <div className="mb-5 flex items-center gap-2 border-b border-dashed border-cream/25 pb-4 text-cream/45">
               <Scissors size={13} strokeWidth={2} className="shrink-0" />
               <span className="text-[10.5px] font-semibold uppercase tracking-[0.14em]">
-                Simpan Kontak Ini
+                {t.cta.keepContactLabel}
               </span>
             </div>
 
@@ -71,11 +71,9 @@ export default function Cta() {
                 />
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-wide text-cream/50">
-                    Lokasi
+                    {t.cta.lokasiLabel}
                   </p>
-                  <p className="text-cream">
-                    Sumberjaya, Tambun Selatan, Kab. Bekasi 17510
-                  </p>
+                  <p className="text-cream">{t.cta.lokasiValue}</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -86,10 +84,10 @@ export default function Cta() {
                 />
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-wide text-cream/50">
-                    WhatsApp
+                    {t.cta.whatsappLabel}
                   </p>
                   <a
-                    href={WA_HREF}
+                    href={waHref}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-cream hover:text-gold-light"
@@ -106,7 +104,7 @@ export default function Cta() {
                 />
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-wide text-cream/50">
-                    Website Utama
+                    {t.cta.websiteLabel}
                   </p>
                   <a
                     href="https://alwaliy-sejahtera.com"
