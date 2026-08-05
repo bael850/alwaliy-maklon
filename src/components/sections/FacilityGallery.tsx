@@ -143,12 +143,30 @@ export default function FacilityGallery() {
   const draggingRef = useRef(false);
   const hasDraggedRef = useRef(false);
 
-  // Konversi scroll roda mouse (vertikal) jadi gerakan horizontal di galeri —
-  // tanpa ini, user dengan mouse biasa (bukan trackpad) gak bisa scroll galeri
-  // ini sama sekali karena browser secara default cuma scroll vertikal.
+  // Konversi scroll roda mouse (vertikal) jadi gerakan horizontal di galeri,
+  // dengan EASING — bukan langsung `scrollLeft += e.deltaY` mentah.
+  // Wheel event biasanya datang dalam step besar (terutama mouse non-trackpad),
+  // kalau ditambahin langsung ke scrollLeft hasilnya "nyentak" tiap step.
+  // Di sini delta ditumpuk ke `pending`, lalu dikejar sedikit-sedikit tiap
+  // frame (rAF) — jadi kerasa meluncur, bukan lompat-lompat.
   useEffect(() => {
     const el = scrollerRef.current;
     if (!el) return;
+
+    let rafId: number | null = null;
+    let pending = 0; // sisa jarak yang belum "dikejar"
+
+    const step = () => {
+      if (Math.abs(pending) < 0.5) {
+        pending = 0;
+        rafId = null;
+        return;
+      }
+      const move = pending * 0.18; // makin kecil = makin halus/lambat nyusul
+      el.scrollLeft += move;
+      pending -= move;
+      rafId = requestAnimationFrame(step);
+    };
 
     const onWheel = (e: WheelEvent) => {
       if (el.scrollWidth <= el.clientWidth) return;
@@ -157,37 +175,71 @@ export default function FacilityGallery() {
       if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
 
       e.preventDefault();
-      el.scrollLeft += e.deltaY;
+      pending += e.deltaY;
+      if (rafId === null) rafId = requestAnimationFrame(step);
     };
 
     el.addEventListener("wheel", onWheel, { passive: false });
-    return () => el.removeEventListener("wheel", onWheel);
+    return () => {
+      el.removeEventListener("wheel", onWheel);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
   }, []);
 
-  // Drag-to-scroll dengan mouse (klik-tahan-geser) — dukung juga user desktop
-  // yang gak punya trackpad/scroll horizontal sama sekali.
+  // Drag-to-scroll dengan mouse (klik-tahan-geser) + MOMENTUM saat dilepas —
+  // dukung juga user desktop yang gak punya trackpad/scroll horizontal sama
+  // sekali. Tanpa momentum, scroll berhenti mendadak pas mouse dilepas
+  // (padahal scroll fisik biasanya masih "meluncur" dikit sebelum berhenti).
   useEffect(() => {
     const el = scrollerRef.current;
     if (!el) return;
 
     let startX = 0;
     let startScrollLeft = 0;
+    let lastX = 0;
+    let lastTime = 0;
+    let velocity = 0; // px per ms, dihitung dari gerakan mouse terakhir
+    let momentumRaf: number | null = null;
+
+    const stopMomentum = () => {
+      if (momentumRaf) cancelAnimationFrame(momentumRaf);
+      momentumRaf = null;
+    };
 
     const onPointerDown = (e: PointerEvent) => {
       if (e.pointerType !== "mouse") return; // touch pakai native scroll
+      stopMomentum();
       draggingRef.current = true;
       hasDraggedRef.current = false;
-      startX = e.clientX;
+      startX = lastX = e.clientX;
       startScrollLeft = el.scrollLeft;
+      lastTime = performance.now();
+      velocity = 0;
       el.setPointerCapture(e.pointerId);
       el.classList.add("cursor-grabbing");
     };
 
     const onPointerMove = (e: PointerEvent) => {
       if (!draggingRef.current) return;
+      const now = performance.now();
       const dx = e.clientX - startX;
       if (Math.abs(dx) > 4) hasDraggedRef.current = true;
       el.scrollLeft = startScrollLeft - dx;
+
+      const dt = now - lastTime;
+      if (dt > 0) velocity = (lastX - e.clientX) / dt;
+      lastX = e.clientX;
+      lastTime = now;
+    };
+
+    const applyMomentum = () => {
+      velocity *= 0.95; // deselerasi tiap frame, biar melambat natural
+      if (Math.abs(velocity) < 0.02) {
+        momentumRaf = null;
+        return;
+      }
+      el.scrollLeft += velocity * 16;
+      momentumRaf = requestAnimationFrame(applyMomentum);
     };
 
     const endDrag = (e: PointerEvent) => {
@@ -199,6 +251,9 @@ export default function FacilityGallery() {
       } catch {
         // no-op — pointer capture mungkin sudah lepas duluan
       }
+      if (Math.abs(velocity) > 0.05) {
+        momentumRaf = requestAnimationFrame(applyMomentum);
+      }
     };
 
     el.addEventListener("pointerdown", onPointerDown);
@@ -207,6 +262,7 @@ export default function FacilityGallery() {
     el.addEventListener("pointercancel", endDrag);
 
     return () => {
+      stopMomentum();
       el.removeEventListener("pointerdown", onPointerDown);
       el.removeEventListener("pointermove", onPointerMove);
       el.removeEventListener("pointerup", endDrag);
@@ -270,11 +326,15 @@ export default function FacilityGallery() {
 
       {/* Scroll horizontal — full-bleed dari max-w container biar leluasa di mobile.
           cursor-grab menandakan area ini bisa di-drag; select-none biar teks
-          gak ke-select tanpa sengaja pas drag. */}
+          gak ke-select tanpa sengaja pas drag.
+          snap-proximity (bukan snap-mandatory) — cuma "menarik lembut" ke
+          kartu terdekat kalau posisinya udah cukup dekat, gak maksa lompat
+          tiap kali scroll berhenti, jadi gak bentrok sama easing/momentum
+          di atas. */}
       <Reveal delay={0.1}>
         <div
           ref={scrollerRef}
-          className="hide-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-2 md:px-8 cursor-grab select-none"
+          className="hide-scrollbar flex snap-x snap-proximity gap-4 overflow-x-auto px-5 pb-2 md:px-8 cursor-grab select-none"
         >
           {FACILITY_ITEMS.map((item) => (
             <button

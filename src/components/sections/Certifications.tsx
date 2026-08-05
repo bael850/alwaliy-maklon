@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { BadgeCheck, ShieldCheck, Factory, Scale, X } from "lucide-react";
+import {
+  BadgeCheck,
+  ShieldCheck,
+  Factory,
+  Scale,
+  Check,
+  X,
+} from "lucide-react";
 import Reveal from "../Reveal";
 import SmartImage from "../SmartImage";
 
@@ -16,6 +23,8 @@ interface CertItem {
    */
   imageBase?: string;
   note: string;
+  /** Teks pendek yang melingkar di cincin luar stempel — ganti sesuai istilah resmi tiap sertifikat. */
+  ringText: string;
 }
 
 const CERTS: CertItem[] = [
@@ -27,6 +36,7 @@ const CERTS: CertItem[] = [
     imageBase: "/images/certifications/halal-mui",
     desc: "Sertifikasi halal resmi dari Majelis Ulama Indonesia dan Badan Penyelenggara Jaminan Produk Halal.",
     note: "Nomor sertifikat & masa berlaku akan ditampilkan di sini setelah scan dokumen tersedia.",
+    ringText: "• SERTIFIKAT HALAL RESMI",
   },
   {
     id: "bpom",
@@ -36,6 +46,7 @@ const CERTS: CertItem[] = [
     imageBase: "/images/certifications/bpom",
     desc: "Produk melalui evaluasi dan terdaftar di Badan Pengawas Obat dan Makanan Republik Indonesia.",
     note: "Nomor registrasi BPOM akan ditampilkan di sini setelah scan dokumen tersedia.",
+    ringText: "• TERDAFTAR & DIAWASI",
   },
   {
     id: "cpotb",
@@ -45,6 +56,7 @@ const CERTS: CertItem[] = [
     imageBase: "/images/certifications/cpotb",
     desc: "Memenuhi Cara Pembuatan Obat Tradisional yang Baik — standar produksi herbal tertinggi di Indonesia.",
     note: "Detail sertifikasi fasilitas akan ditampilkan di sini setelah scan dokumen tersedia.",
+    ringText: "• STANDAR PRODUKSI RESMI",
   },
   {
     id: "legalitas",
@@ -54,11 +66,88 @@ const CERTS: CertItem[] = [
     imageBase: "/images/certifications/legalitas",
     desc: "CV Al-Waliy Sejahtera terdaftar sebagai badan hukum resmi dengan legalitas usaha lengkap.",
     note: "Dokumen legalitas usaha akan ditampilkan di sini setelah scan dokumen tersedia.",
+    ringText: "• BADAN HUKUM TERDAFTAR",
   },
 ];
 
 const ARABIC_QUOTE =
   "كَانَ النَّبِيُّ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ يُعْجِبُهُ الْحَلْوَاءُ وَالْعَسَلُ";
+
+// Tiap stempel dikasih rotasi & offset vertikal beda-beda — biar berasa
+// "dicap tangan satu-satu" (gak pernah presisi sejajar), bukan hasil print
+// komputer yang simetris sempurna.
+const SEAL_ROTATIONS = [-5, 4, -3, 6];
+const SEAL_OFFSETS = ["md:mt-0", "md:mt-9", "md:mt-2", "md:mt-11"];
+
+function CertSeal({ cert, index }: { cert: CertItem; index: number }) {
+  const rot = SEAL_ROTATIONS[index % SEAL_ROTATIONS.length];
+  const pathId = `seal-ring-${cert.id}`;
+
+  return (
+    <div
+      className="group flex flex-col items-center"
+      style={{ "--rot": `${rot}deg` } as React.CSSProperties}
+    >
+      <div className="relative h-32 w-32 rotate-[var(--rot)] transition-transform duration-500 ease-out group-hover:rotate-0 md:h-36 md:w-36">
+        {/* Cincin luar — border ganda ala stempel/notaris resmi */}
+        <div className="absolute inset-0 rounded-full border-[3px] border-gold" />
+        <div className="absolute inset-[7px] rounded-full border border-dashed border-cream/40" />
+
+        {/* Teks melengkung di sepanjang cincin — motif "stempel resmi" */}
+        <svg
+          viewBox="0 0 100 100"
+          className="absolute inset-0 h-full w-full"
+          aria-hidden="true"
+        >
+          <defs>
+            <path
+              id={pathId}
+              d="M 50,50 m -40,0 a 40,40 0 1,1 80,0 a 40,40 0 1,1 -80,0"
+            />
+          </defs>
+          <text
+            fontSize="6.2"
+            fill="currentColor"
+            letterSpacing="1.5"
+            className="fill-cream/70 font-heading font-semibold uppercase"
+          >
+            <textPath href={`#${pathId}`} startOffset="2%">
+              {cert.ringText.repeat(2)}
+            </textPath>
+          </text>
+        </svg>
+
+        {/* Badge/logo tengah */}
+        <div className="absolute inset-[16px] flex items-center justify-center overflow-hidden rounded-full bg-cream p-3 md:inset-[18px]">
+          {cert.imageBase ? (
+            <SmartImage
+              basePath={cert.imageBase}
+              alt={cert.title}
+              className="h-full w-full object-contain"
+              fallback={
+                <cert.icon size={26} strokeWidth={2} className="text-forest" />
+              }
+            />
+          ) : (
+            <cert.icon size={26} strokeWidth={2} className="text-forest" />
+          )}
+        </div>
+
+        {/* Overlay "cap disetujui" — nempel di sudut, kayak stempel verifikasi kedua */}
+        <div className="absolute -bottom-1 -right-1 flex h-8 w-8 items-center justify-center rounded-full border-2 border-forest bg-gold text-forest shadow-[0_2px_6px_rgba(0,0,0,0.25)]">
+          <Check size={15} strokeWidth={3} />
+        </div>
+      </div>
+
+      <h3 className="mt-5 max-w-[10rem] text-center font-heading text-sm font-bold text-cream md:text-base">
+        {cert.title}
+      </h3>
+      <p className="mt-1 max-w-[11rem] text-center text-xs leading-relaxed text-cream/50">
+        {cert.desc}
+      </p>
+    </div>
+  );
+}
 
 export default function Certifications() {
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -103,7 +192,7 @@ export default function Certifications() {
             {ARABIC_QUOTE}
           </p>
 
-          <div className="mb-12 max-w-2xl">
+          <div className="mb-16 max-w-2xl">
             <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold-light">
               Legalitas &amp; Standar
             </p>
@@ -111,50 +200,38 @@ export default function Certifications() {
               Bukan Sekadar Klaim — Ini Jaminan Tertulis
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-cream/70 md:text-base">
-              Klik tiap sertifikat untuk melihat detailnya.
+              Tiap sertifikat adalah dokumen resmi yang bisa diverifikasi —
+              ketuk stempelnya untuk lihat detail.
             </p>
           </div>
         </Reveal>
 
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {CERTS.map((cert, i) => (
-            <Reveal key={cert.id} delay={i * 0.06}>
-              <button
-                type="button"
-                onClick={() => setActiveId(cert.id)}
-                className="group flex h-full w-full flex-col rounded-[4px] border border-cream/15 bg-forest-light/40 p-6 text-left transition-colors hover:border-gold"
-              >
-                <div className="mb-4 flex h-11 w-11 items-center justify-center overflow-hidden rounded-[4px] bg-cream p-1.5">
-                  {cert.imageBase ? (
-                    <SmartImage
-                      basePath={cert.imageBase}
-                      alt={cert.title}
-                      className="h-full w-full object-contain"
-                      fallback={
-                        <cert.icon
-                          size={20}
-                          strokeWidth={2}
-                          className="text-forest"
-                        />
-                      }
-                    />
-                  ) : (
-                    <cert.icon
-                      size={20}
-                      strokeWidth={2}
-                      className="text-forest"
-                    />
-                  )}
-                </div>
-                <h3 className="font-heading text-base font-bold text-cream">
-                  {cert.title}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-cream/70">
-                  {cert.desc}
-                </p>
-              </button>
-            </Reveal>
-          ))}
+        {/* Garis putus-putus di belakang barisan stempel — kayak baris tanda
+            tangan/cap di dokumen resmi, cuma keliatan di desktop biar gak
+            berantakan pas kartu ke-stack vertikal di mobile. */}
+        <div className="relative">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute left-0 right-0 top-16 hidden h-px md:block md:top-[4.5rem]"
+            style={{
+              backgroundImage:
+                "repeating-linear-gradient(to right, rgba(250,248,244,0.18) 0 6px, transparent 6px 16px)",
+            }}
+          />
+          <div className="relative flex flex-wrap justify-center gap-x-10 gap-y-14 md:gap-x-14">
+            {CERTS.map((cert, i) => (
+              <Reveal key={cert.id} delay={i * 0.08}>
+                <button
+                  type="button"
+                  onClick={() => setActiveId(cert.id)}
+                  aria-label={`Lihat detail ${cert.title}`}
+                  className="rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold"
+                >
+                  <CertSeal cert={cert} index={i} />
+                </button>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </div>
 
