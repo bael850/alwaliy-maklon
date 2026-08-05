@@ -52,9 +52,22 @@ export default function Faq() {
                   type="button"
                   onClick={() => setOpenIndex(isOpen ? null : i)}
                   aria-expanded={isOpen}
-                  className="flex w-full items-center justify-between gap-4 py-5 text-left"
+                  className="flex w-full items-center gap-3.5 py-5 text-left"
                 >
-                  <span className="font-heading text-base font-bold text-forest md:text-lg">
+                  {/* Badge "T" — biar kerasa sesi tanya-jawab konsultasi,
+                      bukan accordion FAQ generik */}
+                  <span
+                    aria-hidden="true"
+                    className={[
+                      "flex h-7 w-7 shrink-0 items-center justify-center rounded-full border font-heading text-xs font-bold transition-colors duration-200",
+                      isOpen
+                        ? "border-forest bg-forest text-cream"
+                        : "border-forest/25 text-forest/60",
+                    ].join(" ")}
+                  >
+                    T
+                  </span>
+                  <span className="flex-1 font-heading text-base font-bold text-forest md:text-lg">
                     {item.q}
                   </span>
                   <ChevronDown
@@ -74,9 +87,13 @@ export default function Faq() {
                       : "grid-rows-[0fr] opacity-0",
                   ].join(" ")}
                 >
-                  <p className="min-h-0 text-sm leading-relaxed text-ink/70 md:text-base">
-                    {item.a}
-                  </p>
+                  <div className="min-h-0 pl-[2.6rem]">
+                    {/* Aksen garis kiri pada jawaban — kesan "kutipan
+                        jawaban konsultasi", nyambung ke badge "T" di atas */}
+                    <p className="border-l-2 border-gold/40 pl-4 text-sm leading-relaxed text-ink/70 md:text-base">
+                      {item.a}
+                    </p>
+                  </div>
                 </div>
               </div>
             );

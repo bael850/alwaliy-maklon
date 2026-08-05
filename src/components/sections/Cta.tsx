@@ -1,4 +1,4 @@
-import { MapPin, MessageCircle, Globe, FileDown } from "lucide-react";
+import { MapPin, MessageCircle, Globe, FileDown, Scissors } from "lucide-react";
 
 const WA_NUMBER = "6281515264972";
 const WA_MESSAGE =
@@ -29,11 +29,6 @@ export default function Cta() {
               konsultasi produksi maklon sesuai kebutuhan brand Anda.
             </p>
 
-            {/* CTA ganda — WhatsApp jadi aksi utama (konsultasi langsung),
-                download company profile jadi aksi sekunder buat yang masih
-                riset internal sebelum berani chat. Digabung ke sini dari
-                CompanyProfileDownload standalone, karena sama-sama ajakan
-                aksi di akhir halaman. */}
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <a
                 href={WA_HREF}
@@ -55,60 +50,73 @@ export default function Cta() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-5 rounded-[4px] border border-cream/15 bg-forest-light/30 p-6 md:p-8">
-            <div className="flex items-start gap-3">
-              <MapPin
-                size={20}
-                strokeWidth={2}
-                className="mt-0.5 shrink-0 text-gold"
-              />
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-wide text-cream/50">
-                  Lokasi
-                </p>
-                <p className="text-cream">
-                  Sumberjaya, Tambun Selatan, Kab. Bekasi 17510
-                </p>
-              </div>
+          {/* Kartu kontak bergaya "kupon" — garis gunting putus-putus di
+              atas seolah bisa dipotong & disimpan, sesuai fungsi panel ini
+              (info kontak yang mau diinget/disimpan pengunjung). Beda dari
+              motif nota/kwitansi yang sudah dipakai di MaklonComparison. */}
+          <div className="rounded-[4px] border border-cream/15 bg-forest-light/30 p-6 md:p-8">
+            <div className="mb-5 flex items-center gap-2 border-b border-dashed border-cream/25 pb-4 text-cream/45">
+              <Scissors size={13} strokeWidth={2} className="shrink-0" />
+              <span className="text-[10.5px] font-semibold uppercase tracking-[0.14em]">
+                Simpan Kontak Ini
+              </span>
             </div>
-            <div className="flex items-start gap-3">
-              <MessageCircle
-                size={20}
-                strokeWidth={2}
-                className="mt-0.5 shrink-0 text-gold"
-              />
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-wide text-cream/50">
-                  WhatsApp
-                </p>
-                <a
-                  href={WA_HREF}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-cream hover:text-gold-light"
-                >
-                  +62 815-1526-4972
-                </a>
+
+            <div className="flex flex-col gap-5">
+              <div className="flex items-start gap-3">
+                <MapPin
+                  size={20}
+                  strokeWidth={2}
+                  className="mt-0.5 shrink-0 text-gold"
+                />
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-wide text-cream/50">
+                    Lokasi
+                  </p>
+                  <p className="text-cream">
+                    Sumberjaya, Tambun Selatan, Kab. Bekasi 17510
+                  </p>
+                </div>
               </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <Globe
-                size={20}
-                strokeWidth={2}
-                className="mt-0.5 shrink-0 text-gold"
-              />
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-wide text-cream/50">
-                  Website Utama
-                </p>
-                <a
-                  href="https://alwaliy-sejahtera.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-cream hover:text-gold-light"
-                >
-                  alwaliy-sejahtera.com
-                </a>
+              <div className="flex items-start gap-3">
+                <MessageCircle
+                  size={20}
+                  strokeWidth={2}
+                  className="mt-0.5 shrink-0 text-gold"
+                />
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-wide text-cream/50">
+                    WhatsApp
+                  </p>
+                  <a
+                    href={WA_HREF}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-cream hover:text-gold-light"
+                  >
+                    +62 815-1526-4972
+                  </a>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <Globe
+                  size={20}
+                  strokeWidth={2}
+                  className="mt-0.5 shrink-0 text-gold"
+                />
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-wide text-cream/50">
+                    Website Utama
+                  </p>
+                  <a
+                    href="https://alwaliy-sejahtera.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-cream hover:text-gold-light"
+                  >
+                    alwaliy-sejahtera.com
+                  </a>
+                </div>
               </div>
             </div>
           </div>
