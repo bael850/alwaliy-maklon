@@ -12,16 +12,11 @@ import {
 } from "lucide-react";
 import Reveal from "../Reveal";
 import SmartImage from "../SmartImage";
+import { useLanguage } from "../../i18n/LanguageContext";
+import type { Translations } from "../../i18n/translations";
 
-interface FacilitySpec {
-  label: string;
-  value: string;
-}
-
-interface FacilityItem {
+interface FacilityMeta {
   id: string;
-  category: string;
-  title: string;
   icon: LucideIcon;
   /**
    * PLACEHOLDER — path TANPA ekstensi ke public/images/facility/<nama>.
@@ -29,105 +24,55 @@ interface FacilityItem {
    * bebas salah satu) — otomatis kedeteksi, gak perlu ubah kode ini.
    */
   imageBase: string;
-  description: string;
-  specs: FacilitySpec[];
 }
 
-const FACILITY_ITEMS: FacilityItem[] = [
+type FacilityText = Translations["facilityGallery"]["items"][number];
+
+interface FacilityItem extends FacilityMeta, FacilityText {}
+
+// Bagian non-teks (id, ikon, path gambar) tetap konstanta terpisah — urutannya
+// HARUS 1:1 sama dengan urutan t.facilityGallery.items di translations.ts,
+// karena di-zip pakai index di dalam komponen.
+const FACILITY_META: FacilityMeta[] = [
   {
     id: "gedung",
-    category: "Fasilitas",
-    title: "Gedung Produksi",
     icon: Building2,
     imageBase: "/images/facility/gedung",
-    description:
-      "Bangunan produksi milik sendiri di Bekasi, dirancang mengikuti alur produksi satu arah sesuai standar CPOTB — dari penerimaan bahan baku sampai gudang produk jadi.",
-    specs: [
-      { label: "Lokasi", value: "Tambun Selatan, Bekasi" },
-      { label: "Standar", value: "CPOTB" },
-    ],
   },
-
   /* ── "Alat Tempur" produksi — dipecah per mesin, masing-masing punya
      spek sendiri, biar keliatan konkret ke calon klien (bukan cuma
      klaim generik "punya alat produksi"). Tambah mesin lain di masa
-     depan tinggal duplikat pola item di bawah ini. ── */
+     depan tinggal duplikat pola item di bawah ini (dan tambah entri baru
+     yang senada di translations.ts, di posisi index yang sama). ── */
   {
     id: "mesin-mixing",
-    category: "Peralatan",
-    title: "Mesin Mixing",
     icon: Blend,
     imageBase: "/images/facility/mesin-mixing",
-    description:
-      "Mesin pencampur untuk mengolah dan menghomogenkan bahan baku herbal maupun madu sebelum masuk tahap pengisian, memastikan komposisi tiap batch konsisten.",
-    specs: [
-      { label: "Kapasitas", value: "Detail akan diperbarui" },
-      { label: "Fungsi", value: "Homogenisasi bahan baku" },
-      { label: "Perawatan", value: "Terjadwal & terdokumentasi" },
-    ],
   },
   {
     id: "mesin-filling",
-    category: "Peralatan",
-    title: "Mesin Filling",
     icon: Droplets,
     imageBase: "/images/facility/mesin-filling",
-    description:
-      "Mesin pengisian untuk menuang produk cair, madu, maupun serbuk ke dalam kemasan secara presisi dan higienis, menjaga takaran tiap unit tetap konsisten.",
-    specs: [
-      { label: "Kapasitas", value: "Detail akan diperbarui" },
-      { label: "Fungsi", value: "Pengisian ke kemasan" },
-      { label: "Perawatan", value: "Terjadwal & terdokumentasi" },
-    ],
   },
-
   {
     id: "ruang-penuangan",
-    category: "Ruang Produksi",
-    title: "Ruang Penuangan (Filling)",
     icon: FlaskConical,
     imageBase: "/images/facility/ruang-penuangan",
-    description:
-      "Ruang khusus untuk proses penuangan produk cair dan madu ke dalam kemasan, dijaga kebersihan dan suhunya sesuai standar CPOTB.",
-    specs: [
-      { label: "Standar", value: "CPOTB" },
-      { label: "Kebersihan", value: "Terpantau berkala" },
-    ],
   },
   {
     id: "ruang-pengemasan",
-    category: "Ruang Produksi",
-    title: "Ruang Pengemasan",
     icon: PackageCheck,
     imageBase: "/images/facility/ruang-pengemasan",
-    description:
-      "Ruang tempat produk jadi dikemas dan diberi label sebelum masuk tahap penyimpanan dan distribusi ke mitra.",
-    specs: [
-      { label: "Standar", value: "CPOTB" },
-      { label: "Pengecekan", value: "Quality control per batch" },
-    ],
   },
   {
     id: "pakaian-produksi",
-    category: "Standar Kerja",
-    title: "Pakaian & APD Produksi",
     icon: Shirt,
     imageBase: "/images/facility/pakaian-produksi",
-    description:
-      "Seluruh staf produksi menggunakan pakaian dan alat pelindung diri (APD) sesuai standar higienitas produksi herbal.",
-    specs: [
-      { label: "Kelengkapan", value: "Masker, sarung tangan, penutup kepala" },
-    ],
   },
   {
     id: "stiker-label",
-    category: "Kemasan",
-    title: "Stiker & Label Kemasan",
     icon: Tag,
     imageBase: "/images/facility/stiker-label",
-    description:
-      "Label kemasan mencantumkan informasi produk, legalitas (BPOM/Halal), dan identitas brand sesuai kebutuhan mitra maklon.",
-    specs: [{ label: "Kustomisasi", value: "Sesuai identitas brand mitra" }],
   },
 ];
 
@@ -154,6 +99,15 @@ function SprocketRow() {
 }
 
 export default function FacilityGallery() {
+  const { t } = useLanguage();
+
+  // Zip metadata non-teks (ikon, id, path gambar) dengan teks hasil terjemahan,
+  // by index — sama pola kayak section lain yang punya array campuran.
+  const FACILITY_ITEMS: FacilityItem[] = FACILITY_META.map((meta, i) => ({
+    ...meta,
+    ...t.facilityGallery.items[i],
+  }));
+
   const [activeId, setActiveId] = useState<string | null>(null);
   const activeItem =
     FACILITY_ITEMS.find((item) => item.id === activeId) ?? null;
@@ -333,14 +287,13 @@ export default function FacilityGallery() {
         <Reveal>
           <div className="mb-10 max-w-2xl">
             <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold">
-              Fasilitas Kami
+              {t.facilityGallery.eyebrow}
             </p>
             <h2 className="font-heading text-3xl font-extrabold leading-tight text-forest md:text-4xl">
-              Lihat Langsung Tempat Produk Anda Dibuat
+              {t.facilityGallery.heading}
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-ink/70 md:text-base">
-              Scroll atau geser (klik-tahan-tarik) untuk lihat semua fasilitas —
-              klik tiap foto untuk detail dan spesifikasinya.
+              {t.facilityGallery.paragraph}
             </p>
           </div>
         </Reveal>
@@ -438,7 +391,7 @@ export default function FacilityGallery() {
               <button
                 type="button"
                 onClick={() => setActiveId(null)}
-                aria-label="Tutup"
+                aria-label={t.facilityGallery.closeAria}
                 className="-mr-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-forest/60 transition-colors hover:bg-forest/5 hover:text-forest active:bg-forest/10"
               >
                 <X size={22} />
