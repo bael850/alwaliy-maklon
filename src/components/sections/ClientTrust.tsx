@@ -1,4 +1,4 @@
-import { Building2, Check, CheckCheck } from "lucide-react";
+import { Building2, CheckCheck } from "lucide-react";
 import Reveal from "../Reveal";
 
 /**
