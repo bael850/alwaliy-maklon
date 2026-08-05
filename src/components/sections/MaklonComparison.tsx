@@ -56,6 +56,67 @@ const CASE_STUDIES = [
   },
 ];
 
+// Strip bergerigi di kepala tiap "nota" — meniru sobekan kertas roll kasir.
+// Dibuat pakai mask radial-gradient berulang, jadi tak perlu asset gambar.
+function PerforatedEdge({ tone }: { tone: "light" | "dark" }) {
+  return (
+    <div
+      aria-hidden="true"
+      className={`h-3 w-full ${tone === "light" ? "bg-cream/40" : "bg-white"}`}
+      style={{
+        WebkitMaskImage:
+          "radial-gradient(circle at 8px 6px, transparent 6px, black 6.5px)",
+        maskImage:
+          "radial-gradient(circle at 8px 6px, transparent 6px, black 6.5px)",
+        WebkitMaskSize: "16px 12px",
+        maskSize: "16px 12px",
+        WebkitMaskRepeat: "repeat-x",
+        maskRepeat: "repeat-x",
+      }}
+    />
+  );
+}
+
+// Satu baris item nota dengan garis titik-titik penghubung ke keterangan,
+// meniru layout aspek...harga pada struk/kwitansi asli.
+function ReceiptRow({
+  label,
+  detail,
+  positive,
+}: {
+  label: string;
+  detail: string;
+  positive: boolean;
+}) {
+  return (
+    <li className="flex items-baseline gap-2 py-2.5">
+      {positive ? (
+        <Check
+          size={14}
+          strokeWidth={3}
+          className="mt-1 shrink-0 text-forest"
+        />
+      ) : (
+        <X size={14} strokeWidth={3} className="mt-1 shrink-0 text-ink/30" />
+      )}
+      <span className="shrink-0 font-mono text-[12.5px] font-semibold text-forest">
+        {label}
+      </span>
+      <span
+        className="mt-1 flex-1 border-b border-dotted border-ink/25"
+        aria-hidden="true"
+      />
+      <span
+        className={`max-w-[45%] text-right font-mono text-[12px] leading-snug ${
+          positive ? "text-ink/75" : "text-ink/45"
+        }`}
+      >
+        {detail}
+      </span>
+    </li>
+  );
+}
+
 export default function MaklonComparison() {
   return (
     <section className="bg-white py-20 md:py-28">
@@ -71,70 +132,71 @@ export default function MaklonComparison() {
           </div>
         </Reveal>
 
-        <Reveal delay={0.1}>
-          <div className="overflow-x-auto rounded-[4px] border border-forest/10">
-            <table className="w-full min-w-[560px] border-collapse text-left text-sm">
-              <caption className="sr-only">
-                Perbandingan maklon dengan membangun pabrik produksi sendiri
-              </caption>
-              <thead>
-                <tr className="bg-forest text-cream">
-                  <th scope="col" className="p-4 font-heading font-bold">
-                    Aspek
-                  </th>
-                  <th
-                    scope="col"
-                    className="p-4 font-heading font-bold text-gold-light"
-                  >
-                    Maklon Al-Waliy
-                  </th>
-                  <th
-                    scope="col"
-                    className="p-4 font-heading font-bold text-cream/60"
-                  >
-                    Bangun Pabrik Sendiri
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {ROWS.map((row, i) => (
-                  <tr
-                    key={row.aspect}
-                    className={i % 2 === 0 ? "bg-cream/50" : "bg-white"}
-                  >
-                    <th scope="row" className="p-4 font-semibold text-forest">
-                      {row.aspect}
-                    </th>
-                    <td className="p-4 text-ink/80">
-                      <span className="flex items-start gap-2">
-                        <Check
-                          size={16}
-                          strokeWidth={2.5}
-                          className="mt-0.5 shrink-0 text-forest"
-                        />
-                        {row.maklon}
-                      </span>
-                    </td>
-                    <td className="p-4 text-ink/50">
-                      <span className="flex items-start gap-2">
-                        <X
-                          size={16}
-                          strokeWidth={2.5}
-                          className="mt-0.5 shrink-0 text-ink/30"
-                        />
-                        {row.sendiri}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        {/* Perbandingan disajikan sebagai dua "nota" berdampingan, bukan
+            tabel HTML biasa — biar konsisten dengan nuansa apotek/kwitansi
+            yang dipakai section lain, dan beda dari grid kartu di section
+            sekitarnya. */}
+        <div className="relative grid gap-8 md:grid-cols-2 md:gap-6">
+          {/* Badge VS di tengah, cuma muncul di layar md ke atas */}
+          <div className="pointer-events-none absolute left-1/2 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 md:flex">
+            <span className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-gold bg-white font-heading text-xs font-extrabold text-forest shadow-md">
+              VS
+            </span>
           </div>
-        </Reveal>
 
-        {/* Studi kasus — digabung ke sini dari CaseStudies standalone, jadi
-            argumen "kenapa maklon" langsung diikuti bukti nyata di bawahnya,
-            bukan section terpisah yang mengulang topik serupa. */}
+          {/* Nota kiri — Maklon Al-Waliy */}
+          <Reveal delay={0.06}>
+            <div className="overflow-hidden rounded-[3px] border border-forest/15 bg-cream/40 shadow-[0_1px_0_rgba(0,0,0,0.03),0_10px_24px_-16px_rgba(28,44,34,0.35)]">
+              <PerforatedEdge tone="light" />
+              <div className="px-6 pb-6 pt-2">
+                <div className="mb-1 flex items-center justify-between border-b border-dashed border-forest/20 pb-3">
+                  <p className="font-heading text-sm font-extrabold uppercase tracking-[0.08em] text-forest">
+                    Maklon Al-Waliy
+                  </p>
+                  <span className="rounded-full bg-forest px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-gold-light">
+                    Rekomendasi
+                  </span>
+                </div>
+                <ul className="divide-y divide-forest/10">
+                  {ROWS.map((row) => (
+                    <ReceiptRow
+                      key={row.aspect}
+                      label={row.aspect}
+                      detail={row.maklon}
+                      positive
+                    />
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </Reveal>
+
+          {/* Nota kanan — Bangun Pabrik Sendiri */}
+          <Reveal delay={0.12}>
+            <div className="overflow-hidden rounded-[3px] border border-ink/10 bg-white shadow-[0_1px_0_rgba(0,0,0,0.02),0_10px_24px_-16px_rgba(28,44,34,0.18)]">
+              <PerforatedEdge tone="dark" />
+              <div className="px-6 pb-6 pt-2">
+                <div className="mb-1 flex items-center justify-between border-b border-dashed border-ink/15 pb-3">
+                  <p className="font-heading text-sm font-extrabold uppercase tracking-[0.08em] text-ink/50">
+                    Bangun Pabrik Sendiri
+                  </p>
+                </div>
+                <ul className="divide-y divide-ink/10">
+                  {ROWS.map((row) => (
+                    <ReceiptRow
+                      key={row.aspect}
+                      label={row.aspect}
+                      detail={row.sendiri}
+                      positive={false}
+                    />
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+
+        {/* Studi kasus */}
         <div className="mt-16 border-t border-forest/10 pt-12">
           <Reveal>
             <div className="mb-8 max-w-2xl">
