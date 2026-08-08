@@ -1,7 +1,7 @@
 import { MapPin, MessageCircle, Globe, FileDown, Scissors } from "lucide-react";
 import { useLanguage } from "../../i18n/LanguageContext";
 
-const WA_NUMBER = "6281515264972";
+const WA_NUMBER = "6285713896599";
 
 /**
  * PLACEHOLDER — arahkan href ke file PDF asli begitu company profile jadi.
@@ -92,7 +92,7 @@ export default function Cta() {
                     rel="noopener noreferrer"
                     className="text-cream hover:text-gold-light"
                   >
-                    +62 815-1526-4972
+                    +6285713896599
                   </a>
                 </div>
               </div>

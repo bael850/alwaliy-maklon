@@ -37,7 +37,7 @@ function FacebookIcon({ size = 16 }: { size?: number }) {
   );
 }
 
-const WA_NUMBER = "6281515264972";
+const WA_NUMBER = "6285713896599";
 const WA_HREF = `https://wa.me/${WA_NUMBER}`;
 
 export default function Footer() {

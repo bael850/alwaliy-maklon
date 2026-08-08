@@ -4,7 +4,7 @@ import logoImage from "../assets/logo.png";
 import { useLanguage } from "../i18n/LanguageContext";
 import LanguageSwitch from "../i18n/LanguageSwitch";
 
-const WA_NUMBER = "6281515264972";
+const WA_NUMBER = "6285713896599";
 
 export default function Navbar() {
   const { t } = useLanguage();

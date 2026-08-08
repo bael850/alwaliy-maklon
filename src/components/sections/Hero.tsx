@@ -5,7 +5,7 @@ import heroImageWebp from "../../assets/hero.webp";
 import heroImagePng from "../../assets/hero.png";
 import { useLanguage } from "../../i18n/LanguageContext";
 
-const WA_NUMBER = "6281515264972";
+const WA_NUMBER = "6285713896599";
 const waHref = (message: string) =>
   `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(message)}`;
 

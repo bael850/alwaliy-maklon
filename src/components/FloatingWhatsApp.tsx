@@ -1,7 +1,7 @@
 import { MessageCircle } from "lucide-react";
 import { useLanguage } from "../i18n/LanguageContext";
 
-const WA_NUMBER = "6281515264972";
+const WA_NUMBER = "6285713896599";
 
 export default function FloatingWhatsApp() {
   const { t } = useLanguage();
