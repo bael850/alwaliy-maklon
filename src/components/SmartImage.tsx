@@ -1,12 +1,12 @@
 import { useEffect, useState, type ReactNode } from "react";
 
-const EXTENSIONS = ["webp", "jpg", "png"] as const;
+const EXTENSIONS = ["webp", "avif", "jpg", "png"] as const;
 
 interface SmartImageProps {
   /**
    * Path TANPA ekstensi, relatif ke folder `public/`.
    * Contoh: "/images/certifications/halal-mui"
-   * → komponen ini otomatis coba .webp, lalu .jpg, lalu .png secara berurutan.
+   * → komponen ini otomatis coba .webp, lalu .avif, lalu .jpg, lalu .png secara berurutan.
    * Taruh file asetnya di public/images/... dengan salah satu dari 3 ekstensi
    * itu (nama file harus sama persis, cuma ekstensi yang beda), gak perlu
    * ubah kode apa pun.
