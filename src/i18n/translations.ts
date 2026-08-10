@@ -345,8 +345,7 @@ const id = {
     ],
   },
   pullQuote: {
-    quote:
-      "Alam menyediakan, kami meracik — kini giliran brand Anda yang memasarkan.",
+    quote: "Kini, giliran brand Anda yang memasarkan.",
     attribution: "CV Al-Waliy Sejahtera — sejak 2014",
   },
   faq: {
@@ -356,7 +355,7 @@ const id = {
     faqs: [
       {
         q: "Berapa minimal order untuk layanan maklon?",
-        a: "Minimal order kami sengaja fleksibel, disesuaikan jenis produk (serbuk, kapsul, cair, atau madu) dan kompleksitas formulasi — cocok baik untuk brand baru yang mau mulai skala kecil maupun yang sudah siap produksi lebih besar. Tim kami akan hitungkan MOQ paling efisien untuk Anda saat konsultasi.",
+        a: "Minimal order kami sengaja fleksibel, disesuaikan jenis produk (serbuk, kapsul, cair, atau madu) dan kompleksitas formulasi — cocok baik untuk brand baru yang mau mulai skala kecil maupun yang sudah siap produksi lebih besar. Tim kami akan hitungkan MOQ (Minimum Order Quantity) paling efisien untuk Anda saat konsultasi.",
       },
       {
         q: "Apakah saya perlu formulasi sendiri?",
@@ -790,7 +789,7 @@ const en: typeof id = {
     ],
   },
   pullQuote: {
-    quote: "Nature provides, we craft — now it's your brand's turn to sell.",
+    quote: "Now, it's your brand's turn to emerge.",
     attribution: "CV Al-Waliy Sejahtera — since 2014",
   },
   faq: {
@@ -800,7 +799,7 @@ const en: typeof id = {
     faqs: [
       {
         q: "What's the minimum order for the maklon service?",
-        a: "Our minimum order is intentionally flexible, depending on the product type (powder, capsules, liquid, or honey) and formulation complexity — suitable for new brands starting small as well as those ready for larger production. Our team will calculate the most efficient MOQ for you during consultation.",
+        a: "Our minimum order is intentionally flexible, depending on the product type (powder, capsules, liquid, or honey) and formulation complexity — suitable for new brands starting small as well as those ready for larger production. Our team will calibrate the most efficient MOQ (Minimum Order Quantity) for you during consultation.",
       },
       {
         q: "Do I need my own formulation?",
