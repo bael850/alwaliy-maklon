@@ -319,8 +319,6 @@ const id = {
       "Mitra Maklon 2",
       "Mitra Maklon 3",
       "Mitra Maklon 4",
-      "Mitra Maklon 5",
-      "Mitra Maklon 6",
     ],
     testimonials: [
       {
@@ -766,8 +764,6 @@ const en: typeof id = {
       "Maklon Partner 2",
       "Maklon Partner 3",
       "Maklon Partner 4",
-      "Maklon Partner 5",
-      "Maklon Partner 6",
     ],
     testimonials: [
       {
