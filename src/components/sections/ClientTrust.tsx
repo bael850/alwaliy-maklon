@@ -61,25 +61,25 @@ export default function ClientTrust() {
         </Reveal>
         <Reveal delay={0.06}>
           <div className="marquee-pause relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
-            <div className="marquee-track flex w-max items-center gap-6">
+            <div className="marquee-track flex w-max items-center gap-14">
               {[...clients, ...clients].map((client, i) => (
                 <div
                   key={`${client}-${i}`}
                   aria-hidden={i >= clients.length}
-                  className="flex h-16 w-40 shrink-0 items-center justify-center gap-2 rounded-[4px] border border-cream/15 opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                  className="flex h-24 w-56 shrink-0 items-center justify-center gap-2 opacity-60 grayscale transition-opacity hover:opacity-90"
                 >
                   <SmartImage
                     basePath={`/images/clients/${slugifyClientName(client)}`}
                     alt={client}
-                    className="h-full w-full object-contain p-3"
+                    className="h-full w-full object-contain"
                     fallback={
                       <>
                         <Building2
-                          size={18}
+                          size={22}
                           strokeWidth={1.75}
                           className="text-cream/60"
                         />
-                        <span className="text-xs font-medium text-cream/60">
+                        <span className="text-sm font-medium text-cream/60">
                           {client}
                         </span>
                       </>
