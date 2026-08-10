@@ -1,11 +1,29 @@
 import { Building2, CheckCheck } from "lucide-react";
 import Reveal from "../Reveal";
+import SmartImage from "../SmartImage";
 import { useLanguage } from "../../i18n/LanguageContext";
 
 // Warna dipetik dari palet WA asli tapi diredam dikit biar tetap nyatu
 // dengan tema forest/gold/cream di seluruh situs, bukan norak hijau terang.
 const WA_GREEN = "#3EA872"; // bubble outgoing / aksen centang
 const WA_TEAL_DARK = "#0B3D2E"; // header chat, senada forest
+
+/**
+ * PLACEHOLDER — logo tiap klien diambil dari public/images/clients/<slug>.
+ * <slug> = nama klien di-lowercase, spasi jadi "-" (mis. "Mitra Maklon 1"
+ * → "mitra-maklon-1"). Taruh file di
+ * public/images/clients/<slug>.webp (atau .jpg / .png, bebas salah satu)
+ * — otomatis kedeteksi lewat SmartImage, gak perlu ubah kode ini walau
+ * daftar klien di translations.ts nanti ditambah/dikurangi.
+ */
+function slugifyClientName(name: string): string {
+  return name
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
 
 export default function ClientTrust() {
   const { t } = useLanguage();
@@ -50,16 +68,23 @@ export default function ClientTrust() {
                   aria-hidden={i >= clients.length}
                   className="flex h-16 w-40 shrink-0 items-center justify-center gap-2 rounded-[4px] border border-cream/15 opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
                 >
-                  {/* Placeholder ikon — ganti dengan <img src={client.logo} alt={client.name}
-                      className="h-full w-full object-contain p-3" /> begitu logo asli siap */}
-                  <Building2
-                    size={18}
-                    strokeWidth={1.75}
-                    className="text-cream/60"
+                  <SmartImage
+                    basePath={`/images/clients/${slugifyClientName(client)}`}
+                    alt={client}
+                    className="h-full w-full object-contain p-3"
+                    fallback={
+                      <>
+                        <Building2
+                          size={18}
+                          strokeWidth={1.75}
+                          className="text-cream/60"
+                        />
+                        <span className="text-xs font-medium text-cream/60">
+                          {client}
+                        </span>
+                      </>
+                    }
                   />
-                  <span className="text-xs font-medium text-cream/60">
-                    {client}
-                  </span>
                 </div>
               ))}
             </div>
