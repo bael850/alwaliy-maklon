@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import { Building2, CheckCheck } from "lucide-react";
 import Reveal from "../Reveal";
 import SmartImage from "../SmartImage";
@@ -25,6 +26,82 @@ function slugifyClientName(name: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
+/**
+ * WhatsAppBubble — testimoni gak langsung nongol sebagai bubble jadi,
+ * tapi lewat jeda "sedang mengetik..." dulu (3 titik), baru bubble
+ * pesannya pop-in. Detail kecil tapi kerasa hidup karena section ini
+ * emang dibungkus tema chat WhatsApp. Trigger pakai IntersectionObserver
+ * ringan (bukan GSAP) karena cuma butuh deteksi visible sekali, gak perlu
+ * scrub/timeline.
+ */
+function WhatsAppBubble({ quote, time }: { quote: string; time: string }) {
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const [stage, setStage] = useState<"idle" | "typing" | "sent">("idle");
+
+  useEffect(() => {
+    const el = wrapRef.current;
+    if (!el) return;
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    if (prefersReducedMotion) {
+      setStage("sent");
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        observer.disconnect();
+        setStage("typing");
+        const timer = setTimeout(() => setStage("sent"), 550);
+        return () => clearTimeout(timer);
+      },
+      { threshold: 0.4 },
+    );
+    observer.observe(el);
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={wrapRef} className="relative max-w-[92%]">
+      {stage !== "sent" ? (
+        <div
+          className="inline-flex items-center gap-1 rounded-lg rounded-tl-none bg-cream/95 px-3.5 py-3 shadow-sm transition-opacity duration-200"
+          style={{ opacity: stage === "typing" ? 1 : 0 }}
+          aria-hidden="true"
+        >
+          <span className="typing-dot h-1.5 w-1.5 rounded-full bg-forest/40" />
+          <span className="typing-dot h-1.5 w-1.5 rounded-full bg-forest/40" />
+          <span className="typing-dot h-1.5 w-1.5 rounded-full bg-forest/40" />
+        </div>
+      ) : (
+        <div className="bubble-pop-in relative rounded-lg rounded-tl-none bg-cream/95 px-3 py-2.5 shadow-sm">
+          {/* ekor bubble */}
+          <span
+            className="absolute -left-[7px] top-0 h-0 w-0 border-b-[8px] border-r-[8px] border-b-transparent"
+            style={{ borderRightColor: "rgba(245,240,230,0.95)" }}
+            aria-hidden="true"
+          />
+          <p className="text-[13.5px] leading-relaxed text-forest">{quote}</p>
+          <div className="mt-1.5 flex items-center justify-end gap-1">
+            <span className="text-[10.5px] text-forest/45">{time}</span>
+            <CheckCheck
+              size={14}
+              strokeWidth={2.25}
+              style={{ color: "#34B7F1" }}
+              aria-hidden="true"
+            />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function ClientTrust() {
   const { t } = useLanguage();
   const { clients, testimonials } = t.clientTrust;
@@ -49,6 +126,31 @@ export default function ClientTrust() {
         }
         @media (prefers-reduced-motion: reduce) {
           .marquee-track { animation: none; }
+        }
+
+        /* Typing indicator — 3 titik naik-turun bergantian, klasik chat app */
+        .typing-dot {
+          animation: typingBounce 1.1s ease-in-out infinite;
+        }
+        .typing-dot:nth-child(2) { animation-delay: 0.15s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.3s; }
+        @keyframes typingBounce {
+          0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+          30% { transform: translateY(-3px); opacity: 1; }
+        }
+
+        /* Bubble pesan pop-in — kecil ke pas, bukan cuma muncul rata */
+        .bubble-pop-in {
+          animation: bubblePopIn 0.28s cubic-bezier(0.33, 1.4, 0.6, 1) both;
+        }
+        @keyframes bubblePopIn {
+          from { opacity: 0; transform: scale(0.85) translateY(4px); }
+          to   { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .typing-dot { animation: none; }
+          .bubble-pop-in { animation: none; }
         }
       `}</style>
 
@@ -152,28 +254,7 @@ export default function ClientTrust() {
                       backgroundSize: "14px 14px",
                     }}
                   >
-                    <div className="relative max-w-[92%] rounded-lg rounded-tl-none bg-cream/95 px-3 py-2.5 shadow-sm">
-                      {/* ekor bubble */}
-                      <span
-                        className="absolute -left-[7px] top-0 h-0 w-0 border-b-[8px] border-r-[8px] border-b-transparent"
-                        style={{ borderRightColor: "rgba(245,240,230,0.95)" }}
-                        aria-hidden="true"
-                      />
-                      <p className="text-[13.5px] leading-relaxed text-forest">
-                        {item.quote}
-                      </p>
-                      <div className="mt-1.5 flex items-center justify-end gap-1">
-                        <span className="text-[10.5px] text-forest/45">
-                          {item.time}
-                        </span>
-                        <CheckCheck
-                          size={14}
-                          strokeWidth={2.25}
-                          style={{ color: "#34B7F1" }}
-                          aria-hidden="true"
-                        />
-                      </div>
-                    </div>
+                    <WhatsAppBubble quote={item.quote} time={item.time} />
                   </div>
                 </div>
               </Reveal>

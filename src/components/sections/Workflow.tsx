@@ -12,6 +12,8 @@ export default function Workflow() {
   const { t } = useLanguage();
   const [activeIndex, setActiveIndex] = useState(0);
   const stepRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const pipelineTrackRef = useRef<HTMLDivElement>(null);
+  const pipelineFillRef = useRef<HTMLDivElement>(null);
   const steps = t.workflow.steps;
 
   useEffect(() => {
@@ -40,6 +42,45 @@ export default function Workflow() {
     });
 
     return () => mm.revert();
+  }, []);
+
+  // Garis pipeline "ngalir" ngikutin progres scroll — bukan trigger sekali,
+  // tapi discrub persis sama scroll position, dari titik tahap pertama
+  // sampai titik tahap terakhir. Kesan materi mengalir di jalur produksi
+  // seiring user membaca tiap tahap, nyambung ke tema section ini.
+  useEffect(() => {
+    const track = pipelineTrackRef.current;
+    const fill = pipelineFillRef.current;
+    const firstStep = stepRefs.current[0];
+    const lastStep = stepRefs.current[stepRefs.current.length - 1];
+    if (!track || !fill || !firstStep || !lastStep) return;
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    if (prefersReducedMotion) {
+      gsap.set(fill, { scaleY: 1 });
+      return;
+    }
+
+    gsap.set(fill, { scaleY: 0, transformOrigin: "top center" });
+
+    const ctx = gsap.context(() => {
+      gsap.to(fill, {
+        scaleY: 1,
+        ease: "none",
+        scrollTrigger: {
+          trigger: track,
+          start: "top center",
+          endTrigger: lastStep,
+          end: "center center",
+          scrub: true,
+        },
+      });
+    });
+
+    return () => ctx.revert();
   }, []);
 
   return (
@@ -119,9 +160,18 @@ export default function Workflow() {
               daftar terpisah-pisah. */}
           <div className="relative flex flex-col gap-6">
             <div
+              ref={pipelineTrackRef}
               aria-hidden="true"
               className="absolute bottom-5 left-5 top-5 hidden w-px bg-forest/12 md:block"
-            />
+            >
+              {/* Overlay yang "mengisi" dari atas ke bawah, discrub persis
+                  sama posisi scroll — bukan warna solid, tapi gradasi emas
+                  biar kelihatan seperti aliran, bukan sekadar garis nyala. */}
+              <div
+                ref={pipelineFillRef}
+                className="h-full w-full bg-gradient-to-b from-gold via-gold to-gold/40"
+              />
+            </div>
             {steps.map((step, i) => (
               <div
                 key={step.title}

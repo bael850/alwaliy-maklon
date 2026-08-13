@@ -1,6 +1,63 @@
+import { useEffect, useRef, type ReactNode } from "react";
 import { Check, X, ArrowUpRight } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Reveal from "../Reveal";
 import { useLanguage } from "../../i18n/LanguageContext";
+
+gsap.registerPlugin(ScrollTrigger);
+
+/**
+ * ReceiptPrint — nerusin metafora nota/kasir yang udah dipakai
+ * PerforatedEdge & ReceiptRow: kartu "keluar" dari clip-path atas ke
+ * bawah, kayak kertas struk yang lagi dicetak, bukan cuma fade+slide
+ * generik seperti Reveal biasa.
+ */
+function ReceiptPrint({
+  children,
+  delay = 0,
+}: {
+  children: ReactNode;
+  delay?: number;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    if (prefersReducedMotion) {
+      gsap.set(el, { opacity: 1, clipPath: "inset(0 0 0% 0)" });
+      return;
+    }
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        el,
+        { opacity: 1, clipPath: "inset(0 0 100% 0)" },
+        {
+          clipPath: "inset(0 0 0% 0)",
+          duration: 0.85,
+          delay,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: el,
+            start: "top 85%",
+            once: true,
+          },
+        },
+      );
+    }, ref);
+
+    return () => ctx.revert();
+  }, [delay]);
+
+  return <div ref={ref}>{children}</div>;
+}
 
 // Strip bergerigi di kepala tiap "nota" — meniru sobekan kertas roll kasir.
 // Dibuat pakai mask radial-gradient berulang, jadi tak perlu asset gambar.
@@ -93,8 +150,8 @@ export default function MaklonComparison() {
             </span>
           </div>
 
-          {/* Nota kiri — Maklon Al-Waliy */}
-          <Reveal delay={0.06}>
+          {/* Nota kiri — Maklon Al-Waliy — "keluar" duluan dari mesin kasir */}
+          <ReceiptPrint delay={0.05}>
             <div className="overflow-hidden rounded-[3px] border border-forest/15 bg-cream/40 shadow-[0_1px_0_rgba(0,0,0,0.03),0_10px_24px_-16px_rgba(28,44,34,0.35)]">
               <PerforatedEdge tone="light" />
               <div className="px-6 pb-6 pt-2">
@@ -118,10 +175,10 @@ export default function MaklonComparison() {
                 </ul>
               </div>
             </div>
-          </Reveal>
+          </ReceiptPrint>
 
-          {/* Nota kanan — Bangun Pabrik Sendiri */}
-          <Reveal delay={0.12}>
+          {/* Nota kanan — Bangun Pabrik Sendiri — nyusul dikit setelahnya */}
+          <ReceiptPrint delay={0.28}>
             <div className="overflow-hidden rounded-[3px] border border-ink/10 bg-white shadow-[0_1px_0_rgba(0,0,0,0.02),0_10px_24px_-16px_rgba(28,44,34,0.18)]">
               <PerforatedEdge tone="dark" />
               <div className="px-6 pb-6 pt-2">
@@ -142,7 +199,7 @@ export default function MaklonComparison() {
                 </ul>
               </div>
             </div>
-          </Reveal>
+          </ReceiptPrint>
         </div>
 
         {/* Studi kasus */}

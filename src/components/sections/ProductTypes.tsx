@@ -37,6 +37,11 @@ function ProductTag({
   waHref: string;
 }) {
   const rot = TAG_ROTATIONS[index % TAG_ROTATIONS.length];
+  // Durasi & delay idle-sway dibikin beda tiap tag (nurunin dari index)
+  // biar semua tag gak goyang serempak kayak barisan robot — meniru
+  // pola wire-sway di AboutMaklon yang juga sengaja di-desync.
+  const swayDuration = 4.2 + (index % 4) * 0.6;
+  const swayDelay = -(index % 4) * 0.9;
 
   return (
     <div className="group flex flex-col items-center">
@@ -44,8 +49,14 @@ function ProductTag({
       <div aria-hidden="true" className="h-9 w-px bg-forest/25" />
 
       <div
-        style={{ "--rot": `${rot}deg` } as CSSProperties}
-        className="tag-card relative w-[13.5rem] origin-top rotate-[var(--rot)] rounded-[4px] border border-forest/12 bg-white p-5 shadow-[0_8px_20px_rgba(27,67,50,0.09)] group-hover:shadow-[0_12px_28px_rgba(27,67,50,0.14)]"
+        style={
+          {
+            "--rot": `${rot}deg`,
+            "--sway-duration": `${swayDuration}s`,
+            "--sway-delay": `${swayDelay}s`,
+          } as CSSProperties
+        }
+        className="tag-card tag-idle-sway relative w-[13.5rem] origin-top rotate-[var(--rot)] rounded-[4px] border border-forest/12 bg-white p-5 shadow-[0_8px_20px_rgba(27,67,50,0.09)] group-hover:shadow-[0_12px_28px_rgba(27,67,50,0.14)]"
       >
         {/* Lubang label — bulatan kecil kayak lubang gantungan tag asli */}
         <div
@@ -92,6 +103,18 @@ export default function ProductTypes() {
           transition: transform 0.35s cubic-bezier(0.33, 1, 0.68, 1), box-shadow 0.3s ease;
           will-change: transform;
         }
+        /* Idle sway — goyangan ambient super halus (+-1.2deg dari --rot),
+           seolah label beneran ketiup angin di gantungannya. Tiap tag
+           punya durasi/delay sendiri lewat --sway-duration & --sway-delay. */
+        .tag-idle-sway {
+          animation: tagIdleSway var(--sway-duration) ease-in-out infinite;
+          animation-delay: var(--sway-delay);
+        }
+        @keyframes tagIdleSway {
+          0%   { transform: rotate(calc(var(--rot) - 1.2deg)); }
+          50%  { transform: rotate(calc(var(--rot) + 1.2deg)); }
+          100% { transform: rotate(calc(var(--rot) - 1.2deg)); }
+        }
         @keyframes tagSway {
           0%   { transform: rotate(var(--rot)); }
           25%  { transform: rotate(calc(var(--rot) + 5deg)); }
@@ -103,7 +126,7 @@ export default function ProductTypes() {
           animation: tagSway 0.7s cubic-bezier(0.33, 1, 0.68, 1);
         }
         @media (prefers-reduced-motion: reduce) {
-          .tag-card { transition: box-shadow 0.3s ease; }
+          .tag-card, .tag-idle-sway { transition: box-shadow 0.3s ease; animation: none; }
           .group:hover .tag-card { animation: none; }
         }
       `}</style>

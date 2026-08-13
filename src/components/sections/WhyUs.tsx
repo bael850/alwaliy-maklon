@@ -1,10 +1,93 @@
+import { useEffect, useRef } from "react";
 import { Camera } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Reveal from "../Reveal";
 import SmartImage from "../SmartImage";
 import { useLanguage } from "../../i18n/LanguageContext";
 
+gsap.registerPlugin(ScrollTrigger);
+
 export default function WhyUs() {
   const { t } = useLanguage();
+  const photoRef = useRef<HTMLDivElement>(null);
+  const checkRefs = useRef<Array<SVGPathElement | null>>([]);
+
+  // Foto bukti mutu "jatuh & mendarat" ke clipboard — bukan cuma fade,
+  // tapi turun dari atas dengan sedikit overshoot rotasi, kayak beneran
+  // baru dijepretkan ke lembar checklist.
+  useEffect(() => {
+    const el = photoRef.current;
+    if (!el) return;
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    if (prefersReducedMotion) return;
+
+    // Mulai dari rotasi berbeda dari posisi istirahat (rotate-6 di className)
+    // supaya back.out kerasa "mendarat miring" alih-alih diam di tempat.
+    gsap.set(el, { y: -60, opacity: 0, rotate: -14 });
+
+    const ctx = gsap.context(() => {
+      gsap.to(el, {
+        y: 0,
+        opacity: 1,
+        rotate: 6,
+        duration: 0.7,
+        delay: 0.5,
+        ease: "back.out(1.7)",
+        scrollTrigger: {
+          trigger: el,
+          start: "top 85%",
+          once: true,
+        },
+      });
+    }, photoRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  // Centang "digambar" pas item-nya sendiri masuk viewport — dipisah dari
+  // CSS animation-delay biasa karena section ini jauh di bawah halaman;
+  // delay berbasis waktu-mount bisa keburu selesai sebelum user scroll
+  // sampai sini. Tiap path dapat trigger ScrollTrigger sendiri-sendiri.
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    const paths = checkRefs.current.filter(
+      (p): p is SVGPathElement => p !== null,
+    );
+    if (paths.length === 0) return;
+
+    if (prefersReducedMotion) {
+      gsap.set(paths, { strokeDashoffset: 0 });
+      return;
+    }
+
+    gsap.set(paths, { strokeDasharray: 16, strokeDashoffset: 16 });
+
+    const ctx = gsap.context(() => {
+      paths.forEach((path, i) => {
+        gsap.to(path, {
+          strokeDashoffset: 0,
+          duration: 0.35,
+          delay: 0.35 + i * 0.06,
+          ease: "power1.out",
+          scrollTrigger: {
+            trigger: path,
+            start: "top 90%",
+            once: true,
+          },
+        });
+      });
+    });
+
+    return () => ctx.revert();
+  }, []);
 
   return (
     <section className="bg-white py-20 md:py-28">
@@ -44,7 +127,10 @@ export default function WhyUs() {
                   ke lembar checklist (kayak dokumentasi inspeksi mutu asli).
                   Disembunyikan di layar sangat kecil biar gak numpuk sama
                   jepitan clipboard. */}
-              <div className="absolute -right-3 -top-4 z-20 hidden w-24 rotate-6 sm:block md:-right-5 md:-top-6 md:w-28">
+              <div
+                ref={photoRef}
+                className="absolute -right-3 -top-4 z-20 hidden w-24 rotate-6 sm:block md:-right-5 md:-top-6 md:w-28"
+              >
                 <div className="border-[5px] border-white bg-white shadow-[0_10px_20px_rgba(0,0,0,0.25)]">
                   <div className="flex aspect-[4/5] items-center justify-center overflow-hidden bg-forest/5">
                     <SmartImage
@@ -94,7 +180,10 @@ export default function WhyUs() {
                 {t.whyUs.reasons.map((reason, i) => (
                   <Reveal key={reason.title} delay={0.14 + i * 0.08}>
                     <div className="flex items-start gap-4 py-5">
-                      {/* Checkbox tercentang */}
+                      {/* Checkbox — centangnya "digambar" (stroke-dashoffset,
+                          teknik sama kayak kabel di AboutMaklon), telat
+                          dikit dari kotaknya sendiri biar kerasa dua gerakan
+                          terpisah: kotak muncul, baru dicentang. */}
                       <span
                         aria-hidden="true"
                         className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-[3px] border-2 border-forest bg-forest text-cream"
@@ -105,6 +194,9 @@ export default function WhyUs() {
                           fill="none"
                         >
                           <path
+                            ref={(el) => {
+                              checkRefs.current[i] = el;
+                            }}
                             d="M3 8.5L6.2 11.5L13 4.5"
                             stroke="currentColor"
                             strokeWidth="2"

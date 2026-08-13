@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import {
   BadgeCheck,
   ShieldCheck,
@@ -8,6 +8,8 @@ import {
   X,
   type LucideIcon,
 } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Reveal from "../Reveal";
 import SmartImage from "../SmartImage";
 import { useLanguage } from "../../i18n/LanguageContext";
@@ -59,12 +61,52 @@ const CERT_META: CertMeta[] = [
 // komputer yang simetris sempurna.
 const SEAL_ROTATIONS = [-5, 4, -3, 6];
 
+gsap.registerPlugin(ScrollTrigger);
+
 function CertSeal({ cert, index }: { cert: CertItem; index: number }) {
   const rot = SEAL_ROTATIONS[index % SEAL_ROTATIONS.length];
   const pathId = `seal-ring-${cert.id}`;
+  const sealRef = useRef<HTMLDivElement>(null);
+  const badgeRef = useRef<HTMLDivElement>(null);
+
+  // Badge centang "nge-stamp" TELAT sedikit setelah seal-nya sendiri
+  // sudah muncul (Reveal parent handle fade-in seal) — scale turun dari
+  // besar ke pas, kayak beneran dicap dengan tenaga, bukan cuma fade rata.
+  useEffect(() => {
+    const seal = sealRef.current;
+    const badge = badgeRef.current;
+    if (!seal || !badge) return;
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    if (prefersReducedMotion) return;
+
+    gsap.set(badge, { scale: 1.9, opacity: 0, rotate: -18 });
+
+    const ctx = gsap.context(() => {
+      gsap.to(badge, {
+        scale: 1,
+        opacity: 1,
+        rotate: 0,
+        duration: 0.45,
+        delay: 0.4,
+        ease: "back.out(2.4)",
+        scrollTrigger: {
+          trigger: seal,
+          start: "top 85%",
+          once: true,
+        },
+      });
+    });
+
+    return () => ctx.revert();
+  }, []);
 
   return (
     <div
+      ref={sealRef}
       className="group flex flex-col items-center"
       style={{ "--rot": `${rot}deg` } as CSSProperties}
     >
@@ -73,10 +115,12 @@ function CertSeal({ cert, index }: { cert: CertItem; index: number }) {
         <div className="absolute inset-0 rounded-full border-[3px] border-gold" />
         <div className="absolute inset-[7px] rounded-full border border-dashed border-cream/40" />
 
-        {/* Teks melengkung di sepanjang cincin — motif "stempel resmi" */}
+        {/* Teks melengkung di sepanjang cincin — motif "stempel resmi".
+            Muter pelan terus-menerus (60s/putaran) biar berasa hidup,
+            berhenti pas di-hover biar teksnya kebaca jelas. */}
         <svg
           viewBox="0 0 100 100"
-          className="absolute inset-0 h-full w-full"
+          className="seal-ring-spin absolute inset-0 h-full w-full"
           aria-hidden="true"
         >
           <defs>
@@ -118,7 +162,10 @@ function CertSeal({ cert, index }: { cert: CertItem; index: number }) {
         </div>
 
         {/* Overlay "cap disetujui" — nempel di sudut, kayak stempel verifikasi kedua */}
-        <div className="absolute -bottom-1 -right-1 flex h-8 w-8 items-center justify-center rounded-full border-2 border-forest bg-gold text-forest shadow-[0_2px_6px_rgba(0,0,0,0.25)]">
+        <div
+          ref={badgeRef}
+          className="absolute -bottom-1 -right-1 flex h-8 w-8 items-center justify-center rounded-full border-2 border-forest bg-gold text-forest shadow-[0_2px_6px_rgba(0,0,0,0.25)]"
+        >
           <Check size={15} strokeWidth={3} />
         </div>
       </div>
@@ -130,6 +177,30 @@ function CertSeal({ cert, index }: { cert: CertItem; index: number }) {
         {cert.desc}
       </p>
     </div>
+  );
+}
+
+// Rotasi cincin teks — dipisah jadi style tag sendiri (bukan inline di
+// komponen CertSeal) karena cuma perlu didefinisikan sekali per halaman,
+// dipakai berulang lewat className yang sama di tiap stempel.
+function SealRingStyle() {
+  return (
+    <style>{`
+      .seal-ring-spin {
+        animation: sealRingSpin 60s linear infinite;
+        transform-origin: 50% 50%;
+      }
+      .group:hover .seal-ring-spin {
+        animation-play-state: paused;
+      }
+      @keyframes sealRingSpin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .seal-ring-spin { animation: none; }
+      }
+    `}</style>
   );
 }
 
@@ -174,6 +245,7 @@ export default function Certifications() {
 
   return (
     <section id="sertifikasi" className="bg-forest py-20 md:py-28">
+      <SealRingStyle />
       <div className="mx-auto max-w-6xl px-5 md:px-8">
         <Reveal>
           <p
