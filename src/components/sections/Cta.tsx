@@ -1,7 +1,7 @@
 import { MapPin, MessageCircle, Globe, FileDown, Scissors } from "lucide-react";
 import { useLanguage } from "../../i18n/LanguageContext";
 
-const WA_NUMBER = "6285713896599";
+const WA_NUMBER = "6282110689827";
 
 /**
  * PLACEHOLDER — arahkan href ke file PDF asli begitu company profile jadi.
@@ -92,7 +92,7 @@ export default function Cta() {
                     rel="noopener noreferrer"
                     className="text-cream hover:text-gold-light"
                   >
-                    +6285713896599
+                    +6282110689827
                   </a>
                 </div>
               </div>
