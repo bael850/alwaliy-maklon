@@ -446,7 +446,6 @@ const id = {
     ],
   },
   visionMission: {
-    eyebrow: "Visi & Misi",
     visionLabel: "Visi",
     vision:
       "Menjadi produsen obat tradisional yang memberikan manfaat nyata bagi kesehatan masyarakat, dengan standar produksi yang dapat dipertanggungjawabkan.",
@@ -1046,7 +1045,6 @@ const en: typeof id = {
     ],
   },
   visionMission: {
-    eyebrow: "Vision & Mission",
     visionLabel: "Vision",
     vision:
       "To be a traditional medicine producer that brings real benefit to public health, with production standards we can stand behind.",
