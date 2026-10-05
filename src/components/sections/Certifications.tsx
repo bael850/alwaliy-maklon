@@ -12,6 +12,7 @@ import Reveal from "../Reveal";
 import SmartImage from "../SmartImage";
 import Lightbox, { type LightboxItem } from "../Lightbox";
 import { useLanguage } from "../../i18n/LanguageContext";
+import { useAvailableImages } from "../../lib/useAvailableImages";
 
 interface CertMeta {
   id: string;
@@ -40,20 +41,41 @@ const CERT_META: CertMeta[] = [
   },
 ];
 
+/**
+ * Hanya sertifikat yang dokumennya sudah ada di public/images/certifications
+ * yang tampil. Belum ada dokumen sama sekali = section tidak muncul.
+ * Dokumen ditambah = otomatis muncul, tanpa ubah kode.
+ */
 export default function Certifications() {
+  const { ready, has } = useAvailableImages(CERT_META.map((m) => m.imageBase));
+  const metas = CERT_META.filter((_, i) => has[i]);
+  // Index asli ke t.certifications.certs (urutan 1:1 dengan CERT_META)
+  const textIdx = CERT_META.map((_, i) => i).filter((i) => has[i]);
+
+  if (!ready || metas.length === 0) return null;
+  return <CertificationsStage metas={metas} textIdx={textIdx} />;
+}
+
+function CertificationsStage({
+  metas,
+  textIdx,
+}: {
+  metas: CertMeta[];
+  textIdx: number[];
+}) {
   const { t } = useLanguage();
-  const certs = t.certifications.certs;
+  const certs = textIdx.map((i) => t.certifications.certs[i]);
   const total = certs.length;
 
   const [active, setActive] = useState(0);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const current = certs[active];
-  const CurrentIcon = CERT_META[active].icon;
+  const CurrentIcon = metas[active].icon;
 
   const lightboxItems: LightboxItem[] = certs.map((cert, i) => ({
-    id: CERT_META[i].id,
-    imageBase: CERT_META[i].imageBase,
+    id: metas[i].id,
+    imageBase: metas[i].imageBase,
     title: cert.title,
     description: cert.desc,
     fit: "contain",
@@ -101,7 +123,7 @@ export default function Certifications() {
 
             {/* Detail — key=active supaya animasi masuk ulang tiap ganti */}
             <div
-              key={CERT_META[active].id}
+              key={metas[active].id}
               className="cert-swap mt-8 rounded-[4px] border border-cream/15 bg-cream/5 p-5 md:p-6"
               aria-live="polite"
             >
@@ -138,7 +160,7 @@ export default function Certifications() {
             <div className="mt-5 flex flex-wrap gap-2">
               {certs.map((cert, i) => (
                 <button
-                  key={CERT_META[i].id}
+                  key={metas[i].id}
                   type="button"
                   onClick={() => setActive(i)}
                   aria-pressed={i === active}
@@ -165,11 +187,11 @@ export default function Certifications() {
               {certs.map((cert, i) => {
                 const pos = (i - active + total) % total;
                 const isFront = pos === 0;
-                const Icon = CERT_META[i].icon;
+                const Icon = metas[i].icon;
 
                 return (
                   <button
-                    key={CERT_META[i].id}
+                    key={metas[i].id}
                     type="button"
                     onClick={() =>
                       isFront ? setLightboxIndex(i) : setActive(i)
@@ -198,7 +220,7 @@ export default function Certifications() {
 
                       <div className="my-3 flex min-h-0 flex-1 items-center justify-center overflow-hidden rounded-[4px] border border-forest/10 bg-white">
                         <SmartImage
-                          basePath={CERT_META[i].imageBase}
+                          basePath={metas[i].imageBase}
                           alt=""
                           className="h-full w-full object-contain p-2"
                           fallback={

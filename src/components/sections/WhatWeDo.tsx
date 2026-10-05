@@ -4,6 +4,7 @@ import Reveal from "../Reveal";
 import SmartImage from "../SmartImage";
 import Lightbox, { type LightboxItem } from "../Lightbox";
 import { useLanguage } from "../../i18n/LanguageContext";
+import { useAvailableImages } from "../../lib/useAvailableImages";
 
 type Filter = "all" | "client" | "own";
 
@@ -26,10 +27,31 @@ const WORK_META: WorkMeta[] = [
   { id: "w8", kind: "own", category: 1, imageBase: "/images/work/8" },
 ];
 
+interface AvailableWork extends WorkMeta {
+  /** Index asli di WORK_META / t.whatWeDo.items */
+  textIndex: number;
+}
+
 const FILTERS: Filter[] = ["all", "client", "own"];
 const pad = (n: number) => String(n).padStart(2, "0");
 
+/**
+ * Hanya karya yang fotonya sudah ada di public/images/work yang tampil.
+ * Belum ada foto sama sekali = section tidak muncul. Foto ditambah =
+ * otomatis muncul, tanpa ubah kode.
+ */
 export default function WhatWeDo() {
+  const { ready, has } = useAvailableImages(WORK_META.map((m) => m.imageBase));
+  const works: AvailableWork[] = WORK_META.map((m, i) => ({
+    ...m,
+    textIndex: i,
+  })).filter((_, i) => has[i]);
+
+  if (!ready || works.length === 0) return null;
+  return <WhatWeDoStage works={works} />;
+}
+
+function WhatWeDoStage({ works }: { works: AvailableWork[] }) {
   const { t } = useLanguage();
   const [filter, setFilter] = useState<Filter>("all");
   const [active, setActive] = useState(0);
@@ -38,19 +60,17 @@ export default function WhatWeDo() {
 
   const visible = useMemo(
     () =>
-      WORK_META.map((meta, i) => ({ meta, text: t.whatWeDo.items[i] })).filter(
-        ({ meta }) => filter === "all" || meta.kind === filter,
-      ),
-    [filter, t.whatWeDo.items],
+      works
+        .map((meta) => ({ meta, text: t.whatWeDo.items[meta.textIndex] }))
+        .filter(({ meta }) => filter === "all" || meta.kind === filter),
+    [filter, works, t.whatWeDo.items],
   );
 
   const current = Math.min(active, visible.length - 1);
   const now = visible[current];
 
   const count = (f: Filter) =>
-    f === "all"
-      ? WORK_META.length
-      : WORK_META.filter((m) => m.kind === f).length;
+    f === "all" ? works.length : works.filter((m) => m.kind === f).length;
 
   const label = (kind: WorkMeta["kind"], client: string) =>
     kind === "client"
@@ -172,7 +192,7 @@ export default function WhatWeDo() {
                 aria-label={t.whatWeDo.filterAria}
                 className="flex flex-wrap gap-x-6 gap-y-2 border-b border-cream/15"
               >
-                {FILTERS.map((f) => (
+                {FILTERS.filter((f) => count(f) > 0).map((f) => (
                   <button
                     key={f}
                     type="button"

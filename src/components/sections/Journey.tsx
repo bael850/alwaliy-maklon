@@ -10,6 +10,7 @@ import Reveal from "../Reveal";
 import SmartImage from "../SmartImage";
 import Lightbox, { type LightboxItem } from "../Lightbox";
 import { useLanguage } from "../../i18n/LanguageContext";
+import { useAvailableImages } from "../../lib/useAvailableImages";
 
 /**
  * Foto tiap momen. URUTAN HARUS 1:1 dengan t.journey.items.
@@ -34,9 +35,31 @@ const DRAG_THRESHOLD = 6;
 const COPIES = 5;
 const MID = 2;
 
+interface JourneyEntry {
+  base: string;
+  /** Index asli di IMAGE_BASES / t.journey.items */
+  textIndex: number;
+}
+
+/**
+ * Hanya momen yang fotonya sudah ada di public/images/journey yang tampil.
+ * Belum ada foto sama sekali = section tidak muncul. Foto ditambah =
+ * otomatis muncul, tanpa ubah kode.
+ */
 export default function Journey() {
+  const { ready, has } = useAvailableImages(IMAGE_BASES);
+  const entries: JourneyEntry[] = IMAGE_BASES.map((base, i) => ({
+    base,
+    textIndex: i,
+  })).filter((_, i) => has[i]);
+
+  if (!ready || entries.length === 0) return null;
+  return <JourneyCarousel entries={entries} />;
+}
+
+function JourneyCarousel({ entries }: { entries: JourneyEntry[] }) {
   const { t } = useLanguage();
-  const items = t.journey.items;
+  const items = entries.map((e) => t.journey.items[e.textIndex]);
 
   const trackRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLLIElement | null)[]>([]);
@@ -263,7 +286,7 @@ export default function Journey() {
 
   const lightboxItems: LightboxItem[] = items.map((item, i) => ({
     id: `journey-${i}`,
-    imageBase: IMAGE_BASES[i],
+    imageBase: entries[i].base,
     title: item.title,
     meta: item.year,
     description: item.desc,
@@ -349,7 +372,7 @@ export default function Journey() {
                   className="group relative block aspect-[3/4] w-full overflow-hidden rounded-[4px] bg-cream/5 text-left shadow-2xl shadow-black/50 ring-1 ring-cream/10"
                 >
                   <SmartImage
-                    basePath={IMAGE_BASES[di]}
+                    basePath={entries[di].base}
                     alt=""
                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                     fallback={

@@ -5,6 +5,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Reveal from "../Reveal";
 import SmartImage from "../SmartImage";
 import { useLanguage } from "../../i18n/LanguageContext";
+import { useAvailableImages } from "../../lib/useAvailableImages";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -46,13 +47,18 @@ function CountUp({ to, suffix = "" }: { to: number; suffix?: string }) {
 export default function WhoWeAre() {
   const { t } = useLanguage();
   const years = new Date().getFullYear() - FOUNDED_YEAR;
+  // Foto gedung baru tampil kalau file-nya sudah ada di public/images/about.
+  // Kalau belum, kolom foto dihilangkan dan teks memakai lebar penuh.
+  const { ready, has } = useAvailableImages(["/images/about/gedung"]);
+  const showPhoto = ready && has[0];
+  const textCol = showPhoto || !ready ? "md:col-span-7" : "md:col-span-12";
 
   return (
     <section id="who" className="bg-cream py-20 md:py-28">
       <div className="mx-auto max-w-6xl px-5 md:px-8">
         <div className="grid gap-12 md:grid-cols-12 md:items-center md:gap-16">
           {/* Narasi */}
-          <Reveal className="md:col-span-7">
+          <Reveal className={textCol}>
             <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold">
               {t.whoWeAre.eyebrow}
             </p>
@@ -78,33 +84,35 @@ export default function WhoWeAre() {
 
           {/* Foto — bingkai emas bergeser di belakang.
               PLACEHOLDER: taruh file di public/images/about/gedung.(webp|jpg|png) */}
-          <Reveal delay={0.1} className="md:col-span-5">
-            <div className="relative mx-auto max-w-sm md:max-w-none">
-              <div
-                aria-hidden="true"
-                className="absolute -bottom-4 -right-4 h-full w-full rounded-[4px] border-2 border-gold/60"
-              />
-              <div className="relative aspect-[4/5] overflow-hidden rounded-[4px] bg-forest/5">
-                <SmartImage
-                  basePath="/images/about/gedung"
-                  alt={t.whoWeAre.photoLabel}
-                  className="h-full w-full object-cover"
-                  fallback={
-                    <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-center">
-                      <Building2
-                        size={40}
-                        strokeWidth={1.5}
-                        className="text-forest/30"
-                      />
-                      <span className="text-[11px] font-medium uppercase tracking-[0.08em] text-forest/40">
-                        {t.whoWeAre.photoLabel}
-                      </span>
-                    </div>
-                  }
+          {showPhoto && (
+            <Reveal delay={0.1} className="md:col-span-5">
+              <div className="relative mx-auto max-w-sm md:max-w-none">
+                <div
+                  aria-hidden="true"
+                  className="absolute -bottom-4 -right-4 h-full w-full rounded-[4px] border-2 border-gold/60"
                 />
+                <div className="relative aspect-[4/5] overflow-hidden rounded-[4px] bg-forest/5">
+                  <SmartImage
+                    basePath="/images/about/gedung"
+                    alt={t.whoWeAre.photoLabel}
+                    className="h-full w-full object-cover"
+                    fallback={
+                      <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-center">
+                        <Building2
+                          size={40}
+                          strokeWidth={1.5}
+                          className="text-forest/30"
+                        />
+                        <span className="text-[11px] font-medium uppercase tracking-[0.08em] text-forest/40">
+                          {t.whoWeAre.photoLabel}
+                        </span>
+                      </div>
+                    }
+                  />
+                </div>
               </div>
-            </div>
-          </Reveal>
+            </Reveal>
+          )}
         </div>
 
         {/* Angka kunci */}

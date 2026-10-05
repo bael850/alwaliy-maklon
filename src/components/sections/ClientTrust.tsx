@@ -4,6 +4,7 @@ import Reveal from "../Reveal";
 import SmartImage from "../SmartImage";
 import { useLanguage } from "../../i18n/LanguageContext";
 import { translations } from "../../i18n/translations";
+import { useAvailableImages } from "../../lib/useAvailableImages";
 
 const WA_GREEN = "#3EA872"; // bubble outgoing / aksen centang
 const WA_TEAL_DARK = "#0B3D2E"; // header chat, senada forest
@@ -107,10 +108,17 @@ function WhatsAppBubble({ quote, time }: { quote: string; time: string }) {
 export default function ClientTrust() {
   const { t } = useLanguage();
   const { testimonials } = t.clientTrust;
-  const clients: Client[] = t.clientTrust.clients.map((name, i) => ({
+  const allClients: Client[] = t.clientTrust.clients.map((name, i) => ({
     name,
     slug: LOGO_SLUGS[i] ?? slugifyClientName(name),
   }));
+  // Hanya logo yang file-nya sudah ada di public/images/clients yang tampil.
+  // Belum ada logo sama sekali = blok logo tidak muncul (testimoni tetap).
+  const { ready, has } = useAvailableImages(
+    allClients.map((c) => `/images/clients/${c.slug}`),
+  );
+  const clients = allClients.filter((_, i) => has[i]);
+  const showLogos = ready && clients.length > 0;
   const marqueeRef = useRef<HTMLDivElement>(null);
 
   // Hemat CPU: marquee dijeda selama tidak terlihat di layar.
@@ -122,7 +130,7 @@ export default function ClientTrust() {
     });
     io.observe(el);
     return () => io.disconnect();
-  }, []);
+  }, [showLogos]);
 
   return (
     <section id="clients" className="bg-cream py-20 md:py-28">
@@ -180,59 +188,68 @@ export default function ClientTrust() {
       <div className="mx-auto max-w-6xl px-5 md:px-8">
         {/* Logo mitra — dua baris marquee berlawanan arah. Logo abu-abu,
             berwarna saat di-hover; kedua baris berhenti saat di-hover. */}
-        <Reveal>
-          <p className="mb-8 text-center text-sm font-semibold uppercase tracking-[0.14em] text-gold">
-            {t.clientTrust.trustedByLabel}
-          </p>
-        </Reveal>
-        <Reveal delay={0.06}>
-          <div
-            ref={marqueeRef}
-            className="marquee-pause flex flex-col gap-4 [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]"
-          >
-            {[false, true].map((reverse) => {
-              const items = buildRow(clients, reverse);
-              return (
-                <div key={String(reverse)} className="relative overflow-hidden">
-                  <div
-                    className={`marquee-track flex w-max items-center gap-8 ${reverse ? "marquee-track-reverse" : ""}`}
-                  >
-                    {[...items, ...items].map((client, i) => (
+        {showLogos && (
+          <>
+            <Reveal>
+              <p className="mb-8 text-center text-sm font-semibold uppercase tracking-[0.14em] text-gold">
+                {t.clientTrust.trustedByLabel}
+              </p>
+            </Reveal>
+            <Reveal delay={0.06}>
+              <div
+                ref={marqueeRef}
+                className="marquee-pause flex flex-col gap-4 [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]"
+              >
+                {[false, true].map((reverse) => {
+                  const items = buildRow(clients, reverse);
+                  return (
+                    <div
+                      key={String(reverse)}
+                      className="relative overflow-hidden"
+                    >
                       <div
-                        key={`${client.slug}-${i}`}
-                        aria-hidden={i >= items.length || reverse}
-                        className="flex h-20 w-48 shrink-0 items-center justify-center gap-2 grayscale opacity-60 transition duration-300 hover:grayscale-0 hover:opacity-100 md:h-24 md:w-56"
+                        className={`marquee-track flex w-max items-center gap-8 ${reverse ? "marquee-track-reverse" : ""}`}
                       >
-                        <SmartImage
-                          basePath={`/images/clients/${client.slug}`}
-                          alt={client.name}
-                          className="h-full w-full object-contain"
-                          fallback={
-                            <>
-                              <Building2
-                                size={22}
-                                strokeWidth={1.75}
-                                className="text-forest/60"
-                              />
-                              <span className="text-sm font-medium text-forest/70">
-                                {client.name}
-                              </span>
-                            </>
-                          }
-                        />
+                        {[...items, ...items].map((client, i) => (
+                          <div
+                            key={`${client.slug}-${i}`}
+                            aria-hidden={i >= items.length || reverse}
+                            className="flex h-20 w-48 shrink-0 items-center justify-center gap-2 grayscale opacity-60 transition duration-300 hover:grayscale-0 hover:opacity-100 md:h-24 md:w-56"
+                          >
+                            <SmartImage
+                              basePath={`/images/clients/${client.slug}`}
+                              alt={client.name}
+                              className="h-full w-full object-contain"
+                              fallback={
+                                <>
+                                  <Building2
+                                    size={22}
+                                    strokeWidth={1.75}
+                                    className="text-forest/60"
+                                  />
+                                  <span className="text-sm font-medium text-forest/70">
+                                    {client.name}
+                                  </span>
+                                </>
+                              }
+                            />
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </Reveal>
+                    </div>
+                  );
+                })}
+              </div>
+            </Reveal>
+          </>
+        )}
 
         {/* Testimoni — dibungkus jadi "jendela chat WhatsApp" karena kanal
             komunikasi utama bisnis ini memang WA. Header kontak + bubble
             pesan masuk lengkap dengan nama pengirim, jam, dan centang biru. */}
-        <div className="mt-16 border-t border-forest/15 pt-14">
+        <div
+          className={showLogos ? "mt-16 border-t border-forest/15 pt-14" : ""}
+        >
           <Reveal>
             <div className="mb-12 max-w-2xl">
               <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold">
