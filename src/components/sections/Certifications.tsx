@@ -1,19 +1,17 @@
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useState, type CSSProperties } from "react";
 import {
   BadgeCheck,
   ShieldCheck,
   Factory,
   Scale,
-  Check,
-  X,
+  FileText,
+  Maximize2,
   type LucideIcon,
 } from "lucide-react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Reveal from "../Reveal";
 import SmartImage from "../SmartImage";
+import Lightbox, { type LightboxItem } from "../Lightbox";
 import { useLanguage } from "../../i18n/LanguageContext";
-import type { Translations } from "../../i18n/translations";
 
 interface CertMeta {
   id: string;
@@ -23,32 +21,18 @@ interface CertMeta {
    * Taruh file di public/images/certifications/<nama>.webp (atau .jpg / .png,
    * bebas salah satu) — otomatis kedeteksi, gak perlu ubah kode ini.
    */
-  imageBase?: string;
+  imageBase: string;
 }
 
-type CertText = Translations["certifications"]["certs"][number];
-
-interface CertItem extends CertMeta, CertText {}
-
-// Bagian non-teks (id, ikon, path gambar) tetap konstanta terpisah — urutannya
-// HARUS 1:1 sama dengan urutan t.certifications.certs di translations.ts,
-// karena di-zip pakai index.
+// URUTAN HARUS 1:1 dengan t.certifications.certs di translations.ts.
 const CERT_META: CertMeta[] = [
   {
     id: "halal-mui",
     icon: BadgeCheck,
     imageBase: "/images/certifications/halal-mui",
   },
-  {
-    id: "bpom",
-    icon: ShieldCheck,
-    imageBase: "/images/certifications/bpom",
-  },
-  {
-    id: "cpotb",
-    icon: Factory,
-    imageBase: "/images/certifications/cpotb",
-  },
+  { id: "bpom", icon: ShieldCheck, imageBase: "/images/certifications/bpom" },
+  { id: "cpotb", icon: Factory, imageBase: "/images/certifications/cpotb" },
   {
     id: "legalitas",
     icon: Scale,
@@ -56,319 +40,203 @@ const CERT_META: CertMeta[] = [
   },
 ];
 
-// Tiap stempel dikasih rotasi & offset vertikal beda-beda — biar berasa
-// "dicap tangan satu-satu" (gak pernah presisi sejajar), bukan hasil print
-// komputer yang simetris sempurna.
-const SEAL_ROTATIONS = [-5, 4, -3, 6];
-
-gsap.registerPlugin(ScrollTrigger);
-
-function CertSeal({ cert, index }: { cert: CertItem; index: number }) {
-  const rot = SEAL_ROTATIONS[index % SEAL_ROTATIONS.length];
-  const pathId = `seal-ring-${cert.id}`;
-  const sealRef = useRef<HTMLDivElement>(null);
-  const badgeRef = useRef<HTMLDivElement>(null);
-
-  // Badge centang "nge-stamp" TELAT sedikit setelah seal-nya sendiri
-  // sudah muncul (Reveal parent handle fade-in seal) — scale turun dari
-  // besar ke pas, kayak beneran dicap dengan tenaga, bukan cuma fade rata.
-  useEffect(() => {
-    const seal = sealRef.current;
-    const badge = badgeRef.current;
-    if (!seal || !badge) return;
-
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-
-    if (prefersReducedMotion) return;
-
-    gsap.set(badge, { scale: 1.9, opacity: 0, rotate: -18 });
-
-    const ctx = gsap.context(() => {
-      gsap.to(badge, {
-        scale: 1,
-        opacity: 1,
-        rotate: 0,
-        duration: 0.45,
-        delay: 0.4,
-        ease: "back.out(2.4)",
-        scrollTrigger: {
-          trigger: seal,
-          start: "top 85%",
-          once: true,
-        },
-      });
-    });
-
-    return () => ctx.revert();
-  }, []);
-
-  return (
-    <div
-      ref={sealRef}
-      className="group flex flex-col items-center"
-      style={{ "--rot": `${rot}deg` } as CSSProperties}
-    >
-      <div className="relative h-32 w-32 rotate-[var(--rot)] transition-transform duration-500 ease-out group-hover:rotate-0 md:h-36 md:w-36">
-        {/* Cincin luar — border ganda ala stempel/notaris resmi */}
-        <div className="absolute inset-0 rounded-full border-[3px] border-gold" />
-        <div className="absolute inset-[7px] rounded-full border border-dashed border-cream/40" />
-
-        {/* Teks melengkung di sepanjang cincin — motif "stempel resmi".
-            Muter pelan terus-menerus (60s/putaran) biar berasa hidup,
-            berhenti pas di-hover biar teksnya kebaca jelas. */}
-        <svg
-          viewBox="0 0 100 100"
-          className="seal-ring-spin absolute inset-0 h-full w-full"
-          aria-hidden="true"
-        >
-          <defs>
-            <path
-              id={pathId}
-              d="M 50,50 m -40,0 a 40,40 0 1,1 80,0 a 40,40 0 1,1 -80,0"
-            />
-          </defs>
-          <text
-            fontSize="6.2"
-            fill="currentColor"
-            letterSpacing="1.5"
-            className="fill-cream/70 font-heading font-semibold uppercase"
-          >
-            <textPath href={`#${pathId}`} startOffset="2%">
-              {cert.ringText.repeat(2)}
-            </textPath>
-          </text>
-        </svg>
-
-        {/* Badge/logo tengah */}
-        <div className="absolute inset-[16px] flex items-center justify-center overflow-hidden rounded-full bg-cream p-3 md:inset-[18px]">
-          {cert.imageBase ? (
-            <SmartImage
-              basePath={cert.imageBase}
-              alt={cert.title}
-              className="h-full w-full object-contain"
-              fallback={
-                <cert.icon
-                  size={42}
-                  strokeWidth={1.75}
-                  className="text-forest"
-                />
-              }
-            />
-          ) : (
-            <cert.icon size={42} strokeWidth={1.75} className="text-forest" />
-          )}
-        </div>
-
-        {/* Overlay "cap disetujui" — nempel di sudut, kayak stempel verifikasi kedua */}
-        <div
-          ref={badgeRef}
-          className="absolute -bottom-1 -right-1 flex h-8 w-8 items-center justify-center rounded-full border-2 border-forest bg-gold text-forest shadow-[0_2px_6px_rgba(0,0,0,0.25)]"
-        >
-          <Check size={15} strokeWidth={3} />
-        </div>
-      </div>
-
-      <h3 className="mt-5 max-w-[10rem] text-center font-heading text-sm font-bold text-cream md:text-base">
-        {cert.title}
-      </h3>
-      <p className="mt-1 max-w-[11rem] text-center text-xs leading-relaxed text-cream/50">
-        {cert.desc}
-      </p>
-    </div>
-  );
-}
-
-// Rotasi cincin teks — dipisah jadi style tag sendiri (bukan inline di
-// komponen CertSeal) karena cuma perlu didefinisikan sekali per halaman,
-// dipakai berulang lewat className yang sama di tiap stempel.
-function SealRingStyle() {
-  return (
-    <style>{`
-      .seal-ring-spin {
-        animation: sealRingSpin 60s linear infinite;
-        transform-origin: 50% 50%;
-      }
-      .group:hover .seal-ring-spin {
-        animation-play-state: paused;
-      }
-      @keyframes sealRingSpin {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
-      }
-      @media (prefers-reduced-motion: reduce) {
-        .seal-ring-spin { animation: none; }
-      }
-    `}</style>
-  );
-}
-
 export default function Certifications() {
   const { t } = useLanguage();
+  const certs = t.certifications.certs;
+  const total = certs.length;
 
-  const CERTS: CertItem[] = CERT_META.map((meta, i) => ({
-    ...meta,
-    ...t.certifications.certs[i],
+  const [active, setActive] = useState(0);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  const current = certs[active];
+  const CurrentIcon = CERT_META[active].icon;
+
+  const lightboxItems: LightboxItem[] = certs.map((cert, i) => ({
+    id: CERT_META[i].id,
+    imageBase: CERT_META[i].imageBase,
+    title: cert.title,
+    description: cert.desc,
+    fit: "contain",
+    fallback: <FileText size={56} strokeWidth={1.5} />,
   }));
 
-  const [activeId, setActiveId] = useState<string | null>(null);
-  const activeItem = CERTS.find((c) => c.id === activeId) ?? null;
-
-  // Body-scroll lock robust: position:fixed + simpan posisi scroll, biar
-  // (a) gak ada scroll-chaining ke halaman belakang, dan (b) posisi scroll
-  // user gak "loncat" ke atas begitu modal ditutup.
-  useEffect(() => {
-    if (!activeItem) return;
-
-    const scrollY = window.scrollY;
-    const { style } = document.body;
-    style.position = "fixed";
-    style.top = `-${scrollY}px`;
-    style.left = "0";
-    style.right = "0";
-
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setActiveId(null);
-    };
-    window.addEventListener("keydown", onKeyDown);
-
-    return () => {
-      style.position = "";
-      style.top = "";
-      style.left = "";
-      style.right = "";
-      window.scrollTo(0, scrollY);
-      window.removeEventListener("keydown", onKeyDown);
-    };
-  }, [activeItem]);
-
   return (
-    <section id="sertifikasi" className="bg-forest py-20 md:py-28">
-      <SealRingStyle />
+    <section
+      id="certifications"
+      className="overflow-hidden bg-forest py-20 md:py-28"
+    >
+      <style>{`
+        .cert-card {
+          transform-origin: 0% 100%;
+          transform:
+            translateX(calc(var(--pos) * var(--dx)))
+            translateY(calc(var(--pos) * var(--dy)))
+            rotate(calc(var(--pos) * var(--rot)))
+            scale(calc(1 - var(--pos) * 0.04));
+          transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease, filter 0.5s ease;
+        }
+        .cert-swap { animation: certSwap 0.5s ease-out; }
+        @keyframes certSwap { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+        @media (prefers-reduced-motion: reduce) {
+          .cert-card { transition: none; }
+          .cert-swap { animation: none; }
+        }
+      `}</style>
+
       <div className="mx-auto max-w-6xl px-5 md:px-8">
-        <Reveal>
-          <p
-            dir="rtl"
-            className="mb-6 text-center font-heading text-sm text-gold-light/80 md:text-base"
-          >
-            {/* {ARABIC_QUOTE} */}
-          </p>
+        <div className="grid gap-14 md:grid-cols-12 md:items-center md:gap-10">
+          {/* Kiri: judul + detail sertifikat aktif + pemilih */}
+          <div className="md:col-span-5">
+            <Reveal>
+              <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold-light">
+                {t.certifications.eyebrow}
+              </p>
+              <h2 className="font-heading text-3xl font-extrabold leading-tight text-cream md:text-4xl">
+                {t.certifications.heading}
+              </h2>
+              <p className="mt-4 text-sm leading-relaxed text-cream/70 md:text-base">
+                {t.certifications.paragraph}
+              </p>
+            </Reveal>
 
-          <div className="mb-16 max-w-2xl">
-            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold-light">
-              {t.certifications.eyebrow}
-            </p>
-            <h2 className="font-heading text-3xl font-extrabold leading-tight text-cream md:text-4xl">
-              {t.certifications.heading}
-            </h2>
-            <p className="mt-4 text-sm leading-relaxed text-cream/70 md:text-base">
-              {t.certifications.paragraph}
-            </p>
-          </div>
-        </Reveal>
-
-        {/* Garis putus-putus di belakang barisan stempel — kayak baris tanda
-            tangan/cap di dokumen resmi, cuma keliatan di desktop biar gak
-            berantakan pas kartu ke-stack vertikal di mobile. */}
-        <div className="relative">
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute left-0 right-0 top-16 hidden h-px md:block md:top-[4.5rem]"
-            style={{
-              backgroundImage:
-                "repeating-linear-gradient(to right, rgba(250,248,244,0.18) 0 6px, transparent 6px 16px)",
-            }}
-          />
-          <div className="relative flex flex-wrap justify-center gap-x-6 gap-y-10 md:gap-x-14 md:gap-y-14">
-            {CERTS.map((cert, i) => (
-              <Reveal key={cert.id} delay={i * 0.08}>
-                <button
-                  type="button"
-                  onClick={() => setActiveId(cert.id)}
-                  aria-label={`${t.certifications.viewDetailAriaPrefix}${cert.title}`}
-                  className="rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold"
-                >
-                  <CertSeal cert={cert} index={i} />
-                </button>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {activeItem && (
-        <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm sm:p-5"
-          onClick={() => setActiveId(null)}
-        >
-          {/* Mobile: full-screen (h-full, tanpa rounded).
-              Desktop (sm:): card di tengah, max-height 85vh. */}
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="certificate-modal-title"
-            onClick={(e) => e.stopPropagation()}
-            className="relative flex h-full w-full flex-col overflow-hidden bg-white sm:h-auto sm:max-h-[85vh] sm:w-full sm:max-w-md sm:rounded-[4px]"
-          >
-            {/* Header sticky — tombol close SELALU keliatan & gak ikut discroll */}
-            <div className="flex shrink-0 items-center justify-between gap-4 border-b border-forest/10 px-5 py-3.5">
-              <h3
-                id="certificate-modal-title"
-                className="font-heading text-sm font-bold text-forest md:text-base"
-              >
-                {activeItem.title}
-              </h3>
+            {/* Detail — key=active supaya animasi masuk ulang tiap ganti */}
+            <div
+              key={CERT_META[active].id}
+              className="cert-swap mt-8 rounded-[4px] border border-cream/15 bg-cream/5 p-5 md:p-6"
+              aria-live="polite"
+            >
+              <div className="flex items-center gap-3">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gold text-forest">
+                  <CurrentIcon size={22} strokeWidth={2} />
+                </span>
+                <div>
+                  <h3 className="font-heading text-lg font-bold leading-tight text-cream">
+                    {current.title}
+                  </h3>
+                  <p className="mt-0.5 text-xs text-gold-light/90">
+                    {current.issuer}
+                  </p>
+                </div>
+              </div>
+              <p className="mt-4 text-sm leading-relaxed text-cream/75">
+                {current.desc}
+              </p>
+              <p className="mt-4 border-t border-cream/10 pt-3 text-xs leading-relaxed text-cream/50">
+                {current.note}
+              </p>
               <button
                 type="button"
-                onClick={() => setActiveId(null)}
-                aria-label={t.certifications.closeAria}
-                className="-mr-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-forest/60 transition-colors hover:bg-forest/5 hover:text-forest active:bg-forest/10"
+                onClick={() => setLightboxIndex(active)}
+                className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-gold transition-colors hover:text-gold-light"
               >
-                <X size={22} />
+                <Maximize2 size={15} />
+                {t.certifications.viewDocument}
               </button>
             </div>
 
-            {/* Konten scrollable — overscroll-contain biar scroll berhenti
-                di sini, gak "bocor" nge-scroll halaman di belakangnya. */}
-            <div
-              data-lenis-prevent
-              className="flex-1 overflow-y-auto overscroll-contain p-5 md:p-8"
-            >
-              <div className="mb-5 flex aspect-[3/4] items-center justify-center overflow-hidden rounded-[4px] bg-forest/5 p-6">
-                {activeItem.imageBase ? (
-                  <SmartImage
-                    basePath={activeItem.imageBase}
-                    alt={activeItem.title}
-                    className="h-full w-full object-contain"
-                    fallback={
-                      <activeItem.icon
-                        size={64}
-                        strokeWidth={1.5}
-                        className="text-forest/40"
-                      />
-                    }
-                  />
-                ) : (
-                  <activeItem.icon
-                    size={64}
-                    strokeWidth={1.5}
-                    className="text-forest/40"
-                  />
-                )}
-              </div>
-
-              <p className="text-sm text-ink/60">{activeItem.issuer}</p>
-              <p className="mt-3 text-sm leading-relaxed text-ink/70">
-                {activeItem.desc}
-              </p>
-              <p className="mt-3 border-t border-forest/10 pt-3 text-xs leading-relaxed text-ink/50">
-                {activeItem.note}
-              </p>
+            {/* Pemilih (juga jalur keyboard/aksesibilitas ke tiap kartu) */}
+            <div className="mt-5 flex flex-wrap gap-2">
+              {certs.map((cert, i) => (
+                <button
+                  key={CERT_META[i].id}
+                  type="button"
+                  onClick={() => setActive(i)}
+                  aria-pressed={i === active}
+                  className={[
+                    "rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-colors",
+                    i === active
+                      ? "border-gold bg-gold text-forest"
+                      : "border-cream/25 text-cream/70 hover:border-gold hover:text-gold",
+                  ].join(" ")}
+                >
+                  {cert.title}
+                </button>
+              ))}
             </div>
           </div>
+
+          {/* Kanan: tumpukan kartu — melebar saat hover, klik kartu belakang
+              = bawa ke depan, klik kartu depan = buka dokumen. */}
+          <Reveal delay={0.1} className="md:col-span-7">
+            <div
+              className="group relative mx-auto w-[calc(var(--cw)_+_110px)] max-w-full [--cw:min(62vw,250px)] md:ml-auto md:mr-0 md:w-[calc(var(--cw)_+_190px)] md:[--cw:290px]"
+              style={{ height: "calc(var(--cw) * 1.333 + 56px)" }}
+            >
+              {certs.map((cert, i) => {
+                const pos = (i - active + total) % total;
+                const isFront = pos === 0;
+                const Icon = CERT_META[i].icon;
+
+                return (
+                  <button
+                    key={CERT_META[i].id}
+                    type="button"
+                    onClick={() =>
+                      isFront ? setLightboxIndex(i) : setActive(i)
+                    }
+                    aria-label={`${
+                      isFront
+                        ? t.certifications.viewDocument
+                        : t.certifications.viewDetailAriaPrefix
+                    } ${cert.title}`}
+                    className="cert-card absolute left-0 top-8 block aspect-[3/4] w-[var(--cw)] overflow-hidden rounded-[6px] border-2 border-gold/80 bg-cream text-left shadow-2xl shadow-black/50 [--dx:26px] [--dy:-9px] [--rot:2.5deg] group-hover:[--dx:52px] group-hover:[--dy:-14px] group-hover:[--rot:4deg]"
+                    style={
+                      {
+                        "--pos": pos,
+                        zIndex: total - pos,
+                        opacity: 1 - pos * 0.12,
+                        filter: `brightness(${1 - pos * 0.12})`,
+                      } as CSSProperties
+                    }
+                  >
+                    <div className="flex h-full flex-col p-4">
+                      <div className="flex items-center justify-between">
+                        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-forest text-gold">
+                          <Icon size={16} strokeWidth={2} />
+                        </span>
+                      </div>
+
+                      <div className="my-3 flex min-h-0 flex-1 items-center justify-center overflow-hidden rounded-[4px] border border-forest/10 bg-white">
+                        <SmartImage
+                          basePath={CERT_META[i].imageBase}
+                          alt=""
+                          className="h-full w-full object-contain p-2"
+                          fallback={
+                            <FileText
+                              size={44}
+                              strokeWidth={1.25}
+                              className="text-forest/25"
+                            />
+                          }
+                        />
+                      </div>
+
+                      <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-gold">
+                        {cert.ringText}
+                      </p>
+                      <p className="mt-1 font-heading text-base font-extrabold leading-tight text-forest">
+                        {cert.title}
+                      </p>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </Reveal>
         </div>
-      )}
+      </div>
+
+      <Lightbox
+        items={lightboxItems}
+        index={lightboxIndex}
+        onClose={() => setLightboxIndex(null)}
+        onIndexChange={setLightboxIndex}
+        labels={{
+          close: t.certifications.closeAria,
+          prev: t.certifications.prevAria,
+          next: t.certifications.nextAria,
+        }}
+      />
     </section>
   );
 }

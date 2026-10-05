@@ -1,16 +1,31 @@
-import { useEffect, useRef, type ReactNode } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
+import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
 
 interface RevealProps {
   children: ReactNode;
-  /** Jeda animasi dalam detik — dipakai buat efek stagger antar elemen */
+  /** Jeda animasi dalam detik, untuk efek stagger antar elemen. */
   delay?: number;
-  /** Jarak geser vertikal awal (px) */
+  /** Jarak geser vertikal awal (px). */
   y?: number;
   className?: string;
+}
+
+// Satu observer dipakai semua Reveal, jauh lebih ringan daripada satu
+// ScrollTrigger per elemen. Animasinya murni CSS (opacity + transform).
+let observer: IntersectionObserver | null = null;
+function getObserver() {
+  if (!observer) {
+    observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          entry.target.classList.add("is-in");
+          observer?.unobserve(entry.target);
+        }
+      },
+      { rootMargin: "0px 0px -12% 0px", threshold: 0.01 },
+    );
+  }
+  return observer;
 }
 
 export default function Reveal({
@@ -24,40 +39,22 @@ export default function Reveal({
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-
-    if (prefersReducedMotion) {
-      gsap.set(el, { opacity: 1, y: 0 });
-      return;
-    }
-
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        el,
-        { opacity: 0, y },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          delay,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: el,
-            start: "top 85%",
-            once: true,
-          },
-        },
-      );
-    }, ref);
-
-    return () => ctx.revert();
-  }, [delay, y]);
+    const obs = getObserver();
+    obs.observe(el);
+    return () => obs.unobserve(el);
+  }, []);
 
   return (
-    <div ref={ref} className={className}>
+    <div
+      ref={ref}
+      className={["reveal", className].filter(Boolean).join(" ")}
+      style={
+        {
+          "--reveal-delay": `${delay}s`,
+          "--reveal-y": `${y}px`,
+        } as CSSProperties
+      }
+    >
       {children}
     </div>
   );

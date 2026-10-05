@@ -13,7 +13,7 @@ export default function CompanyProfileDownload() {
   const { t } = useLanguage();
 
   return (
-    <div className="bg-forest-light/10 py-14 md:py-16">
+    <div className="bg-cream pb-16 md:pb-20">
       <div className="mx-auto max-w-6xl px-5 md:px-8">
         <Reveal>
           <div className="flex flex-col items-center gap-5 rounded-[4px] border border-forest/10 bg-white p-8 text-center md:flex-row md:justify-between md:text-left">

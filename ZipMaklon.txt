@@ -1,0 +1,30 @@
+$src = "."
+$dst = "alwaliy-maklon-code.zip"
+$staging = "$env:TEMP\alwaliy-maklon-zip-staging"
+$exclude = @("node_modules", ".git", ".idea", ".vscode", "dist", "vendor", "writable", "tests", "public\uploads", "public\assets", "public\images")
+
+if (Test-Path $staging) { Remove-Item $staging -Recurse -Force }
+New-Item -ItemType Directory -Path $staging | Out-Null
+
+$root = (Resolve-Path $src).Path
+
+Get-ChildItem $src -Recurse -File -Force | ForEach-Object {
+    $rel = $_.FullName.Substring($root.Length + 1)
+    $skip = $false
+    foreach ($ex in $exclude) {
+        if ($rel -like "$ex\*" -or $rel -like "*\$ex\*") { $skip = $true; break }
+    }
+    if ($_.Name -eq ".env" -or $_.Extension -eq ".zip" -or $_.Extension -eq ".pdf" -or $_.Name -eq "package-lock.json") { $skip = $true }
+
+    if (-not $skip) {
+        $destPath = Join-Path $staging $rel
+        $destDir = Split-Path $destPath
+        if (-not (Test-Path $destDir)) { New-Item -ItemType Directory -Path $destDir -Force | Out-Null }
+        Copy-Item $_.FullName -Destination $destPath
+    }
+}
+
+Compress-Archive -Path "$staging\*" -DestinationPath $dst -CompressionLevel Optimal -Force
+Remove-Item $staging -Recurse -Force
+
+Write-Host "Selesai: $dst"

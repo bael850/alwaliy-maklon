@@ -7,7 +7,7 @@ export default function Faq() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="bg-white py-20 md:py-28">
+    <section id="faq" className="bg-cream py-20 md:py-28">
       <div className="mx-auto max-w-3xl px-5 md:px-8">
         <div className="mb-12">
           <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold">
@@ -57,7 +57,7 @@ export default function Faq() {
                 </button>
                 <div
                   className={[
-                    "grid overflow-hidden transition-all duration-300 ease-in-out",
+                    "grid overflow-hidden transition-[grid-template-rows,opacity,padding] duration-300 ease-in-out",
                     isOpen
                       ? "grid-rows-[1fr] opacity-100 pb-5"
                       : "grid-rows-[0fr] opacity-0",

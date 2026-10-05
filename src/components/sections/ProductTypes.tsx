@@ -1,169 +1,70 @@
-import { type CSSProperties } from "react";
 import {
-  Pill,
-  FlaskConical,
-  Droplets,
+  ArrowUpRight,
   Container,
+  Droplets,
+  Pill,
   type LucideIcon,
 } from "lucide-react";
+import Reveal from "../Reveal";
 import { useLanguage } from "../../i18n/LanguageContext";
 
 const WA_NUMBER = "6282110689827";
-
-interface ProductTypeText {
-  title: string;
-  desc: string;
-}
-
-const PRODUCT_ICONS: LucideIcon[] = [Container, Pill, FlaskConical, Droplets];
-
-// Tiap label digantung dengan sudit sedikit beda-beda — kayak label kertas
-// asli yang digantung tangan di rak apotek/jamu, bukan hasil cetak simetris.
-const TAG_ROTATIONS = [-3, 2, -2, 4];
-
-function ProductTag({
-  type,
-  icon: Icon,
-  index,
-  numberPrefix,
-  ctaLabel,
-  waHref,
-}: {
-  type: ProductTypeText;
-  icon: LucideIcon;
-  index: number;
-  numberPrefix: string;
-  ctaLabel: string;
-  waHref: string;
-}) {
-  const rot = TAG_ROTATIONS[index % TAG_ROTATIONS.length];
-  // Durasi & delay idle-sway dibikin beda tiap tag (nurunin dari index)
-  // biar semua tag gak goyang serempak kayak barisan robot — meniru
-  // pola wire-sway di AboutMaklon yang juga sengaja di-desync.
-  const swayDuration = 4.2 + (index % 4) * 0.6;
-  const swayDelay = -(index % 4) * 0.9;
-
-  return (
-    <div className="group flex flex-col items-center">
-      {/* Benang gantungan — nyambung dari rail ke lubang label */}
-      <div aria-hidden="true" className="h-9 w-px bg-forest/25" />
-
-      <div
-        style={
-          {
-            "--rot": `${rot}deg`,
-            "--sway-duration": `${swayDuration}s`,
-            "--sway-delay": `${swayDelay}s`,
-          } as CSSProperties
-        }
-        className="tag-card tag-idle-sway relative w-[13.5rem] origin-top rotate-[var(--rot)] rounded-[4px] border border-forest/12 bg-white p-5 shadow-[0_8px_20px_rgba(27,67,50,0.09)] group-hover:shadow-[0_12px_28px_rgba(27,67,50,0.14)]"
-      >
-        {/* Lubang label — bulatan kecil kayak lubang gantungan tag asli */}
-        <div
-          aria-hidden="true"
-          className="absolute -top-[9px] left-1/2 h-4 w-4 -translate-x-1/2 rounded-full border border-forest/20 bg-cream"
-        />
-
-        <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-gold">
-          {numberPrefix} {String(index + 1).padStart(2, "0")}
-        </p>
-
-        <div className="mt-3 flex h-10 w-10 items-center justify-center rounded-full bg-forest/5 text-forest">
-          <Icon size={18} strokeWidth={2} />
-        </div>
-
-        <h3 className="mt-3 font-heading text-base font-bold text-forest">
-          {type.title}
-        </h3>
-        <p className="mt-2 text-xs leading-relaxed text-ink/70">{type.desc}</p>
-
-        <a
-          href={waHref}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-4 inline-flex items-center text-xs font-semibold text-forest underline underline-offset-4 hover:text-gold"
-        >
-          {ctaLabel}
-        </a>
-      </div>
-    </div>
-  );
-}
+const ICONS: LucideIcon[] = [Container, Pill, Droplets];
 
 export default function ProductTypes() {
   const { t } = useLanguage();
+  const { types } = t.productTypes;
 
   return (
-    <section id="layanan" className="overflow-hidden bg-cream py-20 md:py-28">
-      {/* Animasi "berayun" pas hover — sudut awal (--rot) tetap jadi titik
-          istirahat, cuma dikasih goyangan singkat lalu balik lagi. Dihormati
-          prefers-reduced-motion biar gak maksa gerak buat yang sensitif. */}
-      <style>{`
-        .tag-card {
-          transition: transform 0.35s cubic-bezier(0.33, 1, 0.68, 1), box-shadow 0.3s ease;
-          will-change: transform;
-        }
-        /* Idle sway — goyangan ambient super halus (+-1.2deg dari --rot),
-           seolah label beneran ketiup angin di gantungannya. Tiap tag
-           punya durasi/delay sendiri lewat --sway-duration & --sway-delay. */
-        .tag-idle-sway {
-          animation: tagIdleSway var(--sway-duration) ease-in-out infinite;
-          animation-delay: var(--sway-delay);
-        }
-        @keyframes tagIdleSway {
-          0%   { transform: rotate(calc(var(--rot) - 1.2deg)); }
-          50%  { transform: rotate(calc(var(--rot) + 1.2deg)); }
-          100% { transform: rotate(calc(var(--rot) - 1.2deg)); }
-        }
-        @keyframes tagSway {
-          0%   { transform: rotate(var(--rot)); }
-          25%  { transform: rotate(calc(var(--rot) + 5deg)); }
-          55%  { transform: rotate(calc(var(--rot) - 3deg)); }
-          80%  { transform: rotate(calc(var(--rot) + 1.5deg)); }
-          100% { transform: rotate(var(--rot)); }
-        }
-        .group:hover .tag-card {
-          animation: tagSway 0.7s cubic-bezier(0.33, 1, 0.68, 1);
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .tag-card, .tag-idle-sway { transition: box-shadow 0.3s ease; animation: none; }
-          .group:hover .tag-card { animation: none; }
-        }
-      `}</style>
-
+    <section id="products" className="bg-cream py-20 md:py-28">
       <div className="mx-auto max-w-6xl px-5 md:px-8">
-        <div className="mb-16 max-w-2xl">
+        <Reveal className="max-w-2xl">
           <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold">
             {t.productTypes.eyebrow}
           </p>
-          <h2 className="font-heading text-3xl font-extrabold leading-tight text-forest md:text-4xl">
+          <h2 className="font-heading text-3xl font-extrabold leading-[1.1] text-forest md:text-5xl">
             {t.productTypes.heading}
           </h2>
-        </div>
+        </Reveal>
 
-        {/* Rail gantungan — tempat semua label "digantung", cuma keliatan
-            desktop biar mobile tetap bersih & tumpuk vertikal wajar. */}
-        <div className="relative">
-          <div
-            aria-hidden="true"
-            className="absolute left-0 right-0 top-0 hidden h-px bg-forest/15 md:block"
-          />
-          <div className="relative flex flex-wrap items-start justify-center gap-x-6 gap-y-9 md:gap-x-10 md:gap-y-14">
-            {t.productTypes.types.map((type, i) => (
-              <ProductTag
-                key={type.title}
-                type={type}
-                icon={PRODUCT_ICONS[i % PRODUCT_ICONS.length]}
-                index={i}
-                numberPrefix={t.productTypes.numberPrefix}
-                ctaLabel={t.productTypes.ctaLabel}
-                waHref={`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(
-                  t.productTypes.waMessagePrefix + type.title,
-                )}`}
-              />
-            ))}
-          </div>
-        </div>
+        <ul className="mt-12 border-t border-forest/15 md:mt-16">
+          {types.map((type, i) => {
+            const Icon = ICONS[i % ICONS.length];
+            return (
+              <li key={type.title} className="border-b border-forest/15">
+                <Reveal delay={i * 0.08}>
+                  <a
+                    href={`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(
+                      t.productTypes.waMessagePrefix + type.title,
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group grid items-center gap-4 py-8 transition-colors hover:bg-forest md:grid-cols-12 md:gap-8 md:px-6 md:py-10"
+                  >
+                    <span className="font-heading text-sm font-bold tabular-nums text-gold md:col-span-1">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <div className="flex items-center gap-4 md:col-span-4">
+                      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-forest text-gold transition-colors group-hover:bg-gold group-hover:text-forest">
+                        <Icon size={20} />
+                      </span>
+                      <h3 className="font-heading text-xl font-extrabold text-forest transition-colors group-hover:text-cream md:text-2xl">
+                        {type.title}
+                      </h3>
+                    </div>
+                    <p className="text-sm leading-relaxed text-ink/70 transition-colors group-hover:text-cream/80 md:col-span-5 md:text-base">
+                      {type.desc}
+                    </p>
+                    <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-forest transition-colors group-hover:text-gold-light md:col-span-2 md:justify-end">
+                      {t.productTypes.ctaLabel}
+                      <ArrowUpRight size={16} />
+                    </span>
+                  </a>
+                </Reveal>
+              </li>
+            );
+          })}
+        </ul>
       </div>
     </section>
   );

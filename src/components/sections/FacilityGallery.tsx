@@ -77,7 +77,7 @@ const FACILITY_META: FacilityMeta[] = [
 ];
 
 // Baris lubang sprocket ala pita film — dibuat pakai mask radial-gradient
-// berulang (teknik sama seperti tepi sobekan nota di MaklonComparison),
+// berulang (teknik sama seperti tepi sobekan nota),
 // jadi tak perlu asset gambar sama sekali.
 function SprocketRow() {
   return (
@@ -282,17 +282,17 @@ export default function FacilityGallery() {
   }, [activeItem]);
 
   return (
-    <section id="fasilitas" className="bg-cream py-20 md:py-28">
+    <section id="facility" className="bg-forest py-20 md:py-28">
       <div className="mx-auto max-w-6xl px-5 md:px-8">
         <Reveal>
           <div className="mb-10 max-w-2xl">
-            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold">
+            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold-light">
               {t.facilityGallery.eyebrow}
             </p>
-            <h2 className="font-heading text-3xl font-extrabold leading-tight text-forest md:text-4xl">
+            <h2 className="font-heading text-3xl font-extrabold leading-tight text-cream md:text-4xl">
               {t.facilityGallery.heading}
             </h2>
-            <p className="mt-4 text-sm leading-relaxed text-ink/70 md:text-base">
+            <p className="mt-4 text-sm leading-relaxed text-cream/80 md:text-base">
               {t.facilityGallery.paragraph}
             </p>
           </div>
@@ -312,7 +312,7 @@ export default function FacilityGallery() {
             ref={scrollerRef}
             className="hide-scrollbar flex snap-x snap-proximity gap-5 overflow-x-auto px-5 py-6 md:px-8 cursor-grab select-none"
           >
-            {FACILITY_ITEMS.map((item, i) => (
+            {FACILITY_ITEMS.map((item) => (
               <button
                 key={item.id}
                 type="button"
@@ -320,12 +320,6 @@ export default function FacilityGallery() {
                 className="group w-64 shrink-0 snap-start text-left md:w-72"
               >
                 <div className="relative border-[6px] border-white bg-white shadow-[0_8px_24px_rgba(0,0,0,0.45)] transition-transform duration-300 group-hover:-translate-y-1">
-                  <span
-                    className="absolute -left-2.5 -top-2.5 z-10 flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-gold text-[10px] font-bold text-forest shadow-md"
-                    aria-hidden="true"
-                  >
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
                   <div className="flex aspect-[4/3] items-center justify-center overflow-hidden bg-forest/5 transition-colors group-hover:bg-forest/10">
                     <SmartImage
                       basePath={item.imageBase}
@@ -375,11 +369,7 @@ export default function FacilityGallery() {
             <div className="flex shrink-0 items-center justify-between gap-4 border-b border-forest/10 px-5 py-3.5">
               <div className="min-w-0">
                 <p className="truncate text-[11px] font-semibold uppercase tracking-[0.1em] text-gold">
-                  {activeItem.category} · No.{" "}
-                  {String(
-                    FACILITY_ITEMS.findIndex((i) => i.id === activeItem.id) + 1,
-                  ).padStart(2, "0")}
-                  /{String(FACILITY_ITEMS.length).padStart(2, "0")}
+                  {activeItem.category}
                 </p>
                 <h3
                   id="facility-modal-title"

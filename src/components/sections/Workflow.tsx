@@ -1,215 +1,228 @@
-import { useEffect, useRef, useState } from "react";
-import { Users } from "lucide-react";
+import { useEffect, useRef, useState, type KeyboardEvent } from "react";
+import { ArrowRight } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Reveal from "../Reveal";
-import SmartImage from "../SmartImage";
 import { useLanguage } from "../../i18n/LanguageContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Workflow() {
   const { t } = useLanguage();
-  const [activeIndex, setActiveIndex] = useState(0);
-  const stepRefs = useRef<Array<HTMLDivElement | null>>([]);
-  const pipelineTrackRef = useRef<HTMLDivElement>(null);
-  const pipelineFillRef = useRef<HTMLDivElement>(null);
-  const steps = t.workflow.steps;
+  const tracks = t.workflow.tracks;
 
+  const [active, setActive] = useState(0);
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const timelineRef = useRef<HTMLOListElement>(null);
+  const fillRef = useRef<HTMLDivElement>(null);
+
+  const track = tracks[active];
+
+  // Garis emas mengisi mengikuti scroll (satu tween ber-scrub). Tahap yang
+  // sudah lewat "menyala" lewat satu IntersectionObserver, lebih ringan dari
+  // satu ScrollTrigger per tahap. Dibangun ulang tiap ganti jalur.
   useEffect(() => {
-    // Kartu "tahap aktif" yang di-drive activeIndex cuma tampil di md ke
-    // atas (hidden md:block). Di mobile, bikin ScrollTrigger utk elemen
-    // yang gak keliatan cuma buang-buang kerja tiap frame scroll — jadi
-    // di-skip di bawah breakpoint md, dan dibikin ulang kalau resize
-    // ngelewatin breakpoint (misal rotate layar / desktop window resize).
-    const mm = gsap.matchMedia();
+    const timeline = timelineRef.current;
+    const fill = fillRef.current;
+    if (!timeline || !fill) return;
 
-    mm.add("(min-width: 768px)", () => {
-      const triggers = stepRefs.current.map((el, i) => {
-        if (!el) return null;
-        return ScrollTrigger.create({
-          trigger: el,
-          start: "top 55%",
-          end: "bottom 55%",
-          onEnter: () => setActiveIndex(i),
-          onEnterBack: () => setActiveIndex(i),
-        });
-      });
+    const rows = Array.from(
+      timeline.querySelectorAll<HTMLElement>("[data-step]"),
+    );
 
-      return () => {
-        triggers.forEach((trigger) => trigger?.kill());
-      };
-    });
-
-    return () => mm.revert();
-  }, []);
-
-  // Garis pipeline "ngalir" ngikutin progres scroll — bukan trigger sekali,
-  // tapi discrub persis sama scroll position, dari titik tahap pertama
-  // sampai titik tahap terakhir. Kesan materi mengalir di jalur produksi
-  // seiring user membaca tiap tahap, nyambung ke tema section ini.
-  useEffect(() => {
-    const track = pipelineTrackRef.current;
-    const fill = pipelineFillRef.current;
-    const firstStep = stepRefs.current[0];
-    const lastStep = stepRefs.current[stepRefs.current.length - 1];
-    if (!track || !fill || !firstStep || !lastStep) return;
-
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-
-    if (prefersReducedMotion) {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       gsap.set(fill, { scaleY: 1 });
+      rows.forEach((row) => (row.dataset.lit = "true"));
       return;
     }
 
-    gsap.set(fill, { scaleY: 0, transformOrigin: "top center" });
-
     const ctx = gsap.context(() => {
-      gsap.to(fill, {
-        scaleY: 1,
-        ease: "none",
-        scrollTrigger: {
-          trigger: track,
-          start: "top center",
-          endTrigger: lastStep,
-          end: "center center",
-          scrub: true,
+      gsap.fromTo(
+        fill,
+        { scaleY: 0 },
+        {
+          scaleY: 1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: timeline,
+            start: "top 65%",
+            end: "bottom 60%",
+            scrub: true,
+          },
         },
-      });
-    });
+      );
+    }, timeline);
 
-    return () => ctx.revert();
-  }, []);
+    // Menyala bila tahap sudah melewati garis 65% tinggi layar;
+    // padam lagi bila ditarik balik ke bawah garis itu.
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const el = entry.target as HTMLElement;
+          const passed =
+            entry.isIntersecting ||
+            entry.boundingClientRect.top < (entry.rootBounds?.top ?? 0);
+          if (passed) el.dataset.lit = "true";
+          else delete el.dataset.lit;
+        }
+      },
+      { rootMargin: "0px 0px -35% 0px", threshold: 0 },
+    );
+    rows.forEach((row) => io.observe(row));
+
+    const raf = requestAnimationFrame(() => ScrollTrigger.refresh());
+
+    return () => {
+      cancelAnimationFrame(raf);
+      io.disconnect();
+      ctx.revert();
+    };
+  }, [active]);
+
+  // Navigasi tab dengan panah kiri/kanan (pola WAI-ARIA tabs).
+  const onTabKeyDown = (e: KeyboardEvent, i: number) => {
+    const total = tracks.length;
+    let next = i;
+    if (e.key === "ArrowRight") next = (i + 1) % total;
+    else if (e.key === "ArrowLeft") next = (i - 1 + total) % total;
+    else if (e.key === "Home") next = 0;
+    else if (e.key === "End") next = total - 1;
+    else return;
+    e.preventDefault();
+    setActive(next);
+    tabRefs.current[next]?.focus();
+  };
 
   return (
-    <section id="proses" className="bg-white py-20 md:py-28">
+    <section id="workflow" className="bg-forest py-20 md:py-28">
+      <style>{`
+        .wf-swap { animation: wfSwap 0.5s ease-out; }
+        @keyframes wfSwap { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+        @media (prefers-reduced-motion: reduce) { .wf-swap { animation: none; } }
+      `}</style>
+
       <div className="mx-auto max-w-6xl px-5 md:px-8">
-        <div className="grid gap-10 md:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] md:gap-16">
-          {/* Panel kiri — nempel selama user scroll ngelewatin 6 tahap di kanan */}
-          <div className="md:sticky md:top-28 md:self-start">
-            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold">
+        <Reveal>
+          <div className="max-w-2xl">
+            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold-light">
               {t.workflow.eyebrow}
             </p>
-            <h2 className="font-heading text-3xl font-extrabold leading-tight text-forest md:text-4xl">
+            <h2 className="font-heading text-3xl font-extrabold leading-tight text-cream md:text-5xl">
               {t.workflow.heading}
             </h2>
-            <p className="mt-4 max-w-sm text-sm leading-relaxed text-ink/70 md:text-base">
+            <p className="mt-4 text-sm leading-relaxed text-cream/70 md:text-base">
               {t.workflow.paragraph}
             </p>
-
-            {/* Foto pendukung — PLACEHOLDER: taruh file di
-                public/images/workflow/tim-produksi.(webp|jpg|png). Tampil
-                di kedua ukuran layar (beda dari kartu tahap aktif di bawah
-                yang cuma muncul di desktop), biar versi mobile juga tetap
-                dapat elemen visual, bukan cuma teks. */}
-            <div className="mt-6 aspect-[4/3] max-w-sm overflow-hidden rounded-[4px] border border-forest/10 bg-forest/5">
-              <SmartImage
-                basePath="/images/workflow/tim-produksi"
-                alt={t.workflow.photoAlt}
-                className="h-full w-full object-cover"
-                fallback={
-                  <div className="flex h-full w-full items-center justify-center">
-                    <Users
-                      size={32}
-                      strokeWidth={1.5}
-                      className="text-forest/30"
-                    />
-                  </div>
-                }
-              />
-            </div>
-
-            {/* Kartu tahap aktif */}
-            <div className="mt-8 hidden max-w-sm rounded-[4px] border border-forest/10 bg-cream p-6 md:block">
-              <div className="flex items-center justify-between">
-                <span className="font-heading text-sm font-bold uppercase tracking-[0.1em] text-gold">
-                  {t.workflow.stepLabel}{" "}
-                  {String(activeIndex + 1).padStart(2, "0")} / 06
-                </span>
-              </div>
-              <p className="mt-3 font-heading text-xl font-bold text-forest">
-                {steps[activeIndex].title}
-              </p>
-              <p className="mt-2 text-sm leading-relaxed text-ink/70">
-                {steps[activeIndex].desc}
-              </p>
-
-              {/* Progress — strip blister kapsul, bukan titik-titik polos.
-                  Nyambung ke tema produk (kapsul/obat) yang jadi salah satu
-                  jenis produksi Al-Waliy, sekaligus beda dari dot-bar generik. */}
-              <div className="mt-6 flex gap-1.5">
-                {steps.map((step, i) => (
-                  <span
-                    key={step.title}
-                    className={[
-                      "h-3 flex-1 rounded-full border transition-colors duration-300",
-                      i <= activeIndex
-                        ? "border-gold bg-gold"
-                        : "border-forest/15 bg-transparent",
-                    ].join(" ")}
-                  />
-                ))}
-              </div>
-            </div>
           </div>
+        </Reveal>
 
-          {/* Kanan — 6 tahap dihubungkan garis pipeline vertikal di belakang
-              nomor tahap, biar kerasa satu alur berkelanjutan, bukan cuma
-              daftar terpisah-pisah. */}
-          <div className="relative flex flex-col gap-6">
+        {/* Tab jalur kerja sama */}
+        <div
+          role="tablist"
+          aria-label={t.workflow.tabsAria}
+          className="mt-10 grid gap-3 md:mt-14 md:grid-cols-3 md:gap-4"
+        >
+          {tracks.map((item, i) => {
+            const isActive = i === active;
+            return (
+              <button
+                key={item.name}
+                ref={(el) => {
+                  tabRefs.current[i] = el;
+                }}
+                type="button"
+                role="tab"
+                id={`wf-tab-${i}`}
+                aria-selected={isActive}
+                aria-controls="wf-panel"
+                tabIndex={isActive ? 0 : -1}
+                onClick={() => setActive(i)}
+                onKeyDown={(e) => onTabKeyDown(e, i)}
+                className={[
+                  "rounded-[4px] border p-5 text-left transition-colors duration-300",
+                  isActive
+                    ? "border-gold bg-cream text-forest"
+                    : "border-cream/20 text-cream hover:border-gold-light",
+                ].join(" ")}
+              >
+                <span className="mt-1 block font-heading text-lg font-bold leading-snug md:text-xl">
+                  {item.name}
+                </span>
+                <span
+                  className={[
+                    "mt-2 block text-sm leading-relaxed",
+                    isActive ? "text-ink/70" : "text-cream/60",
+                  ].join(" ")}
+                >
+                  {item.blurb}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Timeline A-Z — key=active supaya animasi masuk ulang tiap ganti jalur */}
+        <div
+          key={active}
+          id="wf-panel"
+          role="tabpanel"
+          aria-labelledby={`wf-tab-${active}`}
+          className="wf-swap mt-14 md:mt-20"
+        >
+          <ol ref={timelineRef} className="relative">
+            {/* Garis dasar + isian emas */}
             <div
-              ref={pipelineTrackRef}
               aria-hidden="true"
-              className="absolute bottom-5 left-5 top-5 hidden w-px bg-forest/12 md:block"
+              className="absolute bottom-4 left-5 top-4 w-px bg-cream/15 md:left-1/2 md:-translate-x-1/2"
             >
-              {/* Overlay yang "mengisi" dari atas ke bawah, discrub persis
-                  sama posisi scroll — bukan warna solid, tapi gradasi emas
-                  biar kelihatan seperti aliran, bukan sekadar garis nyala. */}
               <div
-                ref={pipelineFillRef}
-                className="h-full w-full bg-gradient-to-b from-gold via-gold to-gold/40"
+                ref={fillRef}
+                className="h-full w-full origin-top bg-gradient-to-b from-gold via-gold to-gold-light"
+                style={{ transform: "scaleY(0)" }}
               />
             </div>
-            {steps.map((step, i) => (
-              <div
-                key={step.title}
-                ref={(el) => {
-                  stepRefs.current[i] = el;
-                }}
-              >
-                <Reveal>
+
+            {track.steps.map((step, i) => {
+              const isLeft = i % 2 === 0;
+              return (
+                <li
+                  key={step.title}
+                  data-step
+                  className="group relative pb-10 pl-16 last:pb-0 md:grid md:grid-cols-2 md:gap-0 md:pb-14 md:pl-0"
+                >
+                  {/* Penanda tahap — menyala emas saat dilewati */}
+                  <span className="absolute left-0 top-0 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-cream/30 bg-forest font-heading text-sm font-bold text-cream/70 transition-colors duration-500 group-data-[lit=true]:border-gold group-data-[lit=true]:bg-gold group-data-[lit=true]:text-forest group-data-[lit=true]:shadow-[0_0_0_6px_rgba(212,175,106,0.18)] md:left-1/2 md:-translate-x-1/2">
+                    <span className="tabular-nums">{i + 1}</span>
+                  </span>
+
                   <div
                     className={[
-                      "relative flex items-start gap-4 rounded-[4px] border p-6 transition-colors duration-300",
-                      i === activeIndex
-                        ? "border-forest/30 bg-forest/[0.03]"
-                        : "border-forest/10 bg-white",
+                      "rounded-[4px] border border-cream/15 bg-cream/[0.04] p-5 translate-y-1 opacity-60 transition-[opacity,transform,border-color,background-color] duration-500 group-data-[lit=true]:border-gold/50 group-data-[lit=true]:bg-cream/[0.08] group-data-[lit=true]:opacity-100 md:p-6 group-data-[lit=true]:translate-y-0",
+                      isLeft
+                        ? "md:col-start-1 md:mr-14 md:text-right"
+                        : "md:col-start-2 md:ml-14",
                     ].join(" ")}
                   >
-                    <span
-                      className={[
-                        "relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold transition-colors duration-300",
-                        i === activeIndex
-                          ? "bg-forest text-cream shadow-[0_0_0_5px_rgba(27,67,50,0.08)]"
-                          : "bg-white text-forest ring-1 ring-inset ring-forest/20",
-                      ].join(" ")}
-                    >
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <div>
-                      <h3 className="font-heading text-lg font-bold text-forest">
-                        {step.title}
-                      </h3>
-                      <p className="mt-1.5 text-sm leading-relaxed text-ink/70 md:text-base">
-                        {step.desc}
-                      </p>
-                    </div>
+                    <h3 className="font-heading text-lg font-bold text-cream md:text-xl">
+                      {step.title}
+                    </h3>
+                    <p className="mt-2 text-sm leading-relaxed text-cream/70 md:text-base">
+                      {step.desc}
+                    </p>
                   </div>
-                </Reveal>
-              </div>
-            ))}
+                </li>
+              );
+            })}
+          </ol>
+
+          <div className="mt-12 flex justify-center md:mt-16">
+            <a
+              href="#contact"
+              className="btn-gold inline-flex items-center gap-2 px-6 py-3.5 text-sm"
+            >
+              {t.workflow.ctaLabel}
+              <ArrowRight size={16} strokeWidth={2.5} />
+            </a>
           </div>
         </div>
       </div>

@@ -3,11 +3,6 @@ import { useLanguage } from "../../i18n/LanguageContext";
 
 const WA_NUMBER = "6282110689827";
 
-/**
- * PLACEHOLDER — arahkan href ke file PDF asli begitu company profile jadi.
- * Taruh file di folder `public/` (mis. public/company-profile.pdf) supaya
- * bisa diakses langsung lewat "/company-profile.pdf" tanpa perlu import.
- */
 const COMPANY_PROFILE_HREF = "/company-profile.pdf";
 
 export default function Cta() {
@@ -17,7 +12,7 @@ export default function Cta() {
   )}`;
 
   return (
-    <section className="bg-forest py-20 md:py-28">
+    <section id="contact" className="bg-forest py-20 md:py-28">
       <div className="mx-auto max-w-6xl px-5 md:px-8">
         <div className="grid gap-10 md:grid-cols-2 md:items-center md:gap-16">
           <div>
@@ -53,7 +48,7 @@ export default function Cta() {
           {/* Kartu kontak bergaya "kupon" — garis gunting putus-putus di
               atas seolah bisa dipotong & disimpan, sesuai fungsi panel ini
               (info kontak yang mau diinget/disimpan pengunjung). Beda dari
-              motif nota/kwitansi yang sudah dipakai di MaklonComparison. */}
+              motif nota/kwitansi . */}
           <div className="rounded-[4px] border border-cream/15 bg-forest-light/30 p-6 md:p-8">
             <div className="mb-5 flex items-center gap-2 border-b border-dashed border-cream/25 pb-4 text-cream/45">
               <Scissors size={13} strokeWidth={2} className="shrink-0" />

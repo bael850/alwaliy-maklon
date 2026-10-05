@@ -3,20 +3,11 @@ import { Building2, CheckCheck } from "lucide-react";
 import Reveal from "../Reveal";
 import SmartImage from "../SmartImage";
 import { useLanguage } from "../../i18n/LanguageContext";
+import { translations } from "../../i18n/translations";
 
-// Warna dipetik dari palet WA asli tapi diredam dikit biar tetap nyatu
-// dengan tema forest/gold/cream di seluruh situs, bukan norak hijau terang.
 const WA_GREEN = "#3EA872"; // bubble outgoing / aksen centang
 const WA_TEAL_DARK = "#0B3D2E"; // header chat, senada forest
 
-/**
- * PLACEHOLDER — logo tiap klien diambil dari public/images/clients/<slug>.
- * <slug> = nama klien di-lowercase, spasi jadi "-" (mis. "Mitra Maklon 1"
- * → "mitra-maklon-1"). Taruh file di
- * public/images/clients/<slug>.webp (atau .jpg / .png, bebas salah satu)
- * — otomatis kedeteksi lewat SmartImage, gak perlu ubah kode ini walau
- * daftar klien di translations.ts nanti ditambah/dikurangi.
- */
 function slugifyClientName(name: string): string {
   return name
     .toLowerCase()
@@ -26,14 +17,25 @@ function slugifyClientName(name: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
-/**
- * WhatsAppBubble — testimoni gak langsung nongol sebagai bubble jadi,
- * tapi lewat jeda "sedang mengetik..." dulu (3 titik), baru bubble
- * pesannya pop-in. Detail kecil tapi kerasa hidup karena section ini
- * emang dibungkus tema chat WhatsApp. Trigger pakai IntersectionObserver
- * ringan (bukan GSAP) karena cuma butuh deteksi visible sekali, gak perlu
- * scrub/timeline.
- */
+/** Susun isi satu baris marquee: baris kedua diputar setengah list supaya
+ *  urutannya beda dari baris pertama, lalu diulang sampai cukup lebar. */
+interface Client {
+  name: string;
+  slug: string;
+}
+
+// Nama file logo selalu diambil dari daftar Indonesia (urutan sama dengan
+// bahasa lain), jadi logo tetap muncul saat bahasa diganti.
+const LOGO_SLUGS = translations.id.clientTrust.clients.map(slugifyClientName);
+
+function buildRow(clients: Client[], offset: boolean): Client[] {
+  const n = clients.length;
+  const start = offset ? Math.floor(n / 2) : 0;
+  const rotated = [...clients.slice(start), ...clients.slice(0, start)];
+  const repeat = Math.max(1, Math.ceil(8 / n));
+  return Array.from({ length: repeat }, () => rotated).flat();
+}
+
 function WhatsAppBubble({ quote, time }: { quote: string; time: string }) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const [stage, setStage] = useState<"idle" | "typing" | "sent">("idle");
@@ -104,10 +106,26 @@ function WhatsAppBubble({ quote, time }: { quote: string; time: string }) {
 
 export default function ClientTrust() {
   const { t } = useLanguage();
-  const { clients, testimonials } = t.clientTrust;
+  const { testimonials } = t.clientTrust;
+  const clients: Client[] = t.clientTrust.clients.map((name, i) => ({
+    name,
+    slug: LOGO_SLUGS[i] ?? slugifyClientName(name),
+  }));
+  const marqueeRef = useRef<HTMLDivElement>(null);
+
+  // Hemat CPU: marquee dijeda selama tidak terlihat di layar.
+  useEffect(() => {
+    const el = marqueeRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([entry]) => {
+      el.classList.toggle("is-offscreen", !entry.isIntersecting);
+    });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   return (
-    <section className="bg-forest py-20 md:py-28">
+    <section id="clients" className="bg-cream py-20 md:py-28">
       {/* Marquee logo klien — dobel list-nya biar loop-nya mulus (translateX
           -50% pas nyampe titik di mana set kedua persis nyambung sama set
           pertama, jadi gak kerasa "loncat"). Pause pas di-hover biar user
@@ -118,10 +136,15 @@ export default function ClientTrust() {
           to { transform: translateX(-50%); }
         }
         .marquee-track {
-          animation: clientMarquee 32s linear infinite;
+          animation: clientMarquee 36s linear infinite;
           will-change: transform;
         }
-        .marquee-pause:hover .marquee-track {
+        .marquee-track-reverse {
+          animation-direction: reverse;
+        }
+        .marquee-pause:hover .marquee-track,
+        .marquee-pause:focus-within .marquee-track,
+        .marquee-pause.is-offscreen .marquee-track {
           animation-play-state: paused;
         }
         @media (prefers-reduced-motion: reduce) {
@@ -155,54 +178,67 @@ export default function ClientTrust() {
       `}</style>
 
       <div className="mx-auto max-w-6xl px-5 md:px-8">
-        {/* Logo strip */}
+        {/* Logo mitra — dua baris marquee berlawanan arah. Logo abu-abu,
+            berwarna saat di-hover; kedua baris berhenti saat di-hover. */}
         <Reveal>
-          <p className="mb-8 text-center text-sm font-semibold uppercase tracking-[0.14em] text-gold-light">
+          <p className="mb-8 text-center text-sm font-semibold uppercase tracking-[0.14em] text-gold">
             {t.clientTrust.trustedByLabel}
           </p>
         </Reveal>
         <Reveal delay={0.06}>
-          <div className="marquee-pause relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
-            <div className="marquee-track flex w-max items-center gap-8">
-              {[...clients, ...clients].map((client, i) => (
-                <div
-                  key={`${client}-${i}`}
-                  aria-hidden={i >= clients.length}
-                  className="flex h-24 w-56 shrink-0 items-center justify-center gap-2 opacity-90 transition-opacity hover:opacity-100"
-                >
-                  <SmartImage
-                    basePath={`/images/clients/${slugifyClientName(client)}`}
-                    alt={client}
-                    className="h-full w-full object-contain"
-                    fallback={
-                      <>
-                        <Building2
-                          size={22}
-                          strokeWidth={1.75}
-                          className="text-cream/60"
+          <div
+            ref={marqueeRef}
+            className="marquee-pause flex flex-col gap-4 [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]"
+          >
+            {[false, true].map((reverse) => {
+              const items = buildRow(clients, reverse);
+              return (
+                <div key={String(reverse)} className="relative overflow-hidden">
+                  <div
+                    className={`marquee-track flex w-max items-center gap-8 ${reverse ? "marquee-track-reverse" : ""}`}
+                  >
+                    {[...items, ...items].map((client, i) => (
+                      <div
+                        key={`${client.slug}-${i}`}
+                        aria-hidden={i >= items.length || reverse}
+                        className="flex h-20 w-48 shrink-0 items-center justify-center gap-2 grayscale opacity-60 transition duration-300 hover:grayscale-0 hover:opacity-100 md:h-24 md:w-56"
+                      >
+                        <SmartImage
+                          basePath={`/images/clients/${client.slug}`}
+                          alt={client.name}
+                          className="h-full w-full object-contain"
+                          fallback={
+                            <>
+                              <Building2
+                                size={22}
+                                strokeWidth={1.75}
+                                className="text-forest/60"
+                              />
+                              <span className="text-sm font-medium text-forest/70">
+                                {client.name}
+                              </span>
+                            </>
+                          }
                         />
-                        <span className="text-sm font-medium text-cream/60">
-                          {client}
-                        </span>
-                      </>
-                    }
-                  />
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              ))}
-            </div>
+              );
+            })}
           </div>
         </Reveal>
 
         {/* Testimoni — dibungkus jadi "jendela chat WhatsApp" karena kanal
             komunikasi utama bisnis ini memang WA. Header kontak + bubble
             pesan masuk lengkap dengan nama pengirim, jam, dan centang biru. */}
-        <div className="mt-16 border-t border-cream/10 pt-14">
+        <div className="mt-16 border-t border-forest/15 pt-14">
           <Reveal>
             <div className="mb-12 max-w-2xl">
-              <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold-light">
+              <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold">
                 {t.clientTrust.testimonialsEyebrow}
               </p>
-              <h2 className="font-heading text-3xl font-extrabold leading-tight text-cream md:text-4xl">
+              <h2 className="font-heading text-3xl font-extrabold leading-tight text-forest md:text-4xl">
                 {t.clientTrust.testimonialsHeading}
               </h2>
             </div>
