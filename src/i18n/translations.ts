@@ -177,7 +177,6 @@ const id = {
         desc: "Lebih dari sepuluh tahun kami memproduksi madu herbal dan sari kurma. Pengalaman bekerja sama pun kami rancang serius, dari konsultasi pertama sampai website yang sedang Anda buka ini.",
       },
     ],
-    badge: "Buktinya ada di website ini",
   },
   workflow: {
     eyebrow: "Alur Kerja Sama",
@@ -782,7 +781,6 @@ const en: typeof id = {
         desc: "We've produced herbal honey and date syrup for over a decade, and we put the same care into working with us, from the first consultation to the website you're on right now.",
       },
     ],
-    badge: "The proof is this website",
   },
   workflow: {
     eyebrow: "Our Workflow",
