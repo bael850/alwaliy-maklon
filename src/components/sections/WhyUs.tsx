@@ -86,15 +86,6 @@ export default function WhyUs() {
                         <p className="pt-3 text-base leading-relaxed text-ink/80 md:pt-0 md:text-lg">
                           {pillar.desc}
                         </p>
-                        {isExperience && (
-                          <span className="mt-4 inline-flex items-center gap-2 rounded-full bg-gold/20 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.1em] text-forest">
-                            <span
-                              aria-hidden="true"
-                              className="h-1.5 w-1.5 rounded-full bg-gold"
-                            />
-                            {t.whyUs.eyebrow}
-                          </span>
-                        )}
                       </div>
                     </div>
                   </div>
