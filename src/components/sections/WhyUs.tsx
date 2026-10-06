@@ -92,7 +92,7 @@ export default function WhyUs() {
                               aria-hidden="true"
                               className="h-1.5 w-1.5 rounded-full bg-gold"
                             />
-                            {t.whyUs.badge}
+                            {t.whyUs.eyebrow}
                           </span>
                         )}
                       </div>

@@ -17,7 +17,7 @@ export default function VisionMission() {
               &ldquo;
             </span>
             <p className="relative text-sm font-semibold uppercase tracking-[0.14em] text-gold-light">
-              {t.visionMission.eyebrow} &middot; {t.visionMission.visionLabel}
+              {t.visionMission.visionLabel}
             </p>
             <h2 className="relative mt-5 max-w-4xl font-heading text-2xl font-extrabold leading-[1.25] text-cream md:text-4xl">
               {t.visionMission.vision}
