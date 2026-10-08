@@ -241,7 +241,7 @@ export default function Hero() {
                   <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-gold-light [text-shadow:0_1px_4px_rgba(0,0,0,0.6)] md:text-sm">
                     {slide.eyebrow}
                   </p>
-                  <Heading className="max-w-3xl font-heading text-4xl font-extrabold leading-[1.08] text-cream [text-shadow:0_2px_8px_rgba(0,0,0,0.5)] md:text-6xl">
+                  <Heading className="max-w-3xl font-heading text-[2rem] font-extrabold leading-[1.1] text-cream [text-shadow:0_2px_8px_rgba(0,0,0,0.5)] min-[400px]:text-4xl md:text-6xl">
                     {slide.heading}
                   </Heading>
                   <p className="mt-5 max-w-xl text-base leading-relaxed text-cream/85 md:text-lg">
@@ -252,19 +252,19 @@ export default function Hero() {
             })}
           </div>
 
-          <div className="mt-8 flex flex-wrap items-center gap-4">
+          <div className="mt-8 flex flex-col items-stretch gap-4 sm:flex-row sm:flex-wrap sm:items-center">
             <a
               href={waHref(t.hero.waMessage)}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-[4px] border-[1.5px] border-cream px-6 py-3.5 text-sm font-semibold text-cream transition-colors hover:bg-cream hover:text-forest"
+              className="inline-flex items-center justify-center gap-2 rounded-[4px] border-[1.5px] border-cream bg-cream/10 px-6 py-3.5 text-sm font-semibold text-cream backdrop-blur-[2px] transition-colors hover:bg-cream hover:text-forest active:bg-cream active:text-forest sm:bg-transparent sm:backdrop-blur-none"
             >
               {t.hero.ctaPrimary}
               <ArrowRight size={16} strokeWidth={2.5} />
             </a>
             <a
               href="#what"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-cream/90 underline underline-offset-4 transition-colors hover:text-gold-light"
+              className="inline-flex items-center justify-center gap-2 py-2 text-sm font-semibold text-cream/90 underline underline-offset-4 transition-colors hover:text-gold-light sm:justify-start sm:py-0"
             >
               {t.hero.ctaSecondary}
             </a>
@@ -275,7 +275,7 @@ export default function Hero() {
       {/* Kontrol slider — progress bar per slide (klik untuk loncat),
           counter, prev/next, dan tombol pause (WCAG 2.2.2). */}
       <div className="absolute inset-x-0 bottom-0 z-20">
-        <div className="mx-auto flex w-full max-w-6xl items-center gap-4 px-5 pb-6 md:gap-6 md:px-8 md:pb-10">
+        <div className="mx-auto flex w-full max-w-6xl items-center gap-4 px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] md:gap-6 md:px-8 md:pb-10">
           <div className="flex flex-1 items-center gap-2">
             {slides.map((_, i) => {
               const isActive = i === active;
@@ -316,7 +316,7 @@ export default function Hero() {
               type="button"
               onClick={prev}
               aria-label={t.hero.prevAria}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-[4px] transition-colors hover:bg-cream/15"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-[4px] transition-colors hover:bg-cream/15 active:bg-cream/20"
             >
               <ChevronLeft size={20} />
             </button>
@@ -324,7 +324,7 @@ export default function Hero() {
               type="button"
               onClick={() => setUserPaused((v) => !v)}
               aria-label={userPaused ? t.hero.playAria : t.hero.pauseAria}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-[4px] transition-colors hover:bg-cream/15"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-[4px] transition-colors hover:bg-cream/15 active:bg-cream/20"
             >
               {userPaused || reducedMotion ? (
                 <Play size={18} />
@@ -336,7 +336,7 @@ export default function Hero() {
               type="button"
               onClick={next}
               aria-label={t.hero.nextAria}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-[4px] transition-colors hover:bg-cream/15"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-[4px] transition-colors hover:bg-cream/15 active:bg-cream/20"
             >
               <ChevronRight size={20} />
             </button>

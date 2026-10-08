@@ -4,6 +4,10 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Address bar browser HP naik-turun saat scroll memicu "resize". Tanpa ini
+// ScrollTrigger menghitung ulang terus dan animasi terasa patah-patah.
+ScrollTrigger.config({ ignoreMobileResize: true });
+
 /**
  * Nyalain smooth inertia-scroll (Lenis) dan nyambungin ke GSAP ticker
  * biar ScrollTrigger tetap akurat. Otomatis di-skip kalau user

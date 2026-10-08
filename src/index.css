@@ -34,10 +34,18 @@ html.lenis body {
   overflow: hidden;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 body {
   font-family: var(--font-body);
   background-color: var(--color-cream);
   color: var(--color-ink);
+  /* Jaring pengaman: tidak ada elemen yang bisa bikin halaman goyang ke samping di HP */
+  overflow-x: clip;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* === Accessibility: skip-link + focus state === */
@@ -152,10 +160,51 @@ h4,
   opacity: 1;
   transform: none;
 }
+/* Di HP: geseran lebih pendek & durasi lebih singkat supaya terasa
+   responsif saat di-scroll jempol, bukan menunggu animasi selesai. */
+@media (max-width: 767px) {
+  .reveal {
+    transform: translate3d(0, min(var(--reveal-y, 28px), 18px), 0);
+    transition-duration: 0.6s;
+  }
+  .reveal.is-in {
+    transform: none;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .reveal {
     opacity: 1;
     transform: none;
     transition: none;
+  }
+}
+
+/* === Strip horizontal (scroll-snap) di HP ===
+   scroll-padding wajib: tanpa ini snap-start menempelkan kartu ke tepi layar
+   dan padding kiri hilang. */
+.snap-strip {
+  scroll-padding-inline: 1.25rem;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+@media (min-width: 768px) {
+  .snap-strip {
+    scroll-padding-inline: 2rem;
+  }
+}
+
+/* Petunjuk "masih ada lagi" di ujung kanan strip */
+.fade-edge-r {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    black calc(100% - 2.5rem),
+    transparent
+  );
+  mask-image: linear-gradient(to right, black calc(100% - 2.5rem), transparent);
+}
+@media (min-width: 768px) {
+  .fade-edge-r {
+    -webkit-mask-image: none;
+    mask-image: none;
   }
 }

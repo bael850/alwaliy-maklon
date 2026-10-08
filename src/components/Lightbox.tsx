@@ -132,7 +132,7 @@ export default function Lightbox({
           key={`img-${item.id}`}
           className="lightbox-swap relative flex min-h-0 flex-1 items-center justify-center bg-black/30 md:w-3/5 md:flex-none"
         >
-          <div className="aspect-[3/4] max-h-[60vh] w-full md:max-h-[90vh]">
+          <div className="aspect-[3/4] max-h-[56dvh] w-full md:max-h-[90vh]">
             <SmartImage
               basePath={item.imageBase}
               alt={item.title}
@@ -151,7 +151,7 @@ export default function Lightbox({
         </div>
 
         {/* Teks */}
-        <div className="flex shrink-0 flex-col justify-between gap-6 p-6 md:w-2/5 md:p-8">
+        <div className="flex max-h-[44dvh] shrink-0 flex-col justify-between gap-6 overflow-y-auto p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] md:max-h-none md:w-2/5 md:p-8">
           <div key={`txt-${item.id}`} className="lightbox-swap">
             {item.meta && (
               <p className="font-heading text-4xl font-extrabold text-gold md:text-5xl">

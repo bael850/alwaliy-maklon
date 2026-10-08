@@ -54,9 +54,9 @@ export default function WhoWeAre() {
   const textCol = showPhoto || !ready ? "md:col-span-7" : "md:col-span-12";
 
   return (
-    <section id="who" className="bg-cream py-20 md:py-28">
+    <section id="who" className="bg-cream py-16 md:py-28">
       <div className="mx-auto max-w-6xl px-5 md:px-8">
-        <div className="grid gap-12 md:grid-cols-12 md:items-center md:gap-16">
+        <div className="grid gap-10 md:grid-cols-12 md:items-center md:gap-16">
           {/* Narasi */}
           <Reveal className={textCol}>
             <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold">
@@ -85,13 +85,16 @@ export default function WhoWeAre() {
           {/* Foto — bingkai emas bergeser di belakang.
               PLACEHOLDER: taruh file di public/images/about/gedung.(webp|jpg|png) */}
           {showPhoto && (
-            <Reveal delay={0.1} className="md:col-span-5">
-              <div className="relative mx-auto max-w-sm md:max-w-none">
+            <Reveal
+              delay={0.1}
+              className="order-first md:order-none md:col-span-5"
+            >
+              <div className="relative mr-4 md:mr-0 md:max-w-none">
                 <div
                   aria-hidden="true"
                   className="absolute -bottom-4 -right-4 h-full w-full rounded-[4px] border-2 border-gold/60"
                 />
-                <div className="relative aspect-[4/5] overflow-hidden rounded-[4px] bg-forest/5">
+                <div className="relative aspect-[4/3] overflow-hidden rounded-[4px] bg-forest/5 md:aspect-[4/5]">
                   <SmartImage
                     basePath="/images/about/gedung"
                     alt={t.whoWeAre.photoLabel}
@@ -116,17 +119,21 @@ export default function WhoWeAre() {
         </div>
 
         {/* Angka kunci */}
-        <dl className="mt-20 grid gap-10 border-t border-forest/15 pt-10 sm:grid-cols-3 sm:gap-8">
+        <dl className="mt-14 grid divide-y divide-forest/10 border-t border-forest/15 sm:mt-20 sm:grid-cols-3 sm:gap-8 sm:divide-y-0 sm:pt-10">
           {t.whoWeAre.stats.map((stat, i) => (
-            <Reveal key={stat.label} delay={i * 0.08}>
-              <dt className="font-heading text-5xl font-extrabold leading-none text-forest md:text-6xl">
+            <Reveal
+              key={stat.label}
+              delay={i * 0.08}
+              className="flex items-center gap-5 py-5 sm:block sm:py-0"
+            >
+              <dt className="w-[6.5rem] shrink-0 font-heading text-4xl font-extrabold leading-none text-forest sm:w-auto sm:text-5xl md:text-6xl">
                 {stat.value === YEARS_TOKEN ? (
                   <CountUp to={years} suffix="+" />
                 ) : (
                   stat.value
                 )}
               </dt>
-              <dd className="mt-3 max-w-[16rem] text-sm leading-relaxed text-ink/70">
+              <dd className="max-w-[16rem] text-sm leading-relaxed text-ink/70 sm:mt-3">
                 {stat.label}
               </dd>
             </Reveal>

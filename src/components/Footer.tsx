@@ -45,10 +45,10 @@ export default function Footer() {
 
   return (
     <footer className="bg-ink text-cream/70">
-      <div className="mx-auto max-w-6xl px-5 py-16 md:px-8">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-5">
+      <div className="mx-auto max-w-6xl px-5 pb-24 pt-14 md:px-8 md:py-16">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-5">
           {/* Brand */}
-          <div className="lg:col-span-2">
+          <div className="col-span-2">
             <p className="font-heading text-lg font-extrabold text-cream">
               AL-WALIY <span className="text-gold-light">Maklon</span>
             </p>
@@ -160,9 +160,9 @@ export default function Footer() {
         </div>
 
         {/* Copyright */}
-        <div className="mt-8 flex flex-col gap-2 text-xs text-cream/40 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-8 flex flex-col gap-2 text-xs text-cream/55 sm:flex-row sm:items-center sm:justify-between">
           <p>{t.footer.copyright}</p>
-          <p>{t.footer.alamatLengkap}</p>
+          <p className="hidden sm:block">{t.footer.alamatLengkap}</p>
         </div>
       </div>
     </footer>

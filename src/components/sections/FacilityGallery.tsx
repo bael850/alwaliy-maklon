@@ -349,7 +349,7 @@ function FacilityTour({ metas }: { metas: AvailableMeta[] }) {
     <section
       id="facility"
       ref={sectionRef}
-      className={`relative bg-forest ${pinned ? "" : "py-24 md:py-32"}`}
+      className={`relative bg-forest ${pinned ? "" : "py-16 md:py-32"}`}
       style={pinned ? { height: `calc(100vh + ${dist}px)` } : undefined}
     >
       {pinned ? (
@@ -485,7 +485,7 @@ function FacilityTour({ metas }: { metas: AvailableMeta[] }) {
 
           <div
             ref={stripRef}
-            className="hide-scrollbar mt-12 flex snap-x snap-proximity items-start gap-6 overflow-x-auto px-5 pb-2 [--h:15rem] md:mt-16 md:gap-10 md:px-8 md:[--h:22rem]"
+            className="snap-strip hide-scrollbar fade-edge-r mt-10 flex snap-x snap-proximity items-start gap-6 overflow-x-auto px-5 pb-2 [--h:15rem] md:mt-16 md:gap-10 md:px-8 md:[--h:22rem]"
           >
             {FACILITY_ITEMS.map((item, i) => {
               const delay = i * 0.08;

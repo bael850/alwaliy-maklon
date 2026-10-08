@@ -94,7 +94,7 @@ export default function Workflow() {
   };
 
   return (
-    <section id="workflow" className="bg-forest py-20 md:py-28">
+    <section id="workflow" className="bg-forest py-16 md:py-28">
       <style>{`
         .wf-swap { animation: wfSwap 0.5s ease-out; }
         @keyframes wfSwap { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
@@ -110,7 +110,7 @@ export default function Workflow() {
             <h2 className="font-heading text-3xl font-extrabold leading-tight text-cream md:text-5xl">
               {t.workflow.heading}
             </h2>
-            <p className="mt-4 text-sm leading-relaxed text-cream/70 md:text-base">
+            <p className="mt-4 text-[15px] leading-relaxed text-cream/70 md:text-base">
               {t.workflow.paragraph}
             </p>
           </div>
@@ -120,7 +120,7 @@ export default function Workflow() {
         <div
           role="tablist"
           aria-label={t.workflow.tabsAria}
-          className="mt-10 grid gap-3 md:mt-14 md:grid-cols-3 md:gap-4"
+          className="mt-8 grid grid-cols-3 gap-2 md:mt-14 md:gap-4"
         >
           {tracks.map((item, i) => {
             const isActive = i === active;
@@ -139,18 +139,18 @@ export default function Workflow() {
                 onClick={() => setActive(i)}
                 onKeyDown={(e) => onTabKeyDown(e, i)}
                 className={[
-                  "rounded-[4px] border p-5 text-left transition-colors duration-300",
+                  "rounded-[4px] border px-2 py-3 text-center transition-colors duration-300 md:p-5 md:text-left",
                   isActive
                     ? "border-gold bg-cream text-forest"
                     : "border-cream/20 text-cream hover:border-gold-light",
                 ].join(" ")}
               >
-                <span className="mt-1 block font-heading text-lg font-bold leading-snug md:text-xl">
+                <span className="block font-heading text-[13px] font-bold leading-tight min-[400px]:text-sm md:mt-1 md:text-xl md:leading-snug">
                   {item.name}
                 </span>
                 <span
                   className={[
-                    "mt-2 block text-sm leading-relaxed",
+                    "mt-2 hidden text-sm leading-relaxed md:block",
                     isActive ? "text-ink/70" : "text-cream/60",
                   ].join(" ")}
                 >
@@ -161,13 +161,22 @@ export default function Workflow() {
           })}
         </div>
 
+        {/* HP: penjelasan jalur yang aktif */}
+        <p
+          key={`blurb-${active}`}
+          className="wf-swap mt-4 text-[15px] leading-relaxed text-cream/80 md:hidden"
+          aria-live="polite"
+        >
+          {track.blurb}
+        </p>
+
         {/* Timeline A-Z — key=active supaya animasi masuk ulang tiap ganti jalur */}
         <div
           key={active}
           id="wf-panel"
           role="tabpanel"
           aria-labelledby={`wf-tab-${active}`}
-          className="wf-swap mt-14 md:mt-20"
+          className="wf-swap mt-10 md:mt-20"
         >
           <ol ref={timelineRef} className="relative">
             {/* Garis dasar + isian emas */}
@@ -206,7 +215,7 @@ export default function Workflow() {
                     <h3 className="font-heading text-lg font-bold text-cream md:text-xl">
                       {step.title}
                     </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-cream/70 md:text-base">
+                    <p className="mt-2 text-[15px] leading-relaxed text-cream/70 md:text-base">
                       {step.desc}
                     </p>
                   </div>

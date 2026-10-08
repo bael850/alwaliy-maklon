@@ -133,7 +133,7 @@ export default function ClientTrust() {
   }, [showLogos]);
 
   return (
-    <section id="clients" className="bg-cream py-20 md:py-28">
+    <section id="clients" className="bg-cream py-16 md:py-28">
       {/* Marquee logo klien — dobel list-nya biar loop-nya mulus (translateX
           -50% pas nyampe titik di mana set kedua persis nyambung sama set
           pertama, jadi gak kerasa "loncat"). Pause pas di-hover biar user
@@ -198,7 +198,7 @@ export default function ClientTrust() {
             <Reveal delay={0.06}>
               <div
                 ref={marqueeRef}
-                className="marquee-pause flex flex-col gap-4 [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]"
+                className="marquee-pause flex flex-col gap-2 md:gap-4 [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]"
               >
                 {[false, true].map((reverse) => {
                   const items = buildRow(clients, reverse);
@@ -208,13 +208,13 @@ export default function ClientTrust() {
                       className="relative overflow-hidden"
                     >
                       <div
-                        className={`marquee-track flex w-max items-center gap-8 ${reverse ? "marquee-track-reverse" : ""}`}
+                        className={`marquee-track flex w-max items-center gap-5 md:gap-8 ${reverse ? "marquee-track-reverse" : ""}`}
                       >
                         {[...items, ...items].map((client, i) => (
                           <div
                             key={`${client.slug}-${i}`}
                             aria-hidden={i >= items.length || reverse}
-                            className="flex h-20 w-48 shrink-0 items-center justify-center gap-2 grayscale opacity-60 transition duration-300 hover:grayscale-0 hover:opacity-100 md:h-24 md:w-56"
+                            className="flex h-14 w-32 shrink-0 items-center justify-center gap-2 grayscale opacity-60 transition duration-300 hover:grayscale-0 hover:opacity-100 md:h-24 md:w-56"
                           >
                             <SmartImage
                               basePath={`/images/clients/${client.slug}`}
@@ -251,7 +251,7 @@ export default function ClientTrust() {
           className={showLogos ? "mt-16 border-t border-forest/15 pt-14" : ""}
         >
           <Reveal>
-            <div className="mb-12 max-w-2xl">
+            <div className="mb-8 max-w-2xl md:mb-12">
               <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold">
                 {t.clientTrust.testimonialsEyebrow}
               </p>
@@ -261,9 +261,13 @@ export default function ClientTrust() {
             </div>
           </Reveal>
 
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="snap-strip hide-scrollbar fade-edge-r -mx-5 flex snap-x snap-mandatory items-stretch gap-4 overflow-x-auto px-5 pb-2 md:mx-0 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:px-0 md:pb-0">
             {testimonials.map((item, i) => (
-              <Reveal key={item.name + i} delay={i * 0.1}>
+              <Reveal
+                key={item.name + i}
+                delay={i * 0.1}
+                className="w-[84%] shrink-0 snap-start sm:w-[60%] md:w-auto"
+              >
                 <div
                   className="flex h-full flex-col overflow-hidden rounded-[10px] border border-cream/15 shadow-lg"
                   role="group"

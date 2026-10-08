@@ -7,7 +7,7 @@ export default function Faq() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="bg-cream py-20 md:py-28">
+    <section id="faq" className="bg-cream py-16 md:py-28">
       <div className="mx-auto max-w-3xl px-5 md:px-8">
         <div className="mb-12">
           <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold">
@@ -66,7 +66,7 @@ export default function Faq() {
                   <div className="min-h-0 pl-[2.6rem]">
                     {/* Aksen garis kiri pada jawaban — kesan "kutipan
                         jawaban konsultasi", nyambung ke badge huruf di atas */}
-                    <p className="border-l-2 border-gold/40 pl-4 text-sm leading-relaxed text-ink/70 md:text-base">
+                    <p className="border-l-2 border-gold/40 pl-4 text-[15px] leading-relaxed text-ink/70 md:text-base">
                       {item.a}
                     </p>
                   </div>

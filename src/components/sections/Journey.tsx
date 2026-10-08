@@ -294,7 +294,7 @@ function JourneyCarousel({ entries }: { entries: JourneyEntry[] }) {
   }));
 
   return (
-    <section id="journey" className="overflow-hidden bg-forest py-20 md:py-28">
+    <section id="journey" className="overflow-hidden bg-forest py-16 md:py-28">
       <div className="mx-auto max-w-6xl px-5 md:px-8">
         <Reveal>
           <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
@@ -305,12 +305,12 @@ function JourneyCarousel({ entries }: { entries: JourneyEntry[] }) {
               <h2 className="font-heading text-3xl font-extrabold leading-tight text-cream md:text-5xl">
                 {t.journey.heading}
               </h2>
-              <p className="mt-4 text-sm leading-relaxed text-cream/70 md:text-base">
+              <p className="mt-4 text-[15px] leading-relaxed text-cream/70 md:text-base">
                 {t.journey.paragraph}
               </p>
             </div>
 
-            <div className="flex shrink-0 items-center gap-2">
+            <div className="hidden shrink-0 items-center gap-2 md:flex">
               <button
                 type="button"
                 onClick={() => scrollByCard(-1)}
@@ -337,7 +337,7 @@ function JourneyCarousel({ entries }: { entries: JourneyEntry[] }) {
         ref={trackRef}
         onMouseDown={onMouseDown}
         onDragStart={(e) => e.preventDefault()}
-        className="hide-scrollbar relative mt-12 flex cursor-grab snap-x snap-mandatory overflow-x-auto overscroll-x-contain pb-14 pt-10 select-none [--card-w:min(68vw,290px)] md:mt-10 md:[--card-w:340px]"
+        className="hide-scrollbar relative mt-6 flex cursor-grab snap-x snap-mandatory overflow-x-auto overscroll-x-contain pb-12 pt-10 select-none [--card-w:min(68vw,290px)] md:mt-10 md:[--card-w:340px]"
       >
         <ul
           className="flex w-max items-center"

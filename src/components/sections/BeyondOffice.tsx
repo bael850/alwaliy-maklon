@@ -19,35 +19,35 @@ gsap.registerPlugin(ScrollTrigger);
  */
 const TILES: { cell: string; aspect: string }[] = [
   {
-    cell: "col-span-4 col-start-1 lg:col-span-5 lg:col-start-1 lg:row-span-2 lg:row-start-1",
+    cell: "col-span-3 lg:col-span-5 lg:col-start-1 lg:row-span-2 lg:row-start-1",
     aspect: "aspect-[4/5]",
   },
   {
-    cell: "col-span-4 col-start-3 lg:col-span-5 lg:col-start-7 lg:row-start-2",
+    cell: "col-span-3 lg:col-span-5 lg:col-start-7 lg:row-start-2",
     aspect: "aspect-[3/2]",
   },
   {
-    cell: "col-span-4 col-start-1 lg:col-span-3 lg:col-start-2",
+    cell: "col-span-3 lg:col-span-3 lg:col-start-2",
     aspect: "aspect-square",
   },
   {
-    cell: "col-span-4 col-start-3 lg:col-span-4 lg:col-start-6",
+    cell: "col-span-3 lg:col-span-4 lg:col-start-6",
     aspect: "aspect-[3/4]",
   },
   {
-    cell: "col-span-4 col-start-1 lg:col-span-3 lg:col-start-10",
+    cell: "col-span-3 lg:col-span-3 lg:col-start-10",
     aspect: "aspect-[4/5]",
   },
   {
-    cell: "col-span-4 col-start-3 lg:col-span-6 lg:col-start-1",
+    cell: "col-span-3 lg:col-span-6 lg:col-start-1",
     aspect: "aspect-[3/2]",
   },
   {
-    cell: "col-span-4 col-start-1 lg:col-span-3 lg:col-start-8",
+    cell: "col-span-3 lg:col-span-3 lg:col-start-8",
     aspect: "aspect-[3/4]",
   },
   {
-    cell: "col-span-4 col-start-3 lg:col-span-2 lg:col-start-11",
+    cell: "col-span-3 lg:col-span-2 lg:col-start-11",
     aspect: "aspect-square",
   },
 ];
@@ -156,11 +156,11 @@ function BeyondCollage({ photos }: { photos: BeyondPhoto[] }) {
   }, []);
 
   return (
-    <section id="beyond" className="bg-cream py-24 md:py-32">
+    <section id="beyond" className="bg-cream py-16 md:py-32">
       <div className="mx-auto max-w-7xl px-5 md:px-8">
         <div
           ref={rootRef}
-          className="grid grid-cols-6 gap-x-4 gap-y-6 lg:grid-cols-12 lg:gap-x-8 lg:gap-y-20"
+          className="grid grid-cols-6 items-start gap-x-3 gap-y-3 lg:grid-cols-12 lg:[align-items:normal] lg:gap-x-8 lg:gap-y-20"
         >
           {/* Judul ikut jadi bagian kolase */}
           <Reveal className="col-span-6 mb-6 lg:col-span-6 lg:col-start-7 lg:row-start-1 lg:mb-0 lg:self-start lg:pt-6">
@@ -178,13 +178,13 @@ function BeyondCollage({ photos }: { photos: BeyondPhoto[] }) {
 
           {photos.map((photo, i) => {
             const tile = TILES[i] ?? {
-              cell: "col-span-4 col-start-1 lg:col-span-3",
+              cell: "col-span-3 lg:col-span-3",
               aspect: "aspect-square",
             };
             return (
               <figure
                 key={i}
-                className={`beyond-tile group relative overflow-hidden rounded-[4px] bg-forest/5 ${tile.cell} ${tile.aspect}`}
+                className={`beyond-tile group relative overflow-hidden rounded-[4px] bg-forest/5 ${tile.cell} ${tile.aspect} ${i % 2 === 1 ? "max-lg:mt-10" : ""}`}
               >
                 {/* Lebih tinggi dari bingkai supaya bisa bergeser (parallax) */}
                 <div className="beyond-par absolute inset-x-0 -top-[10%] h-[120%]">

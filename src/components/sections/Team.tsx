@@ -84,7 +84,7 @@ function TeamStage({ members }: { members: TeamMember[] }) {
   );
 
   return (
-    <section id="team" className="bg-cream py-24 md:py-32">
+    <section id="team" className="bg-cream py-16 md:py-32">
       <div className="mx-auto max-w-7xl px-5 md:px-8">
         {/* Kepala editorial: judul besar kiri, paragraf rapat ke bawah di kanan */}
         <div className="grid items-end gap-8 lg:grid-cols-12 lg:gap-12">
@@ -230,7 +230,7 @@ function TeamStage({ members }: { members: TeamMember[] }) {
         </div>
 
         {/* ===== Mobile & tablet: strip scroll-snap, kartu bertingkat ===== */}
-        <ul className="hide-scrollbar -mx-5 mt-12 flex snap-x snap-mandatory items-start gap-4 overflow-x-auto px-5 pb-4 md:-mx-8 md:px-8 lg:hidden">
+        <ul className="snap-strip hide-scrollbar fade-edge-r -mx-5 mt-10 flex snap-x snap-mandatory items-start gap-4 overflow-x-auto px-5 pb-4 md:-mx-8 md:px-8 lg:hidden">
           {members.map((member, i) => (
             <li
               key={i}

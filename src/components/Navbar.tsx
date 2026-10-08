@@ -30,11 +30,32 @@ export default function Navbar() {
 
   const handleLinkClick = () => setMenuOpen(false);
 
+  // Menu terbuka = bar jadi solid (teks gelap) supaya logo & tombol tutup
+  // tetap terbaca, apa pun yang ada di belakangnya.
+  const solid = scrolled || menuOpen;
+
+  // Tutup menu bila layar diputar / dilebarkan ke ukuran desktop.
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const onChange = () => mq.matches && setMenuOpen(false);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
+  // Esc menutup menu.
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e: KeyboardEvent) =>
+      e.key === "Escape" && setMenuOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [menuOpen]);
+
   return (
     <header
       className={[
         "fixed top-0 left-0 right-0 z-50 transition-[background-color,box-shadow] duration-300",
-        scrolled
+        solid
           ? "bg-cream/95 backdrop-blur-sm shadow-[0_1px_0_rgba(27,67,50,0.08)]"
           : "bg-transparent",
       ].join(" ")}
@@ -52,7 +73,7 @@ export default function Navbar() {
               <span
                 className={[
                   "font-heading text-lg md:text-xl font-extrabold tracking-tight transition-colors",
-                  scrolled ? "text-forest" : "text-cream",
+                  solid ? "text-forest" : "text-cream",
                 ].join(" ")}
               >
                 AL-WALIY
@@ -60,7 +81,7 @@ export default function Navbar() {
               <span
                 className={[
                   "text-[11px] md:text-xs font-medium uppercase tracking-[0.14em] transition-colors",
-                  scrolled ? "text-gold" : "text-gold-light",
+                  solid ? "text-gold" : "text-gold-light",
                 ].join(" ")}
               >
                 Maklon
@@ -107,8 +128,8 @@ export default function Navbar() {
             }
             aria-expanded={menuOpen}
             className={[
-              "md:hidden inline-flex h-10 w-10 items-center justify-center rounded-[4px] transition-colors",
-              scrolled ? "text-forest" : "text-cream",
+              "md:hidden inline-flex h-11 w-11 -mr-2 items-center justify-center rounded-[4px] transition-colors",
+              solid ? "text-forest" : "text-cream",
             ].join(" ")}
           >
             {menuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -119,17 +140,23 @@ export default function Navbar() {
       {/* Mobile menu */}
       <div
         className={[
-          "md:hidden overflow-hidden bg-cream transition-[max-height,opacity] duration-300 ease-in-out",
-          menuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0",
+          "md:hidden overflow-y-auto overscroll-contain bg-cream transition-[max-height,opacity] duration-300 ease-in-out",
+          menuOpen
+            ? "max-h-[calc(100dvh-4rem)] opacity-100"
+            : "pointer-events-none max-h-0 opacity-0",
         ].join(" ")}
       >
-        <nav className="flex flex-col gap-1 px-5 pb-6 pt-2">
+        <nav
+          aria-hidden={!menuOpen}
+          className="flex flex-col gap-1 px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-2"
+        >
           {t.navbar.navLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
               onClick={handleLinkClick}
-              className="rounded-[4px] px-3 py-3 text-base font-medium text-ink transition-colors hover:bg-forest/5 hover:text-forest"
+              tabIndex={menuOpen ? 0 : -1}
+              className="rounded-[4px] px-3 py-3.5 text-base font-medium text-ink transition-colors hover:bg-forest/5 hover:text-forest active:bg-forest/10"
             >
               {link.label}
             </a>
@@ -142,7 +169,8 @@ export default function Navbar() {
             target="_blank"
             rel="noopener noreferrer"
             onClick={handleLinkClick}
-            className="mt-2 inline-flex items-center justify-center gap-2 rounded-[4px] bg-forest px-5 py-3 text-sm font-semibold text-cream"
+            tabIndex={menuOpen ? 0 : -1}
+            className="mt-2 inline-flex items-center justify-center gap-2 rounded-[4px] bg-forest px-5 py-3.5 text-sm font-semibold text-cream"
           >
             <MessageCircle size={16} strokeWidth={2.5} />
             {t.navbar.ctaLabel}

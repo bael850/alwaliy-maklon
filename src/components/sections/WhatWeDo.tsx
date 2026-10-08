@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ImageIcon, ArrowUpRight } from "lucide-react";
 import Reveal from "../Reveal";
 import SmartImage from "../SmartImage";
@@ -57,6 +57,8 @@ function WhatWeDoStage({ works }: { works: AvailableWork[] }) {
   const [active, setActive] = useState(0);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const categories = t.productTypes.types;
+  const swipeX = useRef<number | null>(null);
+  const thumbsRef = useRef<HTMLUListElement>(null);
 
   const visible = useMemo(
     () =>
@@ -68,6 +70,17 @@ function WhatWeDoStage({ works }: { works: AvailableWork[] }) {
 
   const current = Math.min(active, visible.length - 1);
   const now = visible[current];
+
+  // Thumbnail aktif selalu di tengah strip (HP).
+  useEffect(() => {
+    const strip = thumbsRef.current;
+    const el = strip?.children[current] as HTMLElement | undefined;
+    if (!strip || !el) return;
+    strip.scrollTo({
+      left: el.offsetLeft - strip.clientWidth / 2 + el.offsetWidth / 2,
+      behavior: "smooth",
+    });
+  }, [current, filter]);
 
   const count = (f: Filter) =>
     f === "all" ? works.length : works.filter((m) => m.kind === f).length;
@@ -86,8 +99,36 @@ function WhatWeDoStage({ works }: { works: AvailableWork[] }) {
     fallback: <ImageIcon size={56} strokeWidth={1.5} />,
   }));
 
+  const filterRow = (cls: string) => (
+    <div role="group" aria-label={t.whatWeDo.filterAria} className={cls}>
+      {FILTERS.filter((f) => count(f) > 0).map((f) => (
+        <button
+          key={f}
+          type="button"
+          aria-pressed={filter === f}
+          onClick={() => {
+            setFilter(f);
+            setActive(0);
+            setOpenIndex(null);
+          }}
+          className={[
+            "-mb-px border-b-2 pb-3 pt-1 text-sm font-semibold transition-colors",
+            filter === f
+              ? "border-gold text-cream"
+              : "border-transparent text-cream/50 hover:text-cream",
+          ].join(" ")}
+        >
+          {t.whatWeDo.filters[f]}
+          <span className="ml-1.5 text-xs tabular-nums text-cream/40">
+            {count(f)}
+          </span>
+        </button>
+      ))}
+    </div>
+  );
+
   return (
-    <section id="what" className="bg-forest py-20 md:py-28">
+    <section id="what" className="bg-forest py-16 md:py-28">
       <div className="mx-auto max-w-6xl px-5 md:px-8">
         <Reveal>
           <div className="grid gap-6 md:grid-cols-12 md:items-end">
@@ -99,21 +140,33 @@ function WhatWeDoStage({ works }: { works: AvailableWork[] }) {
                 {t.whatWeDo.heading}
               </h2>
             </div>
-            <p className="text-sm leading-relaxed text-cream/70 md:col-span-5 md:text-base">
+            <p className="text-[15px] leading-relaxed text-cream/70 md:col-span-5 md:text-base">
               {t.whatWeDo.paragraph}
             </p>
           </div>
         </Reveal>
 
         <Reveal delay={0.1}>
-          <div className="mt-12 grid gap-8 md:mt-16 md:grid-cols-12 md:gap-12">
+          {filterRow("mt-8 flex gap-x-6 border-b border-cream/15 md:hidden")}
+          <div className="mt-5 grid gap-5 md:mt-16 md:grid-cols-12 md:gap-12">
             {/* Panggung: foto besar yang berganti */}
-            <div className="md:order-2 md:col-span-7">
+            <div
+              className="min-w-0 touch-pan-y md:order-2 md:col-span-7"
+              onTouchStart={(e) => (swipeX.current = e.touches[0].clientX)}
+              onTouchEnd={(e) => {
+                if (swipeX.current === null) return;
+                const dx = e.changedTouches[0].clientX - swipeX.current;
+                swipeX.current = null;
+                const n = visible.length;
+                if (Math.abs(dx) > 40)
+                  setActive((current + (dx < 0 ? 1 : -1) + n) % n);
+              }}
+            >
               <button
                 type="button"
                 onClick={() => setOpenIndex(current)}
                 aria-label={`${t.whatWeDo.viewAriaPrefix}${now.text.name}`}
-                className="group relative block aspect-[4/5] w-full overflow-hidden rounded-[4px] bg-cream/5 text-left md:aspect-[5/6]"
+                className="group relative block aspect-[4/5] w-full overflow-hidden rounded-[4px] bg-cream/5 text-left max-h-[62svh] md:aspect-[5/6] md:max-h-none"
               >
                 {visible.map(({ meta, text }, i) => (
                   <div
@@ -183,39 +236,42 @@ function WhatWeDoStage({ works }: { works: AvailableWork[] }) {
                   </span>
                 </div>
               </button>
+
+              {/* HP: thumbnail strip di bawah foto (menggantikan daftar teks panjang) */}
+              <ul
+                ref={thumbsRef}
+                className="hide-scrollbar -mx-5 mt-3 flex gap-2 overflow-x-auto px-5 pb-1 md:hidden"
+              >
+                {visible.map(({ meta, text }, i) => (
+                  <li key={meta.id} className="shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => setActive(i)}
+                      aria-label={text.name}
+                      aria-current={i === current}
+                      className={[
+                        "relative block h-16 w-14 overflow-hidden rounded-[4px] ring-2 transition-[opacity,box-shadow] duration-300",
+                        i === current
+                          ? "opacity-100 ring-gold"
+                          : "opacity-50 ring-transparent",
+                      ].join(" ")}
+                    >
+                      <SmartImage
+                        basePath={meta.imageBase}
+                        alt=""
+                        className="h-full w-full object-cover"
+                      />
+                    </button>
+                  </li>
+                ))}
+              </ul>
             </div>
 
-            {/* Indeks: filter + daftar judul */}
-            <div className="md:order-1 md:col-span-5">
-              <div
-                role="group"
-                aria-label={t.whatWeDo.filterAria}
-                className="flex flex-wrap gap-x-6 gap-y-2 border-b border-cream/15"
-              >
-                {FILTERS.filter((f) => count(f) > 0).map((f) => (
-                  <button
-                    key={f}
-                    type="button"
-                    aria-pressed={filter === f}
-                    onClick={() => {
-                      setFilter(f);
-                      setActive(0);
-                      setOpenIndex(null);
-                    }}
-                    className={[
-                      "-mb-px border-b-2 pb-3 text-sm font-semibold transition-colors",
-                      filter === f
-                        ? "border-gold text-cream"
-                        : "border-transparent text-cream/50 hover:text-cream",
-                    ].join(" ")}
-                  >
-                    {t.whatWeDo.filters[f]}
-                    <span className="ml-1.5 text-xs tabular-nums text-cream/40">
-                      {count(f)}
-                    </span>
-                  </button>
-                ))}
-              </div>
+            {/* Indeks: filter + daftar judul (desktop) */}
+            <div className="hidden md:order-1 md:col-span-5 md:block">
+              {filterRow(
+                "flex flex-wrap gap-x-6 gap-y-2 border-b border-cream/15",
+              )}
 
               <ul className="mt-2">
                 {visible.map(({ meta, text }, i) => {

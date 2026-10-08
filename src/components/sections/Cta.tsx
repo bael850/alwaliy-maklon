@@ -12,7 +12,7 @@ export default function Cta() {
   )}`;
 
   return (
-    <section id="contact" className="bg-forest py-20 md:py-28">
+    <section id="contact" className="bg-forest py-16 md:py-28">
       <div className="mx-auto max-w-6xl px-5 md:px-8">
         <div className="grid gap-10 md:grid-cols-2 md:items-center md:gap-16">
           <div>
@@ -24,12 +24,12 @@ export default function Cta() {
             </h2>
             <p className="mt-4 max-w-md text-cream/80">{t.cta.paragraph}</p>
 
-            <div className="mt-8 flex flex-wrap items-center gap-4">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
               <a
                 href={waHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-[4px] bg-gold px-7 py-3.5 text-sm font-semibold text-forest transition-colors hover:bg-gold-light"
+                className="inline-flex items-center justify-center gap-2 rounded-[4px] bg-gold px-7 py-3.5 text-sm font-semibold text-forest transition-colors hover:bg-gold-light"
               >
                 <MessageCircle size={18} strokeWidth={2.5} />
                 {t.cta.waButtonLabel}
@@ -37,7 +37,7 @@ export default function Cta() {
               <a
                 href={COMPANY_PROFILE_HREF}
                 download
-                className="inline-flex items-center gap-2 rounded-[4px] border-[1.5px] border-cream/30 px-7 py-3.5 text-sm font-semibold text-cream transition-colors hover:border-cream hover:bg-cream/5"
+                className="inline-flex items-center justify-center gap-2 rounded-[4px] border-[1.5px] border-cream/30 px-7 py-3.5 text-sm font-semibold text-cream transition-colors hover:border-cream hover:bg-cream/5"
               >
                 <FileDown size={18} strokeWidth={2.25} />
                 {t.cta.downloadButtonLabel}

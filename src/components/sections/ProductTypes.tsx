@@ -16,7 +16,7 @@ export default function ProductTypes() {
   const { types } = t.productTypes;
 
   return (
-    <section id="products" className="bg-cream py-20 md:py-28">
+    <section id="products" className="bg-cream py-16 md:py-28">
       <div className="mx-auto max-w-6xl px-5 md:px-8">
         <Reveal className="max-w-2xl">
           <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold">
@@ -52,7 +52,7 @@ export default function ProductTypes() {
                         {type.title}
                       </h3>
                     </div>
-                    <p className="text-sm leading-relaxed text-ink/70 transition-colors group-hover:text-cream/80 md:col-span-5 md:text-base">
+                    <p className="text-[15px] leading-relaxed text-ink/70 transition-colors group-hover:text-cream/80 md:col-span-5 md:text-base">
                       {type.desc}
                     </p>
                     <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-forest transition-colors group-hover:text-gold-light md:col-span-2 md:justify-end">

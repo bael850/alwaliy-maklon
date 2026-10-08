@@ -6,7 +6,7 @@ export default function VisionMission() {
   const { missions } = t.visionMission;
 
   return (
-    <section id="vision" className="bg-cream py-20 md:py-28">
+    <section id="vision" className="bg-cream py-16 md:py-28">
       <div className="mx-auto max-w-6xl px-5 md:px-8">
         <Reveal>
           <div className="relative overflow-hidden rounded-[4px] bg-forest px-6 py-12 md:px-14 md:py-20">
@@ -43,7 +43,7 @@ export default function VisionMission() {
                     <h3 className="font-heading text-lg font-bold text-forest md:text-xl">
                       {m.title}
                     </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-ink/70 md:text-base">
+                    <p className="mt-2 text-[15px] leading-relaxed text-ink/70 md:text-base">
                       {m.desc}
                     </p>
                   </div>

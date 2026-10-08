@@ -1,4 +1,4 @@
-import { useState, type CSSProperties } from "react";
+import { useRef, useState, type CSSProperties } from "react";
 import {
   BadgeCheck,
   ShieldCheck,
@@ -67,6 +67,7 @@ function CertificationsStage({
   const certs = textIdx.map((i) => t.certifications.certs[i]);
   const total = certs.length;
 
+  const swipeX = useRef<number | null>(null);
   const [active, setActive] = useState(0);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
@@ -85,7 +86,7 @@ function CertificationsStage({
   return (
     <section
       id="certifications"
-      className="overflow-hidden bg-forest py-20 md:py-28"
+      className="overflow-hidden bg-forest py-16 md:py-28"
     >
       <style>{`
         .cert-card {
@@ -106,9 +107,9 @@ function CertificationsStage({
       `}</style>
 
       <div className="mx-auto max-w-6xl px-5 md:px-8">
-        <div className="grid gap-14 md:grid-cols-12 md:items-center md:gap-10">
-          {/* Kiri: judul + detail sertifikat aktif + pemilih */}
-          <div className="md:col-span-5">
+        <div className="grid gap-10 md:grid-cols-12 md:items-center md:gap-x-10 md:gap-y-0">
+          {/* Judul */}
+          <div className="md:col-span-5 md:col-start-1 md:row-start-1 md:self-end">
             <Reveal>
               <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold-light">
                 {t.certifications.eyebrow}
@@ -116,15 +117,18 @@ function CertificationsStage({
               <h2 className="font-heading text-3xl font-extrabold leading-tight text-cream md:text-4xl">
                 {t.certifications.heading}
               </h2>
-              <p className="mt-4 text-sm leading-relaxed text-cream/70 md:text-base">
+              <p className="mt-4 text-[15px] leading-relaxed text-cream/70 md:text-base">
                 {t.certifications.paragraph}
               </p>
             </Reveal>
+          </div>
 
+          {/* Detail + pemilih (di HP tampil setelah tumpukan kartu) */}
+          <div className="order-3 md:order-none md:col-span-5 md:col-start-1 md:row-start-2 md:self-start">
             {/* Detail — key=active supaya animasi masuk ulang tiap ganti */}
             <div
               key={metas[active].id}
-              className="cert-swap mt-8 rounded-[4px] border border-cream/15 bg-cream/5 p-5 md:p-6"
+              className="cert-swap mt-0 rounded-[4px] border border-cream/15 bg-cream/5 p-5 md:mt-8 md:p-6"
               aria-live="polite"
             >
               <div className="flex items-center gap-3">
@@ -165,7 +169,7 @@ function CertificationsStage({
                   onClick={() => setActive(i)}
                   aria-pressed={i === active}
                   className={[
-                    "rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-colors",
+                    "rounded-full border px-4 py-2 text-xs font-semibold transition-colors",
                     i === active
                       ? "border-gold bg-gold text-forest"
                       : "border-cream/25 text-cream/70 hover:border-gold hover:text-gold",
@@ -179,9 +183,20 @@ function CertificationsStage({
 
           {/* Kanan: tumpukan kartu — melebar saat hover, klik kartu belakang
               = bawa ke depan, klik kartu depan = buka dokumen. */}
-          <Reveal delay={0.1} className="md:col-span-7">
+          <Reveal
+            delay={0.1}
+            className="md:col-span-7 md:col-start-6 md:row-span-2 md:row-start-1 md:self-center"
+          >
             <div
-              className="group relative mx-auto w-[calc(var(--cw)_+_110px)] max-w-full [--cw:min(62vw,250px)] md:ml-auto md:mr-0 md:w-[calc(var(--cw)_+_190px)] md:[--cw:290px]"
+              onTouchStart={(e) => (swipeX.current = e.touches[0].clientX)}
+              onTouchEnd={(e) => {
+                if (swipeX.current === null) return;
+                const dx = e.changedTouches[0].clientX - swipeX.current;
+                swipeX.current = null;
+                if (Math.abs(dx) > 40)
+                  setActive((a) => (a + (dx < 0 ? 1 : -1) + total) % total);
+              }}
+              className="group touch-pan-y relative mx-auto w-[calc(var(--cw)_+_110px)] max-w-full [--cw:min(62vw,250px)] md:ml-auto md:mr-0 md:w-[calc(var(--cw)_+_190px)] md:[--cw:290px]"
               style={{ height: "calc(var(--cw) * 1.333 + 56px)" }}
             >
               {certs.map((cert, i) => {
