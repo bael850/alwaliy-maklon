@@ -9,7 +9,7 @@ import { useAvailableImages } from "../../lib/useAvailableImages";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const FOUNDED_YEAR = 2014;
+const FOUNDED_YEAR = 2011;
 /** Penanda di translations: nilai ini diganti angka tahun berjalan (count-up). */
 const YEARS_TOKEN = "{years}";
 

@@ -17,7 +17,7 @@ const id = {
         eyebrow: "Produksi Bersertifikat Halal MUI & BPOM",
         heading: "Wujudkan Brand Herbal & Madu Anda Sendiri",
         paragraph:
-          "Jasa maklon herbal dan madu dari produsen yang sudah berjalan sejak 2014. Formulasi, kemasan, sampai legalitas kami bantu, tanpa Anda perlu membangun pabrik sendiri.",
+          "Jasa maklon herbal dan madu dari produsen yang sudah berjalan sejak 2011. Formulasi, kemasan, sampai legalitas kami bantu, tanpa Anda perlu membangun pabrik sendiri.",
       },
       {
         eyebrow: "Private Label & Pengembangan Produk",
@@ -48,7 +48,7 @@ const id = {
     eyebrow: "Siapa Kami",
     heading: "Produsen Herbal Berpengalaman, Kini Terbuka untuk Brand Anda",
     paragraphBefore:
-      "CV Al-Waliy Sejahtera memproduksi madu herbal dan sari kurma premium sejak 2014. Kami melayani konsumen akhir, reseller, dan mitra maklon di seluruh Indonesia, dan kini membuka layanan ",
+      "CV Al-Waliy Sejahtera memproduksi madu herbal dan sari kurma premium sejak 2011. Kami melayani konsumen akhir, reseller, dan mitra maklon di seluruh Indonesia, dan kini membuka layanan ",
     paragraphStrong: "maklon",
     paragraphAfter:
       ", memproduksi herbal sesuai formulasi dan kebutuhan brand Anda, dengan standar kualitas yang sama seperti produk kami sendiri.",
@@ -58,7 +58,7 @@ const id = {
       {
         value: "{years}",
         label:
-          "Tahun berpengalaman memproduksi madu herbal dan sari kurma, sejak 2014.",
+          "Tahun berpengalaman memproduksi madu herbal dan sari kurma, sejak 2011.",
       },
       {
         value: "CPOTB",
@@ -77,7 +77,7 @@ const id = {
       "Geser untuk melihat perjalanan Al-Waliy dari tahun ke tahun. Klik foto untuk baca ceritanya.",
     items: [
       {
-        year: "2014",
+        year: "2011",
         title: "Al-Waliy Berdiri",
         desc: "Kami mulai memproduksi madu herbal dan sari kurma premium di Bekasi.",
       },
@@ -503,7 +503,7 @@ const id = {
   },
   pullQuote: {
     quote: "Sekarang giliran brand Anda yang tampil.",
-    attribution: "CV Al-Waliy Sejahtera, sejak 2014",
+    attribution: "CV Al-Waliy Sejahtera, sejak 2011",
   },
   faq: {
     eyebrow: "Pertanyaan Umum",
@@ -577,7 +577,7 @@ const id = {
   },
   footer: {
     tagline:
-      "CV Al-Waliy Sejahtera, produsen herbal terpercaya sejak 2014, kini membuka layanan maklon untuk brand Anda.",
+      "CV Al-Waliy Sejahtera, produsen herbal terpercaya sejak 2011, kini membuka layanan maklon untuk brand Anda.",
     layananHeading: "Layanan",
     layananLinks: [
       { label: "Madu Herbal", href: "#products" },
@@ -620,7 +620,7 @@ const en: typeof id = {
         eyebrow: "Halal MUI & BPOM Certified Production",
         heading: "Bring Your Own Herbal & Honey Brand to Life",
         paragraph:
-          "White-label (maklon) herbal and honey production from an experienced manufacturer since 2014, from formulation and packaging to legal registration, without needing to build your own factory.",
+          "White-label (maklon) herbal and honey production from an experienced manufacturer since 2011, from formulation and packaging to legal registration, without needing to build your own factory.",
       },
       {
         eyebrow: "Private Label & Product Development",
@@ -651,7 +651,7 @@ const en: typeof id = {
     eyebrow: "Who We Are",
     heading: "An Experienced Herbal Producer, Now Open to Your Brand",
     paragraphBefore:
-      "CV Al-Waliy Sejahtera has produced herbal honey and premium date syrup since 2014. We serve end consumers, resellers, and maklon partners across Indonesia, and now offer ",
+      "CV Al-Waliy Sejahtera has produced herbal honey and premium date syrup since 2011. We serve end consumers, resellers, and maklon partners across Indonesia, and now offer ",
     paragraphStrong: "maklon",
     paragraphAfter:
       " (white-label) manufacturing, producing herbal products to your formulation and brand needs, to the same quality standards as our own products.",
@@ -661,7 +661,7 @@ const en: typeof id = {
       {
         value: "{years}",
         label:
-          "Years of experience producing herbal honey and date syrup, since 2014.",
+          "Years of experience producing herbal honey and date syrup, since 2011.",
       },
       {
         value: "CPOTB",
@@ -680,7 +680,7 @@ const en: typeof id = {
       "Drag to see how Al-Waliy has grown over the years. Click a photo to read its story.",
     items: [
       {
-        year: "2014",
+        year: "2011",
         title: "Al-Waliy Is Founded",
         desc: "We began producing herbal honey and premium date syrup in Bekasi.",
       },
@@ -1101,7 +1101,7 @@ const en: typeof id = {
   },
   pullQuote: {
     quote: "Now, it's your brand's turn to emerge.",
-    attribution: "CV Al-Waliy Sejahtera, since 2014",
+    attribution: "CV Al-Waliy Sejahtera, since 2011",
   },
   faq: {
     eyebrow: "Frequently Asked Questions",
@@ -1175,7 +1175,7 @@ const en: typeof id = {
   },
   footer: {
     tagline:
-      "CV Al-Waliy Sejahtera, a trusted herbal manufacturer since 2014, now open for white-label (maklon) partnerships with your brand.",
+      "CV Al-Waliy Sejahtera, a trusted herbal manufacturer since 2011, now open for white-label (maklon) partnerships with your brand.",
     layananHeading: "Services",
     layananLinks: [
       { label: "Herbal Honey", href: "#products" },
