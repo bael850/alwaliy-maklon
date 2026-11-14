@@ -18,10 +18,17 @@ import CompanyProfileDownload from "./components/sections/CompanyProfileDownload
 import VisionMission from "./components/sections/VisionMission";
 import Team from "./components/sections/Team";
 import BeyondOffice from "./components/sections/BeyondOffice";
+import { isOn } from "./lib/content-status";
 import { LanguageProvider, useLanguage } from "./i18n/LanguageContext";
 
 function AppContent() {
   const { t } = useLanguage();
+  const certsVisible =
+    isOn("certBpom") ||
+    isOn("certCpotb") ||
+    isOn("certLegal") ||
+    isOn("certHalal");
+  const clientsVisible = isOn("testimonials") || isOn("partnerLogos");
 
   return (
     <>
@@ -31,22 +38,22 @@ function AppContent() {
       <Navbar />
       <main id="main-content">
         <Hero />
-        <WhoWeAre />
-        <Journey />
-        <WhyUs />
-        <Certifications />
-        <VisionMission />
-        <WhatWeDo />
-        <ProductTypes />
-        <Workflow />
-        <ClientTrust />
-        <Team />
-        <FacilityGallery />
-        <BeyondOffice />
+        {isOn("whoWeAre") && <WhoWeAre />}
+        {isOn("journeyYears") && <Journey />}
+        {isOn("whyUs") && <WhyUs />}
+        {certsVisible && <Certifications />}
+        {isOn("visionMission") && <VisionMission />}
+        {isOn("works") && <WhatWeDo />}
+        {isOn("productTypes") && <ProductTypes />}
+        {isOn("workflow") && <Workflow />}
+        {clientsVisible && <ClientTrust />}
+        {isOn("team") && <Team />}
+        {isOn("facilityGallery") && <FacilityGallery />}
+        {isOn("beyondOffice") && <BeyondOffice />}
         <PullQuote />
-        <Faq />
-        <CompanyProfileDownload />
-        <Cta />
+        {isOn("faq") && <Faq />}
+        {isOn("companyProfile") && <CompanyProfileDownload />}
+        {isOn("cta") && <Cta />}
       </main>
       <Footer />
       <FloatingWhatsApp />

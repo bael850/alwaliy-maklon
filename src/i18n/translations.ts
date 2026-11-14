@@ -15,9 +15,9 @@ const id = {
     slides: [
       {
         eyebrow: "Produksi Bersertifikat Halal MUI & BPOM",
-        heading: "Wujudkan Brand Herbal & Madu Anda Sendiri",
+        heading: "Wujudkan Brand Madu & Herbal Anda Sendiri",
         paragraph:
-          "Jasa maklon herbal dan madu dari produsen yang sudah berjalan sejak 2011. Formulasi, kemasan, sampai legalitas kami bantu, tanpa Anda perlu membangun pabrik sendiri.",
+          "Jasa maklon madu dan herbal dari produsen yang sudah berjalan sejak 2011. Formulasi, kemasan, sampai legalitas kami bantu, tanpa Anda perlu membangun pabrik sendiri.",
       },
       {
         eyebrow: "Private Label & Pengembangan Produk",
@@ -40,18 +40,19 @@ const id = {
     playAria: "Putar slideshow",
     ctaPrimary: "Konsultasi Gratis",
     ctaSecondary: "Lihat Layanan",
-    imageAlt: "Proses produksi herbal Al-Waliy",
+    imageAlt: "Proses produksi madu dan herbal Al-Waliy",
     waMessage:
-      "Assalamualaikum, saya mau konsultasi soal layanan maklon Al-Waliy...",
+      "Assalamualaikum, saya mau konsultasi soal layanan maklon Al-Waliy.",
   },
   whoWeAre: {
     eyebrow: "Siapa Kami",
-    heading: "Produsen Herbal Berpengalaman, Kini Terbuka untuk Brand Anda",
+    heading:
+      "Produsen Madu & Herbal Berpengalaman, Kini Terbuka untuk Brand Anda",
     paragraphBefore:
       "CV Al-Waliy Sejahtera memproduksi madu herbal dan sari kurma premium sejak 2011. Kami melayani konsumen akhir, reseller, dan mitra maklon di seluruh Indonesia, dan kini membuka layanan ",
     paragraphStrong: "maklon",
     paragraphAfter:
-      ", memproduksi herbal sesuai formulasi dan kebutuhan brand Anda, dengan standar kualitas yang sama seperti produk kami sendiri.",
+      ", memproduksi madu dan herbal sesuai formulasi dan kebutuhan brand Anda, dengan standar kualitas yang sama seperti produk kami sendiri.",
     linkText: "Lihat cara kerja sama kami",
     photoLabel: "Gedung Produksi",
     stats: [
@@ -306,7 +307,7 @@ const id = {
         category: "Peralatan",
         title: "Mesin Mixing",
         description:
-          "Mesin pencampur untuk mengolah dan menghomogenkan bahan baku herbal maupun madu sebelum masuk tahap pengisian, memastikan komposisi tiap batch konsisten.",
+          "Mesin pencampur untuk mengolah dan menghomogenkan bahan baku madu maupun herbal sebelum masuk tahap pengisian, memastikan komposisi tiap batch konsisten.",
         specs: [
           { label: "Kapasitas", value: "Detail akan diperbarui" },
           { label: "Fungsi", value: "Homogenisasi bahan baku" },
@@ -348,7 +349,7 @@ const id = {
         category: "Standar Kerja",
         title: "Pakaian & APD Produksi",
         description:
-          "Seluruh staf produksi menggunakan pakaian dan alat pelindung diri (APD) sesuai standar higienitas produksi herbal.",
+          "Seluruh staf produksi menggunakan pakaian dan alat pelindung diri (APD) sesuai standar higienitas produksi madu dan herbal.",
         specs: [
           {
             label: "Kelengkapan",
@@ -538,7 +539,7 @@ const id = {
   },
   cta: {
     eyebrow: "Hubungi Kami",
-    heading: "Siap Punya Produk Herbal dengan Brand Sendiri?",
+    heading: "Siap Punya Produk Madu & Herbal dengan Brand Sendiri?",
     paragraph:
       "Tanya dulu saja. Kami bantu mulai dari info produk, formulasi, sampai rencana produksi maklon.",
     waButtonLabel: "Konsultasi Gratis via WhatsApp",
@@ -549,7 +550,7 @@ const id = {
     whatsappLabel: "WhatsApp",
     websiteLabel: "Website Utama",
     waMessage:
-      "Assalamualaikum, saya mau tanya terkait layanan maklon Al-Waliy...",
+      "Assalamualaikum, saya mau tanya terkait layanan maklon Al-Waliy.",
   },
   companyProfileDownload: {
     heading: "Mau Lihat Profil Lengkap Kami?",
@@ -568,16 +569,16 @@ const id = {
     openMenuAria: "Buka menu",
     closeMenuAria: "Tutup menu",
     waMessage:
-      "Assalamualaikum, saya mau tanya terkait layanan maklon Al-Waliy...",
+      "Assalamualaikum, saya mau tanya terkait layanan maklon Al-Waliy.",
   },
   floatingWhatsApp: {
     ariaLabel: "Chat via WhatsApp",
     waMessage:
-      "Assalamualaikum, saya mau tanya terkait layanan maklon Al-Waliy...",
+      "Assalamualaikum, saya mau tanya terkait layanan maklon Al-Waliy.",
   },
   footer: {
     tagline:
-      "CV Al-Waliy Sejahtera, produsen herbal terpercaya sejak 2011, kini membuka layanan maklon untuk brand Anda.",
+      "CV Al-Waliy Sejahtera, produsen madu dan herbal terpercaya sejak 2011, kini membuka layanan maklon untuk brand Anda.",
     layananHeading: "Layanan",
     layananLinks: [
       { label: "Madu Herbal", href: "#products" },
@@ -605,7 +606,7 @@ const id = {
     ],
     lokasiHeading: "Lokasi Kami",
     alamatLengkap: "Sumberjaya, Tambun Selatan, Kab. Bekasi 17510",
-    copyright: "© 2026 CV Al-Waliy Sejahtera. All rights reserved.",
+    copyright: "© 2026 CV Al-Waliy Sejahtera. Seluruh hak cipta dilindungi.",
   },
 };
 
@@ -618,9 +619,9 @@ const en: typeof id = {
     slides: [
       {
         eyebrow: "Halal MUI & BPOM Certified Production",
-        heading: "Bring Your Own Herbal & Honey Brand to Life",
+        heading: "Bring Your Own Honey & Herbal Brand to Life",
         paragraph:
-          "White-label (maklon) herbal and honey production from an experienced manufacturer since 2011, from formulation and packaging to legal registration, without needing to build your own factory.",
+          "White-label (maklon) honey and herbal production from an experienced manufacturer since 2011, from formulation and packaging to legal registration, without needing to build your own factory.",
       },
       {
         eyebrow: "Private Label & Product Development",
@@ -643,18 +644,18 @@ const en: typeof id = {
     playAria: "Play slideshow",
     ctaPrimary: "Free Consultation",
     ctaSecondary: "See Services",
-    imageAlt: "Al-Waliy herbal production process",
+    imageAlt: "Al-Waliy honey and herbal production process",
     waMessage:
-      "Hello, I'd like to consult about Al-Waliy's white-label (maklon) manufacturing service...",
+      "Hello, I'd like to consult about Al-Waliy's white-label (maklon) manufacturing service.",
   },
   whoWeAre: {
     eyebrow: "Who We Are",
-    heading: "An Experienced Herbal Producer, Now Open to Your Brand",
+    heading: "An Experienced Honey & Herbal Producer, Now Open to Your Brand",
     paragraphBefore:
       "CV Al-Waliy Sejahtera has produced herbal honey and premium date syrup since 2011. We serve end consumers, resellers, and maklon partners across Indonesia, and now offer ",
     paragraphStrong: "maklon",
     paragraphAfter:
-      " (white-label) manufacturing, producing herbal products to your formulation and brand needs, to the same quality standards as our own products.",
+      " (white-label) manufacturing, producing honey and herbal products to your formulation and brand needs, to the same quality standards as our own products.",
     linkText: "See how we work together",
     photoLabel: "Production Building",
     stats: [
@@ -910,7 +911,7 @@ const en: typeof id = {
         category: "Equipment",
         title: "Mixing Machine",
         description:
-          "A mixer used to process and homogenize herbal or honey raw materials before the filling stage, keeping each batch's composition consistent.",
+          "A mixer used to process and homogenize honey or herbal raw materials before the filling stage, keeping each batch's composition consistent.",
         specs: [
           { label: "Capacity", value: "Details to be updated" },
           { label: "Function", value: "Raw material homogenization" },
@@ -952,7 +953,7 @@ const en: typeof id = {
         category: "Work Standards",
         title: "Production Attire & PPE",
         description:
-          "All production staff wear clothing and personal protective equipment (PPE) that meet herbal production hygiene standards.",
+          "All production staff wear clothing and personal protective equipment (PPE) that meet honey and herbal production hygiene standards.",
         specs: [{ label: "Includes", value: "Mask, gloves, head cover" }],
       },
       {
@@ -1136,7 +1137,7 @@ const en: typeof id = {
   },
   cta: {
     eyebrow: "Contact Us",
-    heading: "Ready to Launch Your Own Herbal Brand?",
+    heading: "Ready to Launch Your Own Honey & Herbal Brand?",
     paragraph:
       "Ask us anything. We can help with product info, formulation, and planning your maklon production.",
     waButtonLabel: "Free Consultation via WhatsApp",
@@ -1147,7 +1148,7 @@ const en: typeof id = {
     whatsappLabel: "WhatsApp",
     websiteLabel: "Main Website",
     waMessage:
-      "Hello, I'd like to ask about Al-Waliy's maklon manufacturing service...",
+      "Hello, I'd like to ask about Al-Waliy's maklon manufacturing service.",
   },
   companyProfileDownload: {
     heading: "Want the Full Profile?",
@@ -1166,16 +1167,16 @@ const en: typeof id = {
     openMenuAria: "Open menu",
     closeMenuAria: "Close menu",
     waMessage:
-      "Hello, I'd like to ask about Al-Waliy's maklon manufacturing service...",
+      "Hello, I'd like to ask about Al-Waliy's maklon manufacturing service.",
   },
   floatingWhatsApp: {
     ariaLabel: "Chat via WhatsApp",
     waMessage:
-      "Hello, I'd like to ask about Al-Waliy's maklon manufacturing service...",
+      "Hello, I'd like to ask about Al-Waliy's maklon manufacturing service.",
   },
   footer: {
     tagline:
-      "CV Al-Waliy Sejahtera, a trusted herbal manufacturer since 2011, now open for white-label (maklon) partnerships with your brand.",
+      "CV Al-Waliy Sejahtera, a trusted honey and herbal manufacturer since 2011, now open for white-label (maklon) partnerships with your brand.",
     layananHeading: "Services",
     layananLinks: [
       { label: "Herbal Honey", href: "#products" },

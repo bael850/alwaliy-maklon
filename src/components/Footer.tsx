@@ -1,5 +1,7 @@
 import { MessageCircle } from "lucide-react";
 import { useLanguage } from "../i18n/LanguageContext";
+import { waLink } from "../lib/contact";
+import { isOn } from "../lib/content-status";
 
 function InstagramIcon({ size = 16 }: { size?: number }) {
   return (
@@ -37,8 +39,7 @@ function FacebookIcon({ size = 16 }: { size?: number }) {
   );
 }
 
-const WA_NUMBER = "6282110689827";
-const WA_HREF = `https://wa.me/${WA_NUMBER}`;
+const WA_HREF = waLink();
 
 export default function Footer() {
   const { t } = useLanguage();
@@ -152,17 +153,18 @@ export default function Footer() {
           <p className="text-sm text-cream/80">{t.footer.alamatLengkap}</p>
         </div>
 
-        {/* Cert badges */}
-        <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-cream/10 pt-8 text-xs font-semibold uppercase tracking-wide text-cream/50">
-          <span>Halal MUI</span>
-          <span>BPOM RI</span>
-          <span>CPOTB</span>
-        </div>
+        {/* Cert badges — tampil setelah nomor BPOM/CPOTB final */}
+        {isOn("footerCertBadges") && (
+          <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-cream/10 pt-8 text-xs font-semibold uppercase tracking-wide text-cream/50">
+            <span>Halal MUI</span>
+            <span>BPOM RI</span>
+            <span>CPOTB</span>
+          </div>
+        )}
 
         {/* Copyright */}
         <div className="mt-8 flex flex-col gap-2 text-xs text-cream/55 sm:flex-row sm:items-center sm:justify-between">
           <p>{t.footer.copyright}</p>
-          <p className="hidden sm:block">{t.footer.alamatLengkap}</p>
         </div>
       </div>
     </footer>

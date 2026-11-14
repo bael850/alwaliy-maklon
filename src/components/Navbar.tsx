@@ -4,14 +4,22 @@ import logoImage from "../assets/logo.png";
 import { useLanguage } from "../i18n/LanguageContext";
 import LanguageSwitch from "../i18n/LanguageSwitch";
 
-const WA_NUMBER = "6282110689827";
+import { waLink } from "../lib/contact";
+import { setScrollLocked } from "../lib/lenis";
+import { isOn } from "../lib/content-status";
 
 export default function Navbar() {
   const { t } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const waHref = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(t.navbar.waMessage)}`;
+  const waHref = waLink(t.navbar.waMessage);
+
+  // Link navbar hanya muncul kalau section tujuannya tampil.
+  const clientsVisible = isOn("testimonials") || isOn("partnerLogos");
+  const navLinks = t.navbar.navLinks.filter(
+    (link) => link.href !== "#clients" || clientsVisible,
+  );
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -22,10 +30,8 @@ export default function Navbar() {
 
   // Lock body scroll saat mobile menu terbuka
   useEffect(() => {
-    document.body.style.overflow = menuOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
+    setScrollLocked(menuOpen);
+    return () => setScrollLocked(false);
   }, [menuOpen]);
 
   const handleLinkClick = () => setMenuOpen(false);
@@ -91,7 +97,7 @@ export default function Navbar() {
 
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-8">
-            {t.navbar.navLinks.map((link) => (
+            {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
@@ -150,7 +156,7 @@ export default function Navbar() {
           aria-hidden={!menuOpen}
           className="flex flex-col gap-1 px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-2"
         >
-          {t.navbar.navLinks.map((link) => (
+          {navLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}

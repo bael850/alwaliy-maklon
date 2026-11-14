@@ -15,6 +15,19 @@ ScrollTrigger.config({ ignoreMobileResize: true });
  *
  * Return function cleanup — panggil di useEffect cleanup React.
  */
+let instance: Lenis | null = null;
+
+/**
+ * Kunci / lepas scroll halaman (dipakai menu mobile). Selain overflow:hidden
+ * di body, Lenis juga dihentikan supaya halaman tidak ikut bergeser di
+ * belakang menu.
+ */
+export function setScrollLocked(locked: boolean): void {
+  if (locked) instance?.stop();
+  else instance?.start();
+  document.body.style.overflow = locked ? "hidden" : "";
+}
+
 export function initSmoothScroll(): () => void {
   const prefersReducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
@@ -29,6 +42,7 @@ export function initSmoothScroll(): () => void {
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
   });
 
+  instance = lenis;
   lenis.on("scroll", ScrollTrigger.update);
 
   const tickerFn = (time: number) => {
@@ -40,5 +54,6 @@ export function initSmoothScroll(): () => void {
   return () => {
     gsap.ticker.remove(tickerFn);
     lenis.destroy();
+    instance = null;
   };
 }

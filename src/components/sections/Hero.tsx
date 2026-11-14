@@ -18,10 +18,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import heroImageWebp from "../../assets/hero.webp";
 import heroImagePng from "../../assets/hero.png";
 import { useLanguage } from "../../i18n/LanguageContext";
-
-const WA_NUMBER = "6282110689827";
-const waHref = (message: string) =>
-  `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(message)}`;
+import { waLink } from "../../lib/contact";
+import { isOn } from "../../lib/content-status";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -32,6 +30,10 @@ const SWIPE_THRESHOLD = 50;
 
 /**
  * Gambar tiap slide. URUTAN HARUS 1:1 dengan t.hero.slides di translations.
+
+ * Selama contentStatus.heroMultiSlide = false, hanya slide pertama yang
+ * tampil dan kontrol slider disembunyikan. Set true kalau foto per slide
+ * sudah ada.
  * TODO: ganti `webp`/`png` dengan foto asli per slide (taruh di src/assets,
  * lalu import di atas). Sementara semua pakai hero bawaan dengan
  * object-position berbeda supaya transisinya tetap kelihatan.
@@ -44,7 +46,9 @@ const SLIDE_IMAGES = [
 
 export default function Hero() {
   const { t } = useLanguage();
-  const slides = t.hero.slides;
+  const multi = isOn("heroMultiSlide");
+  const slides = multi ? t.hero.slides : t.hero.slides.slice(0, 1);
+  const slideImages = multi ? SLIDE_IMAGES : SLIDE_IMAGES.slice(0, 1);
   const total = slides.length;
 
   const sectionRef = useRef<HTMLElement>(null);
@@ -60,7 +64,7 @@ export default function Hero() {
   const [reducedMotion, setReducedMotion] = useState(false);
 
   const paused = userPaused || hovered || focused || tabHidden;
-  const autoplay = !reducedMotion && !userPaused;
+  const autoplay = multi && !reducedMotion && !userPaused;
 
   const goTo = useCallback(
     (index: number) => setActive(((index % total) + total) % total),
@@ -168,9 +172,9 @@ export default function Hero() {
       aria-roledescription="carousel"
       aria-label={t.hero.carouselAria}
       className="relative flex min-h-[100svh] items-end overflow-hidden md:min-h-dvh"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onFocus={() => setFocused(true)}
+      onPointerEnter={(e) => e.pointerType === "mouse" && setHovered(true)}
+      onPointerLeave={(e) => e.pointerType === "mouse" && setHovered(false)}
+      onFocus={(e) => e.target.matches(":focus-visible") && setFocused(true)}
       onBlur={() => setFocused(false)}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
@@ -179,7 +183,7 @@ export default function Hero() {
       {/* Background — semua slide ditumpuk, yang aktif opacity 1 (crossfade).
           Gambar non-aktif tetap lazy supaya nggak berebut bandwidth dengan LCP. */}
       <div ref={bgRef} className="absolute inset-0 h-[116%] w-full">
-        {SLIDE_IMAGES.map((img, i) => (
+        {slideImages.map((img, i) => (
           <picture
             key={i}
             className={[
@@ -254,7 +258,7 @@ export default function Hero() {
 
           <div className="mt-8 flex flex-col items-stretch gap-4 sm:flex-row sm:flex-wrap sm:items-center">
             <a
-              href={waHref(t.hero.waMessage)}
+              href={waLink(t.hero.waMessage)}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 rounded-[4px] border-[1.5px] border-cream bg-cream/10 px-6 py-3.5 text-sm font-semibold text-cream backdrop-blur-[2px] transition-colors hover:bg-cream hover:text-forest active:bg-cream active:text-forest sm:bg-transparent sm:backdrop-blur-none"
@@ -263,7 +267,7 @@ export default function Hero() {
               <ArrowRight size={16} strokeWidth={2.5} />
             </a>
             <a
-              href="#what"
+              href="#products"
               className="inline-flex items-center justify-center gap-2 py-2 text-sm font-semibold text-cream/90 underline underline-offset-4 transition-colors hover:text-gold-light sm:justify-start sm:py-0"
             >
               {t.hero.ctaSecondary}
@@ -274,75 +278,79 @@ export default function Hero() {
 
       {/* Kontrol slider — progress bar per slide (klik untuk loncat),
           counter, prev/next, dan tombol pause (WCAG 2.2.2). */}
-      <div className="absolute inset-x-0 bottom-0 z-20">
-        <div className="mx-auto flex w-full max-w-6xl items-center gap-4 px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] md:gap-6 md:px-8 md:pb-10">
-          <div className="flex flex-1 items-center gap-2">
-            {slides.map((_, i) => {
-              const isActive = i === active;
-              const isDone = i < active;
-              return (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => goTo(i)}
-                  aria-label={`${t.hero.goToSlideAria} ${i + 1}`}
-                  aria-current={isActive}
-                  className="group relative h-6 flex-1 md:max-w-[120px]"
-                >
-                  <span className="absolute inset-x-0 top-1/2 block h-[3px] -translate-y-1/2 overflow-hidden rounded-full bg-cream/25 transition-[height] duration-200 group-hover:h-[5px]">
-                    <span
-                      key={isActive ? `run-${active}` : `idle-${i}`}
-                      className="block h-full origin-left rounded-full bg-gold"
-                      style={
-                        isActive && autoplay
-                          ? {
-                              animation: `heroProgress ${SLIDE_DURATION}ms linear forwards`,
-                              animationPlayState: paused ? "paused" : "running",
-                            }
-                          : {
-                              transform: `scaleX(${isActive || isDone ? 1 : 0})`,
-                            }
-                      }
-                      onAnimationEnd={isActive && autoplay ? next : undefined}
-                    />
-                  </span>
-                </button>
-              );
-            })}
-          </div>
+      {multi && (
+        <div className="absolute inset-x-0 bottom-0 z-20">
+          <div className="mx-auto flex w-full max-w-6xl items-center gap-4 px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] md:gap-6 md:px-8 md:pb-10">
+            <div className="flex flex-1 items-center gap-2">
+              {slides.map((_, i) => {
+                const isActive = i === active;
+                const isDone = i < active;
+                return (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => goTo(i)}
+                    aria-label={`${t.hero.goToSlideAria} ${i + 1}`}
+                    aria-current={isActive}
+                    className="group relative h-6 flex-1 md:max-w-[120px]"
+                  >
+                    <span className="absolute inset-x-0 top-1/2 block h-[3px] -translate-y-1/2 overflow-hidden rounded-full bg-cream/25 transition-[height] duration-200 group-hover:h-[5px]">
+                      <span
+                        key={isActive ? `run-${active}` : `idle-${i}`}
+                        className="block h-full origin-left rounded-full bg-gold"
+                        style={
+                          isActive && autoplay
+                            ? {
+                                animation: `heroProgress ${SLIDE_DURATION}ms linear forwards`,
+                                animationPlayState: paused
+                                  ? "paused"
+                                  : "running",
+                              }
+                            : {
+                                transform: `scaleX(${isActive || isDone ? 1 : 0})`,
+                              }
+                        }
+                        onAnimationEnd={isActive && autoplay ? next : undefined}
+                      />
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
 
-          <div className="flex items-center gap-1 text-cream">
-            <button
-              type="button"
-              onClick={prev}
-              aria-label={t.hero.prevAria}
-              className="inline-flex h-11 w-11 items-center justify-center rounded-[4px] transition-colors hover:bg-cream/15 active:bg-cream/20"
-            >
-              <ChevronLeft size={20} />
-            </button>
-            <button
-              type="button"
-              onClick={() => setUserPaused((v) => !v)}
-              aria-label={userPaused ? t.hero.playAria : t.hero.pauseAria}
-              className="inline-flex h-11 w-11 items-center justify-center rounded-[4px] transition-colors hover:bg-cream/15 active:bg-cream/20"
-            >
-              {userPaused || reducedMotion ? (
-                <Play size={18} />
-              ) : (
-                <Pause size={18} />
-              )}
-            </button>
-            <button
-              type="button"
-              onClick={next}
-              aria-label={t.hero.nextAria}
-              className="inline-flex h-11 w-11 items-center justify-center rounded-[4px] transition-colors hover:bg-cream/15 active:bg-cream/20"
-            >
-              <ChevronRight size={20} />
-            </button>
+            <div className="flex items-center gap-1 text-cream">
+              <button
+                type="button"
+                onClick={prev}
+                aria-label={t.hero.prevAria}
+                className="inline-flex h-11 w-11 items-center justify-center rounded-[4px] transition-colors hover:bg-cream/15 active:bg-cream/20"
+              >
+                <ChevronLeft size={20} />
+              </button>
+              <button
+                type="button"
+                onClick={() => setUserPaused((v) => !v)}
+                aria-label={userPaused ? t.hero.playAria : t.hero.pauseAria}
+                className="inline-flex h-11 w-11 items-center justify-center rounded-[4px] transition-colors hover:bg-cream/15 active:bg-cream/20"
+              >
+                {userPaused || reducedMotion ? (
+                  <Play size={18} />
+                ) : (
+                  <Pause size={18} />
+                )}
+              </button>
+              <button
+                type="button"
+                onClick={next}
+                aria-label={t.hero.nextAria}
+                className="inline-flex h-11 w-11 items-center justify-center rounded-[4px] transition-colors hover:bg-cream/15 active:bg-cream/20"
+              >
+                <ChevronRight size={20} />
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </section>
   );
 }

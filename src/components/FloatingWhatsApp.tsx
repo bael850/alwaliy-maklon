@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { MessageCircle } from "lucide-react";
 import { useLanguage } from "../i18n/LanguageContext";
-
-const WA_NUMBER = "6282110689827";
+import { waLink } from "../lib/contact";
 
 /**
  * Di HP tombol ini disembunyikan selama hero (sudah punya CTA sendiri, dan
@@ -12,7 +11,7 @@ const WA_NUMBER = "6282110689827";
 export default function FloatingWhatsApp() {
   const { t } = useLanguage();
   const [show, setShow] = useState(false);
-  const waHref = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(t.floatingWhatsApp.waMessage)}`;
+  const waHref = waLink(t.floatingWhatsApp.waMessage);
 
   useEffect(() => {
     const hero = document.getElementById("hero");
