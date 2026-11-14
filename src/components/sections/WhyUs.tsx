@@ -35,7 +35,11 @@ export default function WhyUs() {
       <div className="mx-auto max-w-6xl px-5 md:px-8">
         <Reveal>
           <div className="mb-12 max-w-2xl md:mb-16">
-            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold">
+            <p className="mb-3 flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold">
+              <span
+                aria-hidden="true"
+                className="rule-grow h-px w-10 bg-gold"
+              />
               {t.whyUs.eyebrow}
             </p>
             <h2 className="font-heading text-3xl font-extrabold leading-tight text-forest md:text-5xl">
@@ -59,9 +63,13 @@ export default function WhyUs() {
               <li key={pillar.word} data-i={i}>
                 <Reveal delay={i * 0.1}>
                   <div
-                    className="grid items-center gap-x-10 border-t border-forest/15 py-5 md:grid-cols-12 md:py-9"
+                    className="relative grid items-center gap-x-10 py-5 md:grid-cols-12 md:py-9"
                     onMouseEnter={() => setActive(i)}
                   >
+                    <span
+                      aria-hidden="true"
+                      className="rule-grow absolute inset-x-0 top-0 h-px bg-forest/15"
+                    />
                     <button
                       type="button"
                       aria-expanded={isActive}

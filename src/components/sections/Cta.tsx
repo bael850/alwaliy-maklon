@@ -1,4 +1,5 @@
 import { MapPin, MessageCircle, Globe, FileDown, Scissors } from "lucide-react";
+import Reveal from "../Reveal";
 import { useLanguage } from "../../i18n/LanguageContext";
 import { waLink, WA_DISPLAY } from "../../lib/contact";
 import { isOn } from "../../lib/content-status";
@@ -13,8 +14,12 @@ export default function Cta() {
     <section id="contact" className="bg-forest py-16 md:py-28">
       <div className="mx-auto max-w-6xl px-5 md:px-8">
         <div className="grid gap-10 md:grid-cols-2 md:items-center md:gap-16">
-          <div>
-            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold-light">
+          <Reveal>
+            <p className="mb-3 flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold-light">
+              <span
+                aria-hidden="true"
+                className="rule-grow h-px w-10 bg-gold-light"
+              />
               {t.cta.eyebrow}
             </p>
             <h2 className="font-heading text-3xl font-extrabold leading-tight text-cream md:text-4xl">
@@ -43,13 +48,17 @@ export default function Cta() {
                 </a>
               )}
             </div>
-          </div>
+          </Reveal>
 
           {/* Kartu kontak bergaya "kupon" — garis gunting putus-putus di
               atas seolah bisa dipotong & disimpan, sesuai fungsi panel ini
               (info kontak yang mau diinget/disimpan pengunjung). Beda dari
               motif nota/kwitansi . */}
-          <div className="rounded-[4px] border border-cream/15 bg-forest-light/30 p-6 md:p-8">
+          <Reveal
+            variant="right"
+            delay={0.15}
+            className="rounded-[4px] border border-cream/15 bg-forest-light/30 p-6 md:p-8"
+          >
             <div className="mb-5 flex items-center gap-2 border-b border-dashed border-cream/25 pb-4 text-cream/45">
               <Scissors size={13} strokeWidth={2} className="shrink-0" />
               <span className="text-[10.5px] font-semibold uppercase tracking-[0.14em]">
@@ -112,7 +121,7 @@ export default function Cta() {
                 </div>
               </div>
             </div>
-          </div>
+          </Reveal>
         </div>
       </div>
     </section>

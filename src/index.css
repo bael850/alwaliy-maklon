@@ -148,32 +148,165 @@ h4,
   }
 }
 
-/* === Reveal saat scroll: hanya opacity + transform === */
+/* === Reveal saat scroll: opacity + transform + clip-path (semua murah di GPU) === */
+:root {
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-soft: cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
 .reveal {
   opacity: 0;
   transform: translate3d(0, var(--reveal-y, 28px), 0);
+  will-change: opacity, transform;
   transition:
-    opacity 0.8s cubic-bezier(0.215, 0.61, 0.355, 1) var(--reveal-delay, 0s),
-    transform 0.8s cubic-bezier(0.215, 0.61, 0.355, 1) var(--reveal-delay, 0s);
+    opacity 0.9s var(--ease-out-soft) var(--reveal-delay, 0s),
+    transform 1s var(--ease-out-expo) var(--reveal-delay, 0s);
 }
 .reveal.is-in {
   opacity: 1;
   transform: none;
+  will-change: auto;
 }
+
+/* Varian arah / gaya */
+.reveal-fade {
+  transform: none;
+}
+.reveal-left {
+  transform: translate3d(-36px, 0, 0);
+}
+.reveal-right {
+  transform: translate3d(36px, 0, 0);
+}
+.reveal-scale {
+  transform: scale(0.96);
+}
+.reveal-left.is-in,
+.reveal-right.is-in,
+.reveal-scale.is-in {
+  transform: none;
+}
+
+/* Tirai foto: terbuka dari bawah ke atas, isinya mengecil pelan */
+.reveal-mask {
+  opacity: 1;
+  transform: none;
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 1.2s var(--ease-out-expo) var(--reveal-delay, 0s);
+}
+.reveal-mask.is-in {
+  clip-path: inset(0 0 0 0);
+}
+.reveal-mask img {
+  transform: scale(1.15);
+  transition: transform 1.6s var(--ease-out-expo) var(--reveal-delay, 0s);
+}
+.reveal-mask.is-in img {
+  transform: scale(1);
+}
+
+/* Anak muncul berurutan */
+.reveal-stagger {
+  opacity: 1;
+  transform: none;
+}
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translate3d(0, 22px, 0);
+  transition:
+    opacity 0.8s var(--ease-out-soft)
+      calc(var(--reveal-delay, 0s) + var(--i, 0) * 0.08s),
+    transform 0.9s var(--ease-out-expo)
+      calc(var(--reveal-delay, 0s) + var(--i, 0) * 0.08s);
+}
+.reveal-stagger.is-in > * {
+  opacity: 1;
+  transform: none;
+}
+.reveal-stagger > :nth-child(2) {
+  --i: 1;
+}
+.reveal-stagger > :nth-child(3) {
+  --i: 2;
+}
+.reveal-stagger > :nth-child(4) {
+  --i: 3;
+}
+.reveal-stagger > :nth-child(5) {
+  --i: 4;
+}
+.reveal-stagger > :nth-child(6) {
+  --i: 5;
+}
+.reveal-stagger > :nth-child(7) {
+  --i: 6;
+}
+.reveal-stagger > :nth-child(8) {
+  --i: 7;
+}
+
+/* Judul (h2) di dalam Reveal: terbuka dari bawah seperti tirai, otomatis
+   untuk semua section tanpa ubah komponennya. */
+.reveal:not(.reveal-stagger) h2 {
+  clip-path: inset(100% 0 0 0);
+  transform: translate3d(0, 0.45em, 0);
+  transition:
+    clip-path 1s var(--ease-out-expo) calc(var(--reveal-delay, 0s) + 0.12s),
+    transform 1s var(--ease-out-expo) calc(var(--reveal-delay, 0s) + 0.12s);
+}
+.reveal.is-in:not(.reveal-stagger) h2 {
+  /* inset negatif supaya huruf yang menjulur (g, y, p) tidak terpotong */
+  clip-path: inset(-20% -5% -20% -5%);
+  transform: none;
+}
+
+/* Garis emas yang tumbuh: tambahkan class "rule-grow" ke elemen garis di
+   dalam Reveal (mis. <span class="rule-grow h-px w-10 bg-gold" />) */
+.rule-grow {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.9s var(--ease-out-expo)
+    calc(var(--reveal-delay, 0s) + 0.25s);
+}
+.is-in .rule-grow {
+  transform: scaleX(1);
+}
+
 /* Di HP: geseran lebih pendek & durasi lebih singkat supaya terasa
    responsif saat di-scroll jempol, bukan menunggu animasi selesai. */
 @media (max-width: 767px) {
   .reveal {
     transform: translate3d(0, min(var(--reveal-y, 28px), 18px), 0);
-    transition-duration: 0.6s;
+    transition-duration: 0.6s, 0.7s;
+  }
+  .reveal-fade {
+    transform: none;
+  }
+  .reveal-left,
+  .reveal-right {
+    transform: translate3d(0, 18px, 0);
   }
   .reveal.is-in {
     transform: none;
   }
+  .reveal-mask {
+    transform: none;
+  }
 }
+
 @media (prefers-reduced-motion: reduce) {
-  .reveal {
+  .reveal,
+  .reveal-stagger > *,
+  .reveal:not(.reveal-stagger) h2,
+  .rule-grow {
     opacity: 1;
+    transform: none;
+    clip-path: none;
+    transition: none;
+  }
+  .reveal-mask,
+  .reveal-mask img {
+    clip-path: none;
     transform: none;
     transition: none;
   }

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
+import Reveal from "../Reveal";
 import { useLanguage } from "../../i18n/LanguageContext";
 
 export default function Faq() {
@@ -9,16 +10,21 @@ export default function Faq() {
   return (
     <section id="faq" className="bg-cream py-16 md:py-28">
       <div className="mx-auto max-w-3xl px-5 md:px-8">
-        <div className="mb-12">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold">
+        <Reveal className="mb-12">
+          <p className="mb-3 flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold">
+            <span aria-hidden="true" className="rule-grow h-px w-10 bg-gold" />
             {t.faq.eyebrow}
           </p>
           <h2 className="font-heading text-3xl font-extrabold leading-tight text-forest md:text-4xl">
             {t.faq.heading}
           </h2>
-        </div>
+        </Reveal>
 
-        <div className="divide-y divide-forest/10 border-y border-forest/10">
+        <Reveal
+          stagger
+          delay={0.1}
+          className="divide-y divide-forest/10 border-y border-forest/10"
+        >
           {t.faq.faqs.map((item, i) => {
             const isOpen = openIndex === i;
             return (
@@ -75,7 +81,7 @@ export default function Faq() {
               </div>
             );
           })}
-        </div>
+        </Reveal>
       </div>
     </section>
   );

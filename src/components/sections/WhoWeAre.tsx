@@ -59,7 +59,11 @@ export default function WhoWeAre() {
         <div className="grid gap-10 md:grid-cols-12 md:items-center md:gap-16">
           {/* Narasi */}
           <Reveal className={textCol}>
-            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold">
+            <p className="mb-3 flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold">
+              <span
+                aria-hidden="true"
+                className="rule-grow h-px w-10 bg-gold"
+              />
               {t.whoWeAre.eyebrow}
             </p>
             <h2 className="font-heading text-3xl font-extrabold leading-[1.1] text-forest md:text-5xl">
@@ -86,6 +90,7 @@ export default function WhoWeAre() {
               PLACEHOLDER: taruh file di public/images/about/gedung.(webp|jpg|png) */}
           {showPhoto && (
             <Reveal
+              variant="fade"
               delay={0.1}
               className="order-first md:order-none md:col-span-5"
             >
@@ -94,7 +99,11 @@ export default function WhoWeAre() {
                   aria-hidden="true"
                   className="absolute -bottom-4 -right-4 h-full w-full rounded-[4px] border-2 border-gold/60"
                 />
-                <div className="relative aspect-[4/3] overflow-hidden rounded-[4px] bg-forest/5 md:aspect-[4/5]">
+                <Reveal
+                  variant="mask"
+                  delay={0.2}
+                  className="relative aspect-[4/3] overflow-hidden rounded-[4px] bg-forest/5 md:aspect-[4/5]"
+                >
                   <SmartImage
                     basePath="/images/about/gedung"
                     alt={t.whoWeAre.photoLabel}
@@ -112,7 +121,7 @@ export default function WhoWeAre() {
                       </div>
                     }
                   />
-                </div>
+                </Reveal>
               </div>
             </Reveal>
           )}

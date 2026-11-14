@@ -133,7 +133,11 @@ function WhatWeDoStage({ works }: { works: AvailableWork[] }) {
         <Reveal>
           <div className="grid gap-6 md:grid-cols-12 md:items-end">
             <div className="md:col-span-7">
-              <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold-light">
+              <p className="mb-3 flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold-light">
+                <span
+                  aria-hidden="true"
+                  className="rule-grow h-px w-10 bg-gold-light"
+                />
                 {t.whatWeDo.eyebrow}
               </p>
               <h2 className="font-heading text-3xl font-extrabold leading-[1.1] text-cream md:text-5xl">

@@ -54,6 +54,8 @@ export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const bgRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const bgInnerRef = useRef<HTMLDivElement>(null);
+  const shadeRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef<number | null>(null);
 
   const [active, setActive] = useState(0);
@@ -111,16 +113,74 @@ export default function Hero() {
       return;
     }
     const ctx = gsap.context(() => {
-      gsap.from(el.children, {
-        opacity: 0,
-        y: 24,
-        duration: 0.9,
-        ease: "power3.out",
-        stagger: 0.14,
-        delay: 0.2,
-      });
+      const tl = gsap.timeline({ delay: 0.2 });
+      // Judul slide pertama terbuka dari bawah seperti tirai.
+      const h1 = el.querySelector("h1");
+      if (h1) {
+        tl.from(
+          h1,
+          {
+            yPercent: 45,
+            clipPath: "inset(0 0 100% 0)",
+            duration: 1.1,
+            ease: "power4.out",
+            clearProps: "clipPath,transform",
+          },
+          0.1,
+        );
+      }
+      tl.from(
+        el.children,
+        {
+          opacity: 0,
+          y: 24,
+          duration: 0.9,
+          ease: "power3.out",
+          stagger: 0.14,
+        },
+        0,
+      );
     }, el);
     return () => ctx.revert();
+  }, []);
+
+  // Foto perlahan "menarik napas" saat dibuka (scale turun), dan di desktop
+  // bergeser sangat halus mengikuti mouse. Pakai wrapper dalam supaya tidak
+  // bentrok dengan parallax scroll di wrapper luar.
+  useEffect(() => {
+    const inner = bgInnerRef.current;
+    if (!inner) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        inner,
+        { scale: 1.14 },
+        { scale: 1.06, duration: 2.6, ease: "power3.out" },
+      );
+    }, inner);
+
+    let onMove: ((e: PointerEvent) => void) | null = null;
+    const finePointer = window.matchMedia("(pointer: fine)").matches;
+    if (finePointer) {
+      const xTo = gsap.quickTo(inner, "x", {
+        duration: 1.2,
+        ease: "power3.out",
+      });
+      const yTo = gsap.quickTo(inner, "y", {
+        duration: 1.2,
+        ease: "power3.out",
+      });
+      onMove = (e: PointerEvent) => {
+        xTo((e.clientX / window.innerWidth - 0.5) * -18);
+        yTo((e.clientY / window.innerHeight - 0.5) * -12);
+      };
+      window.addEventListener("pointermove", onMove, { passive: true });
+    }
+    return () => {
+      if (onMove) window.removeEventListener("pointermove", onMove);
+      ctx.revert();
+    };
   }, []);
 
   // Parallax — background digeser lebih lambat dari scroll. Wrapper di-scale
@@ -142,6 +202,34 @@ export default function Hero() {
           scrub: true,
         },
       });
+
+      // Konten terangkat lebih cepat dari scroll lalu memudar.
+      if (contentRef.current) {
+        gsap.to(contentRef.current, {
+          y: -70,
+          opacity: 0,
+          ease: "none",
+          scrollTrigger: {
+            trigger: section,
+            start: "top top",
+            end: "65% top",
+            scrub: true,
+          },
+        });
+      }
+      // Overlay menggelap pelan supaya transisi ke section berikutnya halus.
+      if (shadeRef.current) {
+        gsap.to(shadeRef.current, {
+          opacity: 0.45,
+          ease: "none",
+          scrollTrigger: {
+            trigger: section,
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
+      }
     }, sectionRef);
     return () => ctx.revert();
   }, []);
@@ -183,26 +271,31 @@ export default function Hero() {
       {/* Background — semua slide ditumpuk, yang aktif opacity 1 (crossfade).
           Gambar non-aktif tetap lazy supaya nggak berebut bandwidth dengan LCP. */}
       <div ref={bgRef} className="absolute inset-0 h-[116%] w-full">
-        {slideImages.map((img, i) => (
-          <picture
-            key={i}
-            className={[
-              "absolute inset-0 transition-opacity duration-[1400ms] ease-in-out",
-              i === active ? "opacity-100" : "opacity-0",
-            ].join(" ")}
-          >
-            <source srcSet={img.webp} type="image/webp" />
-            <img
-              src={img.png}
-              alt={i === active ? t.hero.imageAlt : ""}
-              style={{ objectPosition: img.position }}
-              className="h-full w-full object-cover"
-              loading={i === 0 ? "eager" : "lazy"}
-              fetchPriority={i === 0 ? "high" : "auto"}
-              decoding="async"
-            />
-          </picture>
-        ))}
+        <div
+          ref={bgInnerRef}
+          className="absolute inset-0 will-change-transform"
+        >
+          {slideImages.map((img, i) => (
+            <picture
+              key={i}
+              className={[
+                "absolute inset-0 transition-opacity duration-[1400ms] ease-in-out",
+                i === active ? "opacity-100" : "opacity-0",
+              ].join(" ")}
+            >
+              <source srcSet={img.webp} type="image/webp" />
+              <img
+                src={img.png}
+                alt={i === active ? t.hero.imageAlt : ""}
+                style={{ objectPosition: img.position }}
+                className="h-full w-full object-cover"
+                loading={i === 0 ? "eager" : "lazy"}
+                fetchPriority={i === 0 ? "high" : "auto"}
+                decoding="async"
+              />
+            </picture>
+          ))}
+        </div>
       </div>
 
       <style>{`
@@ -215,6 +308,11 @@ export default function Hero() {
       {/* Overlay gradient — kontras teks konsisten di atas foto apa pun. */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/55 to-black/25 md:from-black/85 md:via-black/45 md:to-black/20" />
       <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-transparent" />
+      <div
+        ref={shadeRef}
+        aria-hidden="true"
+        className="absolute inset-0 bg-black opacity-0"
+      />
 
       {/* Content */}
       <div className="relative z-10 mx-auto w-full max-w-6xl px-5 pb-28 pt-16 sm:pt-24 md:px-8 md:pb-32 md:pt-40">

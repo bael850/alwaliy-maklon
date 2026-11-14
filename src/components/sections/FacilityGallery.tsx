@@ -471,7 +471,10 @@ function FacilityTour({ metas }: { metas: AvailableMeta[] }) {
           <div className="mx-auto max-w-7xl px-5 md:px-8">
             <Reveal>
               <p className="mb-6 flex items-center gap-3 text-sm font-semibold text-gold-light">
-                <span aria-hidden="true" className="h-px w-10 bg-gold-light" />
+                <span
+                  aria-hidden="true"
+                  className="rule-grow h-px w-10 bg-gold-light"
+                />
                 {t.facilityGallery.eyebrow}
               </p>
               <h2 className="max-w-4xl font-heading text-4xl leading-[1.02] font-extrabold tracking-tight text-cream md:text-6xl">

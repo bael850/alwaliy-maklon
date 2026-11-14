@@ -299,7 +299,11 @@ function JourneyCarousel({ entries }: { entries: JourneyEntry[] }) {
         <Reveal>
           <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
             <div className="max-w-2xl">
-              <p className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold-light">
+              <p className="mb-3 flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.14em] text-gold-light">
+                <span
+                  aria-hidden="true"
+                  className="rule-grow h-px w-10 bg-gold-light"
+                />
                 {t.journey.eyebrow}
               </p>
               <h2 className="font-heading text-3xl font-extrabold leading-tight text-cream md:text-5xl">

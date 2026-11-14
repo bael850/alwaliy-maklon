@@ -8,7 +8,7 @@ export default function VisionMission() {
   return (
     <section id="vision" className="bg-cream py-16 md:py-28">
       <div className="mx-auto max-w-6xl px-5 md:px-8">
-        <Reveal>
+        <Reveal variant="mask">
           <div className="relative overflow-hidden rounded-[4px] bg-forest px-6 py-12 md:px-14 md:py-20">
             <span
               aria-hidden="true"
@@ -35,7 +35,11 @@ export default function VisionMission() {
           {missions.map((m, i) => (
             <li key={m.title}>
               <Reveal delay={(i % 2) * 0.08}>
-                <div className="flex gap-5 border-t border-forest/15 pt-6">
+                <div className="relative flex gap-5 pt-6">
+                  <span
+                    aria-hidden="true"
+                    className="rule-grow absolute inset-x-0 top-0 h-px bg-forest/15"
+                  />
                   <span className="font-heading text-3xl font-extrabold leading-none text-gold md:text-4xl">
                     {String(i + 1).padStart(2, "0")}
                   </span>

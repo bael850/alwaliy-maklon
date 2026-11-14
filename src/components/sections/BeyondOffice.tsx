@@ -165,7 +165,10 @@ function BeyondCollage({ photos }: { photos: BeyondPhoto[] }) {
           {/* Judul ikut jadi bagian kolase */}
           <Reveal className="col-span-6 mb-6 lg:col-span-6 lg:col-start-7 lg:row-start-1 lg:mb-0 lg:self-start lg:pt-6">
             <p className="mb-6 flex items-center gap-3 text-sm font-semibold text-gold">
-              <span aria-hidden="true" className="h-px w-10 bg-gold" />
+              <span
+                aria-hidden="true"
+                className="rule-grow h-px w-10 bg-gold"
+              />
               {t.beyondOffice.eyebrow}
             </p>
             <h2 className="font-heading text-4xl leading-[1.02] font-extrabold tracking-tight text-forest md:text-6xl xl:text-7xl">

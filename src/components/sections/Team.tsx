@@ -90,7 +90,10 @@ function TeamStage({ members }: { members: TeamMember[] }) {
         <div className="grid items-end gap-8 lg:grid-cols-12 lg:gap-12">
           <Reveal className="lg:col-span-8">
             <p className="mb-6 flex items-center gap-3 text-sm font-semibold text-gold">
-              <span aria-hidden="true" className="h-px w-10 bg-gold" />
+              <span
+                aria-hidden="true"
+                className="rule-grow h-px w-10 bg-gold"
+              />
               {t.team.eyebrow}
             </p>
             <h2 className="font-heading text-4xl font-extrabold leading-[1.02] tracking-tight text-forest md:text-6xl lg:text-7xl">
